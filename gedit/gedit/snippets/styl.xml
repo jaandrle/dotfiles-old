@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<snippets language="styl">
+  <snippet>
+    <description>comment</description>
+    <text><![CDATA[/* $0 */]]></text>
+    <tag>cmt</tag>
+  </snippet>
+</snippets>

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Adobe Acrobat 7.0
+Exec=wine /home/jaandrle/.wine/drive_c/Program\ Files/Adobe/Acrobat\ 7.0/Acrobat/Acrobat.exe
+Type=Application
+StartupNotify=true
+Comment=Edit and create PDF docs
+Icon=acroread
+StartupWMClass=Acrobat.exe
+Comment[cs]=Editace a tvorba PDF dokumentů
+GenericName[cs]=Editace a tvorba PDF dokumentů

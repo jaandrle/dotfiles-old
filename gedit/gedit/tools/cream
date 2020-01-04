@@ -1,0 +1,20 @@
+#!/bin/bash
+# [Gedit Tool]
+# Input=nothing
+# Shortcut=
+# Name=Cream
+# Save-files=nothing
+# Applicability=all
+# Output=output-panel
+
+cd "$GEDIT_CURRENT_DOCUMENT_DIR"
+date +%H:%M:%S > temp.log
+echo "$(cat temp.log) | Prohlížení textových/csv souborů, viz externí terminál."
+zenity --file-selection --title="Cream | Otevřít soubor" --file-filter="Textové soubory | *.txt *.dat *.log *.csv *.out" --file-filter="Všechny soubory | *" --filename="$GEDIT_CURRENT_DOCUMENT_DIR/" > temp.log 2> /dev/null
+
+if [ -s temp.log ]
+then
+  cream "$(cat temp.log)" 2> /dev/null
+else
+  rm "temp.log"  
+fi

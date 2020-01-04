@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<snippets language="gnuplot">
+  <snippet>
+    <tag>\</tag>
+    <description>nazevsekce</description>
+    <text><![CDATA[# ${2}\ ${1:NazevSekce}\ 
+$0
+# /${1:NazevSekce}/]]></text>
+  </snippet>
+</snippets>

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=FreeRapid Downloader
+Exec=java -jar '/home/jaandrle/UlozeneSoubory/FreeRapid/frd.jar'
+Type=Application
+StartupNotify=true
+Comment=Stahování souborů
+Name[cs]=FreeRapid Downloader
+Icon=ktorrent.svg
+Categories=Internet;

@@ -1,0 +1,67 @@
+--exclude=*.min.js
+--exclude=*.min.css
+--exclude=*.map
+--exclude=.backup
+--exclude=.sass-cache
+--exclude=vendors
+--exclude=.git
+
+--langdef=css
+--langmap=css:.css
+--langmap=css:+.sass
+--langmap=css:+.styl
+--langmap=css:+.less
+--regex-css=/^[ \t]*\.([A-Za-z0-9_-]+)/.\1/c,class,classes/
+--regex-css=/^[ \t]*#([A-Za-z0-9_-]+)/#\1/i,id,ids/
+--regex-css=/^[ \t]*(([A-Za-z0-9_-]+[ \t\n,]+)+)\{/\1/t,tag,tags/
+--regex-css=/^[ \t]*@media\s+([A-Za-z0-9_-]+)/\1/m,media,medias/
+
+--langdef=scss
+--langmap=scss:.scss
+--regex-scss=/^[ \t]*@mixin ([A-Za-z0-9_-]+)/\1/m,mixin,mixins/
+--regex-scss=/^[ \t]*\$([A-Za-z0-9_-]+)/\1/v,variable,variables/
+--regex-scss=/^([A-Za-z0-9_-]*)*\.([A-Za-z0-9_-]+) *[,{]/\2/c,class,classes/
+--regex-scss=/^[ \t]+\.([A-Za-z0-9_-]+) *[,{]/\1/c,class,classes/
+--regex-scss=/^(.*)*\#([A-Za-z0-9_-]+) *[,{]/\2/i,id,ids/
+--regex-scss=/^[ \t]*#([A-Za-z0-9_-]+)/\1/i,id,ids/
+--regex-scss=/(^([A-Za-z0-9_-])*([A-Za-z0-9_-]+)) *[,|\{]/\1/t,tag,tags/
+--regex-scss=/(^([^\/\/])*)[ \t]+([A-Za-z0-9_-]+)) *[,|\{]/\3/t,tag,tags/
+--regex-scss=/(^(.*, *)([A-Za-z0-9_-]+)) *[,|\{]/\3/t,tag,tags/
+--regex-scss=/(^[ \t]+([A-Za-z0-9_-]+)) *[,|\{]/\1/t,tag,tags/
+--regex-scss=/^[ \t]*@media\s+([A-Za-z0-9_-]+)/\1/d,media,media/
+
+--langdef=html
+--langmap=html:.html
+--regex-html=/\<(body|html|DOCTYPE|head|script)\>/\1/,html/
+--regex-html=/id="([A-Za-z0-9_-]+)"/\1/i,id,ids/
+--regex-html=/class="([A-Za-z0-9_-]+)"/\1/c,class,classes/
+--regex-html=/^  <div class="([A-Za-z0-9_-]+)"/\1/,1step/
+--regex-html=/^  <div id="([A-Za-z0-9_-]+)"/\1/,1step/
+--regex-html=/^    <div class="([A-Za-z0-9_-]+)"/\1/,2step/
+--regex-html=/^    <div id="([A-Za-z0-9_-]+)"/\1/,2step/
+--regex-html=/<h1[^>]*>([^<]*)<\/h1>/\1/,h1/
+--regex-html=/<h2[^>]*>([^<]*)<\/h2>/\1/,h2/
+
+--langdef=js
+--langmap=js:.js
+--regex-js=/([A-Za-z0-9._$]+)[ \t]*[:=][ \t]*\{/\1/,object/
+--regex-js=/([A-Za-z0-9._$()]+)[ \t]+[:=][ \t]*function[ \t]+\(/\1/,function/
+--regex-js=/([A-Za-z0-9._$()]+)[ \t]*:[ \t]*function[ \t]*\([^\)]*\)[ \t]*\{/\1/,namespace/
+--regex-js=/_this\.([A-Za-z0-9._$()]+)[ \t]*=[ \t]*function[ \t]*\([^\)]*\)[ \t]*\{/  .\1/,namespace/
+--regex-js=/function[ \t]+([A-Za-z0-9._$]+)[ \t]*(([^)]))/\1/,function/
+--regex-js=/var ([A-Za-z0-9._$]+)/\1/,variable/
+--regex-js=/([^= ]+)[ \t]*[^!+-=]=[\t]*[^"]'[^']*/\1/,string/
+--regex-js=/([^= ]+)[ \t]*[^!+-=]=[\t]*[^']"[^"]*/\1/,string/
+
+--langdef=stylus
+--langmap=stylus:.styl
+--regex-stylus=/^[ \t]*\.([A-Za-z0-9_-]+)/\1/c,class,classes/
+--regex-stylus=/^[ \t]*#([A-Za-z0-9_-]+)/\1/i,id,ids/
+--regex-stylus=/^[ \t]*(([A-Za-z0-9_-]+[ \t\n,]+)+)\{/\1/t,tag,tags/
+--regex-stylus=/^[ \t]*@media\s+([A-Za-z0-9_-]+)/\1/m,media,medias/
+
+--langdef=markdown
+--langmap=markdown:.md
+--regex-markdown=/^# (<.*>)?(.+)/\2/i,h1/
+--regex-markdown=/^## (<.*>)?(.+)/\2/i,h2/
+--regex-markdown=/^### (<.*>)?(.+)/\2/i,h3/

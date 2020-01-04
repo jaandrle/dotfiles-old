@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<snippets language="php">
+  <snippet override="php-$-3">
+    <text><![CDATA[\$_GET['${1:variable}']]]></text>
+    <tag>$</tag>
+    <description>GET['..']</description>
+  </snippet>
+  <snippet>
+    <text><![CDATA[<!-- ${0} -->]]></text>
+    <description>HTML_comment</description>
+    <tag>cmth</tag>
+  </snippet>
+  <snippet override="php-function">
+    <text><![CDATA[${1:public }function ${2:FunctionName}($3){
+    ${0:# code...}
+}]]></text>
+    <tag>fce</tag>
+    <description>function ..</description>
+  </snippet>
+  <snippet override="php-if">
+    <description>if ..</description>
+    <tag>if</tag>
+    <text><![CDATA[if(${1:condition}){
+    $0
+}]]></text>
+  </snippet>
+  <snippet override="php-php">
+    <description>&lt;?php .. ?&gt;</description>
+    <tag>php</tag>
+    <text><![CDATA[<?php $0?>]]></text>
+  </snippet>
+  <snippet>
+    <text><![CDATA[<?= $0?>]]></text>
+    <description>&lt;?= ...?&gt;</description>
+    <tag>pp</tag>
+  </snippet>
+  <snippet>
+    <text><![CDATA[/* $0 */]]></text>
+    <description>comment</description>
+    <tag>cmt</tag>
+  </snippet>
+</snippets>

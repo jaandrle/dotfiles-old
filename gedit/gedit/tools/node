@@ -1,0 +1,10 @@
+#!/bin/sh
+# [Gedit Tool]
+# Name=run-node
+# Languages=js
+# Applicability=all
+# Save-files=nothing
+# Input=nothing
+# Output=output-panel
+
+node $GEDIT_CURRENT_DOCUMENT_PATH

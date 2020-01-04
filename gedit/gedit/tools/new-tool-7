@@ -1,0 +1,32 @@
+#!/bin/sh
+# [Gedit Tool]
+# Save-files=nothing
+# Name=run
+# Input=nothing
+# Output=output-panel
+# Shortcut=
+# Applicability=all
+# Languages=gnuplot
+
+cd "$GEDIT_CURRENT_DOCUMENT_DIR"
+date +%H:%M:%S > temp.log
+echo "$(cat temp.log) | Spuštění skriptu: $GEDIT_CURRENT_DOCUMENT_NAME"
+rm "temp.log"
+
+gnuplot "$GEDIT_CURRENT_DOCUMENT_PATH" -p > "temp.log" 2> "tempERR.log"
+
+if [ -s tempERR.log ]
+then
+  echo "... neproběhlo v pořádku, viz externí Terminál!"
+  gnome-terminal -x bash -c 'cd "$GEDIT_CURRENT_DOCUMENT_DIR"; less tempERR.log' 2> /dev/null
+else
+  echo "... proběhlo v pořádku!"
+  rm "tempERR.log"
+fi
+
+if [ -s temp.log ]
+then
+  gnome-terminal -x bash -c 'cd "$GEDIT_CURRENT_DOCUMENT_DIR"; less temp.log' 2> /dev/null
+else
+  rm "temp.log"  
+fi

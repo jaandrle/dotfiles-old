@@ -1,0 +1,28 @@
+#!/bin/sh
+# [Gedit Tool]
+# Shortcut=F3
+# Output=output-panel
+# Input=selection
+# Name=Grep
+# Save-files=nothing
+# Applicability=all
+
+args=$(xargs)
+echo Výskyty výrazu "'""$args""'":
+grep -nr --exclude=temp.log --exclude=*.*~ --exclude=*.min.js --exclude=*.min.css --exclude="$GEDIT_CURRENT_DOCUMENT_NAME" -r "\b$args\b" "$GEDIT_FILE_BROWSER_ROOT" | sort -r
+echo Aktuální dokument
+grep -nr --exclude=temp.log --exclude=*.*~ -r "\b$args\b" "$GEDIT_CURRENT_DOCUMENT_PATH" | sort -r
+
+
+#echo "Vyhledávání výskytů výrazu '$args' pomocí utility Grep, viz externí terminál."
+#echo Výskyty výrazu "'""$args""'": > temp.log
+#echo \#1 V tomto souboru: >> temp.log
+#grep --color=always -nr --exclude=temp.log --exclude=*.*~ -r "\b$args\b" "$GEDIT_CURRENT_DOCUMENT_PATH" >> temp.log
+#echo \#2 V okolních souborech: >> temp.log
+#grep --color=always -nr --exclude=temp.log --exclude=*.*~ --exclude=*.min.js --exclude=*.min.css --exclude="$GEDIT_CURRENT_DOCUMENT_NAME" -r "\b$args\b" "$GEDIT_FILE_BROWSER_ROOT">> temp.log
+#echo \#3 Celkem výskytů: >> temp.log
+#grep -oh --exclude=temp.log --exclude=*.*~ -r "\b$args\b" "$GEDIT_FILE_BROWSER_ROOT" | wc -w >> temp.log
+#gnome-terminal --geometry=120x6 --title="Vyhledávání '$args' | $GEDIT_CURRENT_DOCUMENT_NAME:" -x bash -c 'cd "$GEDIT_CURRENT_DOCUMENT_DIR"; less -R temp.log ' 2> /dev/null
+##!/bin/bash
+#search=`xargs -0 echo`
+#cat "$GEDIT_CURRENT_DOCUMENT_PATH" | grep "$search"

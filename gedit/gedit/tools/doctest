@@ -1,0 +1,10 @@
+#!/bin/sh
+# [Gedit Tool]
+# Output=output-panel
+# Name=docTEST
+# Applicability=all
+# Save-files=nothing
+# Input=nothing
+# Languages=gnuplot
+
+gnuplot -e "test" -p

@@ -1,0 +1,30 @@
+#!/bin/sh
+# [Gedit Tool]
+# Save-files=nothing
+# Name=debugging
+# Shortcut=
+# Languages=fortran
+# Input=nothing
+# Output=output-panel
+# Applicability=all
+
+cd "$GEDIT_CURRENT_DOCUMENT_DIR"
+date +%H:%M:%S > temp.log
+echo "Kompilace v $(cat temp.log) souboru: $GEDIT_CURRENT_DOCUMENT_NAME"
+rm "temp.log"
+
+gfortran-4.8 "$GEDIT_CURRENT_DOCUMENT_PATH" -fcheck=all -g -fbounds-check -Wall -fbacktrace -finit-real=nan -o "$GEDIT_CURRENT_DOCUMENT_PATH.out" 2> "tempERR.log"
+
+if [ -s tempERR.log ]
+then
+  echo "... neproběhla v pořádku, viz externí Terminál!"
+  gnome-terminal -x bash -c 'cd "$GEDIT_CURRENT_DOCUMENT_DIR"; less tempERR.log' 2> /dev/null
+else
+  echo "... proběhla v pořádku!"
+  cd "$GEDIT_CURRENT_DOCUMENT_DIR"
+  date +%H:%M:%S > temp.log
+  echo "$(cat temp.log) | Spuštění externího programu DDD (debugging), viz externí terminál."
+  ddd 2> /dev/null &
+fi
+
+#-fcheck=all

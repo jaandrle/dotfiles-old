@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='utf-8'?>
+<snippets language="html">
+  <snippet>
+    <text><![CDATA[<!-- ${1:$GEDIT_SELECTED_TEXT} -->$0]]></text>
+    <description>Comment</description>
+    <tag>cmt</tag>
+  </snippet>
+  <snippet>
+    <description>Meta</description>
+    <text><![CDATA[<meta ${1:charset="UTF-8"}>$0]]></text>
+  </snippet>
+  <snippet override="html-meta">
+    <tag>meta2</tag>
+    <description>Meta2</description>
+    <text><![CDATA[<meta name="${1:name}" content="${2:content}" />$0]]></text>
+  </snippet>
+  <snippet override="html-scriptsrc">
+    <tag>scriptsrc</tag>
+    <description>Script With External Source</description>
+    <text><![CDATA[<script src="$1" ${2:type="text/javascript"}></script>]]></text>
+  </snippet>
+  <snippet override="html-script">
+    <tag>script</tag>
+    <description>Script</description>
+    <text><![CDATA[<script ${1:type="text/javascript"}>
+	$0
+</script>]]></text>
+  </snippet>
+  <snippet override="html-div">
+    <description>Div</description>
+    <tag>div</tag>
+    <text><![CDATA[<div${1:>}
+	${0:$GEDIT_SELECTED_TEXT}
+</div>]]></text>
+  </snippet>
+  <snippet override="html-h">
+    <description>Heading</description>
+    <tag>h</tag>
+    <text><![CDATA[<h${1:1}${2: id=""}>${3:$GEDIT_SELECTED_TEXT}</h${1}>$0]]></text>
+  </snippet>
+  <snippet>
+    <description>Paragraf</description>
+    <tag>p</tag>
+    <text><![CDATA[<p>$0</p>]]></text>
+  </snippet>
+  <snippet override="html-span">
+    <description>Span</description>
+    <tag>span</tag>
+    <text><![CDATA[<span${1:>}$2</span>$0]]></text>
+  </snippet>
+  <snippet override="html-link">
+    <description>Link</description>
+    <tag>link</tag>
+    <text><![CDATA[<link rel="${1:stylesheet}" href="${2:master.css}">$0]]></text>
+  </snippet>
+  <snippet>
+    <text><![CDATA[<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>$1</title>
+</head>
+<body>
+    $0
+</body>
+</html>]]></text>
+    <tag>html</tag>
+    <description>Page</description>
+  </snippet>
+  <snippet>
+    <text><![CDATA[console.log(${1:$GEDIT_SELECTED_TEXT});$0]]></text>
+    <tag>log</tag>
+    <description>Console</description>
+  </snippet>
+  <snippet override="html-author">
+    <description>Author</description>
+    <text><![CDATA[<meta name="author" content="${1:author}" />$0]]></text>
+    <tag>author</tag>
+  </snippet>
+  <snippet override="html-br">
+    <accelerator><![CDATA[<Primary><Shift>space]]></accelerator>
+    <description>Br</description>
+    <text><![CDATA[<br />$0]]></text>
+  </snippet>
+  <snippet override="html-button">
+    <description>Button</description>
+    <text><![CDATA[<button type="button" name="${1:name}" value="${2:caption}" onclick="$3" />$0]]></text>
+    <tag>button</tag>
+  </snippet>
+  <snippet override="html-date">
+    <description>Date</description>
+    <text><![CDATA[<meta name="date" content="$<1: import time; return time.strftime("%Y-%m-%d") >" />$0]]></text>
+    <tag>input_date</tag>
+  </snippet>
+  <snippet override="html-file">
+    <description>File</description>
+    <text><![CDATA[<input type="file" name="${1:name}" size="$2" accept="$3" />$0]]></text>
+    <tag>input_file</tag>
+  </snippet>
+  <snippet override="html-mailto">
+    <description>Mail Anchor</description>
+    <text><![CDATA[<a href="mailto:${1:joe@example.com}?subject=${2:feedback}">${3:email me}</a>$0]]></text>
+    <tag>mailto</tag>
+  </snippet>
+  <snippet override="html-nbsp">
+    <accelerator><![CDATA[<Primary><Shift>space]]></accelerator>
+    <description>Non-Breaking Space</description>
+    <text><![CDATA[&nbsp;]]></text>
+  </snippet>
+</snippets>

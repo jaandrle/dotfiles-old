@@ -1,0 +1,9 @@
+#!/bin/sh
+# [Gedit Tool]
+# Output=replace-selection
+# Input=line
+# Name=Mezery
+# Save-files=nothing
+# Applicability=all
+
+echo $GEDIT_SELECTED_TEXT | tr -s ' ' '_'

@@ -1,0 +1,13 @@
+#!/bin/sh
+# [Gedit Tool]
+# Output=output-panel
+# Name=Otevřít zde terminál
+# Save-files=nothing
+# Languages=
+# Input=nothing
+# Applicability=local
+# Comment=Otevřít terminál v umístění dokumentu
+
+
+#TODO: use "gconftool-2 -g /desktop/gnome/applications/terminal/exec"
+gnome-terminal --working-directory="$GEDIT_CURRENT_DOCUMENT_DIR" &

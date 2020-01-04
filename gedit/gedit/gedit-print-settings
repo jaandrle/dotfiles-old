@@ -1,0 +1,11 @@
+[Print Settings]
+reverse=false
+page-ranges=0-104
+print-pages=all
+output-uri=file:///home/jaandrle/Dokumenty/Bakalarka%20-%20Zpracovani%20realnych%20dat.f90.pdf
+output-file-format=pdf
+collate=false
+printer=Tisknout do souboru
+number-up=1
+page-set=all
+scale=100

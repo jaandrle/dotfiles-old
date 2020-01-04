@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Microsoft Powerpoint 2010
+Comment=PlayOnLinux
+Type=Application
+Exec=/usr/share/playonlinux/playonlinux --run "Microsoft Powerpoint 2010" %F
+Icon=ms-powerpoint.svg
+#/home/jaandrle/.PlayOnLinux//icones/full_size/Microsoft Powerpoint 2010
+Name[fr_FR]=Microsoft Powerpoint 2010
+StartupWMClass=POWERPNT.EXE
+Categories=Office;Presentation;

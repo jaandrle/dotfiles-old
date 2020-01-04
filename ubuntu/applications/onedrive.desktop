@@ -1,0 +1,35 @@
+[Desktop Entry]
+Name=Microsoft OneDrive synchronizace
+Comment=Synchronizace s Microsoft OneDrive
+MimeType=application/x-deb;application/x-debian-package;x-scheme-handler/apt;
+Terminal=false
+StartupNotify=true
+Exec=gnome-terminal -x bash -c 'echo Microsoft Onedrive Log:; nautilus Aktivity/OneDrive &> /dev/null;onedrive -m' &
+X-Unity-IconBackgroundColor=#8795ff
+Keywords=Sync;
+Icon=btsync-user
+Type=Application
+Categories=PackageManager;GTK;System;Settings;
+X-Ayatana-Desktop-Shortcuts=SyncOptions;Free;Phone
+
+[Free Shortcut Group]
+Name=-----------------------------------------------
+Exec=
+OnlyShowIn=Unity;
+
+[SyncOptions Shortcut Group]
+Name= Moznosti synchronizace
+Exec=gnome-terminal -x bash -c 'onedrive --help; exec bash' &
+#Exec=gnome-terminal -x bash -c 'cd ~/Aktivity/OneDrive; ./sync help; exec bash' &
+#Exec=gnome-terminal -x bash -c 'cd ~/Aktivity/OneDrive; ./sync; exec bash' &
+TargetEnvironment=Unity
+
+[SyncFolder Shortcut Group]
+Name= Zobrazit složku
+Exec= nautilus Aktivity/OneDrive
+TargetEnvironment=Unity
+
+[Phone Shortcut Group]
+Name= Připojit se k SONY Xperia XZ1 Compact
+Exec= bash -c ~/.run/sony_drop.sh;
+TargetEnvironment=Unity

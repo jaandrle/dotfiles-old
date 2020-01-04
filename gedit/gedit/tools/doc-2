@@ -1,0 +1,15 @@
+#!/bin/sh
+# [Gedit Tool]
+# Output=output-panel
+# Name=doc
+# Applicability=all
+# Save-files=nothing
+# Input=line
+# Languages=gnuplot
+
+cd "$GEDIT_CURRENT_DOCUMENT_DIR"
+date +%H:%M:%S > temp.log
+echo "$(cat temp.log) | Zobrazení nápovědy, viz externí program pydoc."
+rm "temp.log"
+#search=`xargs -0 echo`
+gnome-terminal --title="Dokumentace GnuPlotu | $GEDIT_CURRENT_DOCUMENT_NAME:" -x bash -c 'cd "$GEDIT_CURRENT_DOCUMENT_DIR"; gnuplot -e "help $GEDIT_SELECTED_TEXT" -p' 2> /dev/null

@@ -1,0 +1,8 @@
+#!/bin/bash
+output="gsettings get org.gnome.nautilus.preferences show-image-thumbnails"
+if [[ $(eval $output) = "'never'" ]]
+then
+  gsettings set org.gnome.nautilus.preferences show-image-thumbnails local-only
+else  
+  gsettings set org.gnome.nautilus.preferences show-image-thumbnails never
+fi

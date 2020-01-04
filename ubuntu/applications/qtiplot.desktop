@@ -1,0 +1,71 @@
+[Desktop Entry]
+Name=QtiPlot
+Encoding=UTF-8
+Version=1.0
+Exec=qtiplot %U
+Type=MimeType
+Terminal=false
+X-Ubuntu-Tweak=true
+Type=Application
+MimeType=application/x-qti
+Categories=Qt;Science;Physics;Math;Graphics;
+Patterns=*.qti;
+Icon=qtiplot
+Comment=Application for scientific data analysis and visualization
+Comment[cs]=Aplikace pro zpracování a analýzu vědeckých dat
+X-Ayatana-Desktop-Shortcuts=qtiplot;msexcel;gnumeric;free;spyder;matlab;qtoctave;jupyter;free;octave;gnuplot
+
+[free Shortcut Group]
+Name=-------------------------------------
+TargetEnvironment=Unity
+
+[qtiplot Shortcut Group]
+Name=Nový QtiPlot projekt
+Exec=qtiplot %U
+TargetEnvironment=Unity
+
+[msexcel Shortcut Group]
+Name=Microsoft Excel 2010
+Exec=/usr/share/playonlinux/playonlinux --run "Microsoft Excel 2010" %F
+TargetEnvironment=Unity
+
+[gnumeric Shortcut Group]
+Name=Gnumeric
+Exec=gnumeric %U
+TargetEnvironment=Unity
+
+[spyder Shortcut Group]
+Name=Spyder
+Exec=spyder
+TargetEnvironment=Unity
+
+[jupyter Shortcut Group]
+Name=Jupyter Notebook
+Exec=gnome-terminal -x bash -c 'jupyter notebook; exec bash' &
+TargetEnvironment=Unity
+
+[matlab Shortcut Group]
+Name=MatLab
+Exec=/home/jaandrle/UlozeneSoubory/MATLAB/R2014b/bin/matlab -desktop
+TargetEnvironment=Unity
+
+[qtoctave Shortcut Group]
+Name=Octave GUI
+Exec=octave --force-gui
+TargetEnvironment=Unity
+
+[octave Shortcut Group]
+Name=Octave
+Exec=gnome-terminal -x bash -c '"octave" --no-gui; exec bash' &
+TargetEnvironment=Unity
+
+[gnuplot Shortcut Group]
+Name=GnuPlot
+Exec=gnome-terminal -x bash -c 'gnuplot' &
+TargetEnvironment=Unity
+
+[qtiplotn Shortcut Group]
+Name=QtiPlot (nouzovy)
+Exec=bash -c 'QT_X11_NO_MITSHM=1 qtiplot'
+TargetEnvironment=Unity
+

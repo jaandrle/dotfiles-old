@@ -1,0 +1,37 @@
+#!/bin/sh
+# [Gedit Tool]
+# Languages=fortran
+# Shortcut=
+# Output=output-panel
+# Save-files=nothing
+# Name=run
+# Input=nothing
+# Applicability=all
+
+cd "$GEDIT_CURRENT_DOCUMENT_DIR"
+date +%H:%M:%S > temp.log
+echo "$(cat temp.log) | Spuštění programu: $GEDIT_CURRENT_DOCUMENT_NAME.out"
+rm "temp.log"
+
+"$GEDIT_CURRENT_DOCUMENT_PATH.out" > "temp.log" 2> "tempERR.log"
+
+if [ -s tempERR.log ]
+then
+  echo "... neproběhlo v pořádku, viz externí Terminál!"
+  gnome-terminal --title="ERRORS LOG | $GEDIT_CURRENT_DOCUMENT_NAME:" -x bash -c 'cd "$GEDIT_CURRENT_DOCUMENT_DIR"; less -p "line [0-9]* of" tempERR.log' 2> /dev/null
+else
+  echo "... proběhlo v pořádku!"
+# Uklid  
+  rm "tempERR.log"
+if [ -s debug.out ]
+then
+  rm "debug.out"
+fi
+fi
+
+if [ -s temp.log ]
+then
+  gnome-terminal --title="Terminálový výstup | $GEDIT_CURRENT_DOCUMENT_NAME:" -x bash -c 'cd "$GEDIT_CURRENT_DOCUMENT_DIR"; less temp.log' 2> /dev/null
+else
+  rm "temp.log"  
+fi

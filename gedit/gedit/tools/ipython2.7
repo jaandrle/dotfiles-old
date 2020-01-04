@@ -1,0 +1,11 @@
+#!/bin/sh
+# [Gedit Tool]
+# Name=runipy
+# Languages=python,python3
+# Applicability=all
+# Output=nothing
+# Input=nothing
+# Save-files=nothing
+
+cd "$GEDIT_CURRENT_DOCUMENT_DIR"
+ipython2.7 qtconsole --matplotlib inline &

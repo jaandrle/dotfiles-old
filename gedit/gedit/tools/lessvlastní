@@ -1,0 +1,13 @@
+#!/bin/bash
+# [Gedit Tool]
+# Save-files=nothing
+# Applicability=all
+# Input=nothing
+# Output=output-panel
+# Name=LessVlastní
+
+cd "$GEDIT_CURRENT_DOCUMENT_DIR"
+date +%H:%M:%S > temp.log
+echo "$(cat temp.log) | Prohlížení textových/csv souborů, viz externí terminál."
+
+gnome-terminal -x bash -c 'cd "$GEDIT_CURRENT_DOCUMENT_DIR"; echo "Co se hodí:"; echo " - column -s, -t < CSVsoubory.csv | less -#2 -N -S"; echo " - samozrejme less, cat, head/tail -POCETradku, ..."; echo " - grep/awk"; echo "Výpis textových souborů ve složce:"; ls *.dat *.txt *.log 2> /dev/null; exec bash' 2> /dev/null &

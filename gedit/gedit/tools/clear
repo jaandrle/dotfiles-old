@@ -1,0 +1,17 @@
+#!/bin/sh
+# [Gedit Tool]
+# Shortcut=F12
+# Output=output-panel
+# Name=clear
+# Save-files=nothing
+# Input=document
+# Applicability=all
+
+DIRECTORY=/media/jaandrle/ZD58/gedit/$(date +y%Ym%md%dh%Hm%M)
+count=$(find ./ -maxdepth 1 -type f -name '*.*~' | wc -l)
+if [ $count -gt 0 ] ; then
+    if [ ! -d "$DIRECTORY" ]; then
+        mkdir "$DIRECTORY"
+    fi
+    mv ./*.*~ "$DIRECTORY"
+fi

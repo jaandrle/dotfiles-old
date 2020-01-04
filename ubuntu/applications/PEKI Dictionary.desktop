@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=PEKI Dictionary
+Exec=java -jar '/home/jaandrle/UlozeneSoubory/PEKI dictionary/data/peki.jar'
+Type=Application
+StartupNotify=true
+Icon=dictionary.svg
+Name[cs]=PEKI Dictionary

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Verdict FREE
+Exec=wine /home/jaandrle/.wine/drive_c/Program\ Files/Verdict\ Free/Verdict.exe
+Type=Application
+StartupNotify=true
+Comment=Verdict FREE translator
+Name[cs]=Verdict FREE
+Icon=dictionary

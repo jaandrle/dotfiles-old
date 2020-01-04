@@ -1,0 +1,30 @@
+#!/bin/sh
+# [Gedit Tool]
+# Save-files=nothing
+# Output=nothing
+# Name=Porovnání souborů
+# Applicability=all
+# Input=nothing
+
+# [Gedit Tool]
+# Name=[info] compare files (meld)
+# Shortcut=<Control><Alt>m
+# Applicability=all
+# Output=nothing
+# Input=nothing
+# Save-files=document
+
+
+# Opens meld to compare two documents
+#  (depends on meld, zenity)
+#
+# Save:   Current document
+# Input:  Nothing
+# Output: Nothing
+#
+# by GNOME wiki <http://live.gnome.org/Gedit/ExternalToolsPluginCommands#Comparing_Files>, edited by (you?)
+
+TITLE="Compare With..."
+TEXT="Compare $GEDIT_CURRENT_DOCUMENT_NAME with:"
+FILE=`zenity --file-selection --title="$TITLE" --filename="$GEDIT_CURRENT_DOCUMENT_DIR/"`
+meld "$GEDIT_CURRENT_DOCUMENT_DIR/$GEDIT_CURRENT_DOCUMENT_NAME" "$FILE" &

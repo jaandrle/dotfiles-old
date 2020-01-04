@@ -1,0 +1,10 @@
+#!/bin/sh
+# [Gedit Tool]
+# Languages=js
+# Save-files=nothing
+# Output=output-panel
+# Applicability=all
+# Input=nothing
+# Name=run-rhino
+
+rhino $GEDIT_CURRENT_DOCUMENT_PATH

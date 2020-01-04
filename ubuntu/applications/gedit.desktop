@@ -1,0 +1,56 @@
+[Desktop Entry]
+Name=gedit
+GenericName=Text Editor
+Comment=Edit text files
+Exec=gedit %U
+Terminal=false
+Type=Application
+StartupNotify=true
+MimeType=text/plain;
+Icon=accessories-text-editor
+Categories=GNOME;GTK;Utility;TextEditor;
+X-GNOME-DocPath=gedit/gedit.xml
+X-GNOME-FullName=Text Editor
+X-GNOME-Bugzilla-Bugzilla=GNOME
+X-GNOME-Bugzilla-Product=gedit
+X-GNOME-Bugzilla-Component=general
+X-GNOME-Bugzilla-Version=3.10.4
+X-GNOME-Bugzilla-ExtraInfoScript=/usr/share/gedit/gedit-bugreport
+Actions=Code;free;Window;Document;free;keep;free;cream;Notepad;
+Keywords=Text;Editor;Plaintext;Write;
+X-Ubuntu-Gettext-Domain=gedit;
+
+[Desktop Action free]
+Name=-----------------------------------------------
+Exec=
+OnlyShowIn=Unity;
+
+[Desktop Action Code]
+Name=Visual Studio Code
+Exec=/usr/share/code/code --unity-launch %F
+OnlyShowIn=Unity;
+
+[Desktop Action Window]
+Name=Nové okno editoru Gedit
+Exec=gedit --new-window
+OnlyShowIn=Unity;
+
+[Desktop Action Document]
+Name=Nový dokument v editoru Gedit
+Exec=gedit --new-document
+OnlyShowIn=Unity;
+
+[Desktop Action keep]
+Name=Google Keep
+Exec=npm start --prefix ~/.keep
+OnlyShowIn=Unity
+
+[Desktop Action cream]
+Name=Spustit Cream Vim
+Exec=cream
+OnlyShowIn=Unity;
+
+[Desktop Action Notepad]
+Name=Spustit Poznámkový blok
+Exec=wine /home/jaandrle/.wine/drive_c/windows/notepad.exe
+OnlyShowIn=Unity;

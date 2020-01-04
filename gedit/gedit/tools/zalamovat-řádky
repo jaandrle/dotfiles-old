@@ -1,0 +1,15 @@
+#!/bin/bash
+# [Gedit Tool]
+# Input=nothing
+# Name=Zalamovat řádky
+# Applicability=all
+# Output=output-panel
+# Save-files=nothing
+
+output="gsettings get org.gnome.gedit.preferences.editor wrap-mode"
+if [[ $(eval $output) = "'none'" ]]
+then
+  gsettings set org.gnome.gedit.preferences.editor wrap-mode word
+else  
+  gsettings set org.gnome.gedit.preferences.editor wrap-mode none
+fi

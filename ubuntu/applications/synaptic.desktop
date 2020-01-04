@@ -1,0 +1,42 @@
+[Desktop Entry]
+Name=Správce softwaru Synaptic
+Comment=Lets you choose from thousands of applications available for Ubuntu
+MimeType=application/x-deb;application/x-debian-package;x-scheme-handler/apt;
+Terminal=false
+StartupNotify=true
+Exec=pkexec synaptic %u
+X-Unity-IconBackgroundColor=#ffbf87
+Keywords=Sources;PPA;Install;Uninstall;Remove;Purchase;Catalogue;Store;Apps;
+Icon=synaptic
+Type=Application
+Categories=PackageManager;GTK;System;Settings;
+X-Ayatana-Desktop-Shortcuts=SoftwareUpdates;SoftwareProperties;free;Terminal;LOGS;free;SoftwareCenter
+
+[free Shortcut Group]
+Name=------------------------------------------------------------
+TargetEnvironment=Unity
+
+[SoftwareUpdates Shortcut Group]
+Name=Správce aktualizací
+OnlyShowIn=Unity
+Exec=update-manager -c
+
+[SoftwareProperties Shortcut Group]
+Name=Editace PPA repozitářů
+OnlyShowIn=Unity
+Exec=pkexec synaptic -r
+
+[SoftwareCenter Shortcut Group]
+Name=Centrum softwaru pro Ubuntu
+OnlyShowIn=Unity
+Exec=gnome-software %u
+
+[Terminal Shortcut Group]
+Name=Gnome terminál (root)
+OnlyShowIn=Unity
+Exec=gnome-terminal --window --show-menubar --command 'sudo -i'
+
+[LOGS Shortcut Group]
+Name=Průzkumník systémových záznamů
+OnlyShowIn=Unity
+Exec=ksystemlog %i -caption %c

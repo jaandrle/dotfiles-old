@@ -1,0 +1,19 @@
+#!/bin/bash
+# [Gedit Tool]
+# Save-files=nothing
+# Input=nothing
+# Output=output-panel
+# Name=Less
+# Applicability=all
+# Shortcut=F2
+
+cd "$GEDIT_CURRENT_DOCUMENT_DIR"
+date +%H:%M:%S > temp.log
+echo "$(cat temp.log) | Prohlížení textových/csv souborů, viz externí terminál."
+zenity --file-selection --title="LESS | Otevřít soubor" --file-filter="Textové soubory | *.txt *.dat *.log *.csv" --file-filter="Všechny soubory | *" --filename="$GEDIT_CURRENT_DOCUMENT_DIR/" > temp.log 2> /dev/null
+if [[ $(cat temp.log) == *.csv ]]
+then
+  gnome-terminal -x bash -c 'oddelovac=`zenity --entry --title="Oddělovač sloupců" --text="Sloupce jsou odděleny znakem:"`; clear; cd "$GEDIT_CURRENT_DOCUMENT_DIR"; column -s$oddelovac -t < "$(cat temp.log)" | less -#2 -N -S' 2> /dev/null
+else  
+  gnome-terminal -x bash -c 'cd "$GEDIT_CURRENT_DOCUMENT_DIR"; less -S -N "$(cat temp.log)"' 2> /dev/null
+fi
