@@ -1,5 +1,6 @@
 ## My Mozilla Firefox
-In fact lots of settings are synced by Firefox itself, so this folder contains just some infos around and settings for 
+In fact, lots of settings are synced by Firefox itself.
+So this folder contains just some infos around and settings for [tridactyl](#tridactyl).
 
 ### Extensions
 1. My collections:
