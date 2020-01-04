@@ -10,7 +10,6 @@ set hintchars fsahjklgyuiopqwertnmzxcvb
 " Binds
 bind i set modeindicator false
 bind I set modeindicator true
-bind ii ex.hide_and_clear --mode=insert
 bind gnm tabopen https://github.com/tridactyl/tridactyl
 bind gom open https://github.com/tridactyl/tridactyl
 bind gwm winopen https://github.com/tridactyl/tridactyl
@@ -19,7 +18,6 @@ bind go1 open https://github.com/tridactyl/tridactyl
 bind gw1 winopen https://github.com/tridactyl/tridactyl
 unbind d
 bind dd tabclose
-unbind --mode=insert ii
 
 " For syntax highlighting see https://github.com/tridactyl/vim-tridactyl
 " vim: set filetype=tridactyl
