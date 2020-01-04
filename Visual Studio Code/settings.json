@@ -1,0 +1,199 @@
+{
+    "files.autoSave": "afterDelay",
+    "editor.fontSize": 11,
+    "editor.fontFamily": "'Ubuntu Mono', 'Consolas','Droid Sans Mono', monospace, 'Droid Sans Fallback'",
+    "editor.renderWhitespace": "boundary",
+    "explorer.compressSingleChildFolder": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/*.*~": true
+    },
+    "editor.fontWeight": "bold",
+    "editor.tabCompletion": "on",
+    "window.menuBarVisibility": "toggle",
+    "workbench.editor.showTabs": false,
+    "editor.minimap.maxColumn": 60,
+    "sync.gist": "GIST ID",
+    "sync.quietSync": false,
+    "sync.askGistName": false,
+    "sync.removeExtensions": true,
+    "sync.syncExtensions": true,
+    "sync.autoDownload": false,
+    "sync.autoUpload": false,
+    "sync.forceDownload": false,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\cmd.exe",
+    "diffEditor.ignoreTrimWhitespace": true,
+    "php.validate.executablePath": "C:\\wamp64\\bin\\php\\php5.6.31\\php.exe",
+    "editor.tokenColorCustomizations": {
+        "[Default Dark+]": {
+            "comments": "#9ed49a",
+            "types": "#fff",
+            "textMateRules": [
+                {
+                    "scope": "keyword.operator",
+                    "settings": {
+                        "foreground": "#fff"
+                    }
+                },
+                {
+                    "scope": "support.variable",
+                    "settings": {
+                        "foreground": "#c4c5b8"
+                    }
+                },
+                {
+                    "scope": "support.function",
+                    "settings": {
+                        "foreground": "#eeb76f"
+                    }
+                },
+                {
+                    "scope": "string.quoted",
+                    "settings": {
+                        "foreground": "#91aaee"
+                    }
+                },
+                {
+                    "scope": "variable.parameter",
+                    "settings": {
+                        "foreground": "#c4c5b8"
+                    }
+                },
+                {
+                    "scope": "variable.other",
+                    "settings": {
+                        "foreground": "#c4c5b8"
+                    }
+                },
+                {
+                    "scope": "entity.name.function",
+                    "settings": {
+                        "foreground": "#eec691"
+                    }
+                },
+                {
+                    "scope": "meta",
+                    "settings": {
+                        "foreground": "#fff"
+                    }
+                },
+                {
+                    "scope": "keyword.operator.new",
+                    "settings": {
+                        "foreground": "#d0bcf0"
+                    }
+                },
+                {
+                    "scope": "storage.type",
+                    "settings": {
+                        "foreground": "#d0bcf0"
+                    }
+                },
+                {
+                    "scope": "storage.modifier",
+                    "settings": {
+                        "foreground": "#d0bcf0"
+                    }
+                },
+                {
+                    "scope": "keyword.control",
+                    "settings": {
+                        "foreground": "#d0bcf0"
+                    }
+                },
+                {
+                    "scope": "punctuation.terminator",
+                    "settings": {
+                        "foreground": "#fff"
+                    }
+                }
+            ]
+        }
+    },
+    "highlight.regexes": {
+        "(_this)":{
+            "filterLanguageRegex": "JavaScript",
+            "decorations":[
+                {"color": "white"}
+            ]
+        },
+        "(gulp_place)":{
+            "decorations":[
+                {"color": "#fbca04"}
+            ]
+        }
+    },
+    "window.zoomLevel": 0,
+    "breadcrumbs.enabled": true,
+    "window.newWindowDimensions": "inherit",
+    "terminal.integrated.rendererType": "dom",
+    "git.enabled": false,
+    "bracket-pair-colorizer-2.colors": [
+        "#C7A349",
+        "#e6aad0",
+        "#FFFFFF"
+    ],
+    "sync.forceUpload": true,
+    "task.autoDetect": "off",
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "metaGo.decoration.backgroundColor": "#2b2b2b,#2b2b2b",
+    "metaGo.decoration.color": "yellow",
+    "metaGo.decoration.backgroundOpacity": "1",
+    "metaGo.decoration.borderColor": "yellow",
+    "metaGo.jumper.screenLineRange": 80,
+    "metaGo.jumper.findAllMode": "off",
+    "metaGo.decoration.x": 3,
+    "metaGo.decoration.width": 6,
+    "metaGo.jumper.wordSeparatorPattern": "[\\{\\}\\[\\]\\(\\) ,._!?;\"'`<>\\/+\\-*$]",
+    "vim.visualstar": true,
+    "vim.easymotion": true,
+    "vim.insertModeKeyBindings": [
+        {
+            "before": ["i", "i"],
+            "after": ["<Esc>"]
+        }
+    ],
+    "vim.normalModeKeyBindings": [
+        {
+            "before": [ ";" ],
+            "after": [ ":" ]
+        },
+        {
+           "before": [ "ž" ],
+            "after": [ "^" ]
+        },
+        {
+           "before": [ "č" ],
+            "after": [ "$" ]
+        },
+        {
+            "before": [ "ú" ],
+            "commands": [
+                ":nohl"
+            ]
+        }
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "p",
+            ],
+            "after": [
+                "p",
+                "g",
+                "v",
+                "y"
+            ]
+        }
+    ],
+    "vim.history": 500,
+    "vim.textwidth": 120,
+    "vim.vimrc.enable": false,
+    "vim.disableExtension": true,
+    "search.enableSearchEditorPreview": true
+}

@@ -1,0 +1,203 @@
+// Place your key bindings in this file to overwrite the defaults
+[
+    {
+        "key": "alt+f3 f2",
+        "command": "workbench.action.terminal.focus"
+    },
+    {
+        "key": "f3",
+        "command": "workbench.action.toggleEditorGroupLayout"
+    },
+    {
+        "key": "alt+f3 f1",
+        "command": "workbench.action.togglePanel"
+    },
+    {
+        "key": "shift+alt+0",
+        "command": "-workbench.action.toggleEditorGroupLayout"
+    },
+    {
+        "key": "alt+f2",
+        "command": "workbench.view.extension.outline"
+    },
+    {
+        "key": "alt+f3 f7",
+        "command": "workbench.action.output.toggleOutput"
+    },
+    {
+        "key": "ctrl+k ctrl+h",
+        "command": "-workbench.action.output.toggleOutput"
+    },
+    {
+        "key": "ctrl+k t",
+        "command": "workbench.action.focusPanel"
+    },
+    {
+        "key": "ctrl+j",
+        "command": "-workbench.action.togglePanel"
+    },
+    {
+        "key": "ctrl+alt+f1",
+        "command": "editor.action.showAccessibilityHelp",
+        "when": "editorFocus"
+    },
+    {
+        "key": "alt+f1",
+        "command": "-editor.action.showAccessibilityHelp",
+        "when": "editorFocus"
+    },
+    {
+        "key": "ctrl+alt+f3",
+        "command": "editor.action.dirtydiff.next",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+f3",
+        "command": "-editor.action.dirtydiff.next",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+alt+f3",
+        "command": "editor.action.dirtydiff.previous",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "shift+alt+f3",
+        "command": "-editor.action.dirtydiff.previous",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+alt+f5",
+        "command": "workbench.action.editor.nextChange",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+f5",
+        "command": "-workbench.action.editor.nextChange",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+alt+f5",
+        "command": "workbench.action.editor.previousChange",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "shift+alt+f5",
+        "command": "-workbench.action.editor.previousChange",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+f3 f3",
+        "command": "outline.focus"
+    },
+    {
+        "key": "alt+f3 f5",
+        "command": "workbench.files.action.focusFilesExplorer"
+    },
+    {
+        "key": "alt+f3 shift+alt+f2",
+        "command": "workbench.action.toggleMaximizedPanel"
+    },
+    {
+        "key": "ctrl+shift+d",
+        "command": "editor.action.addSelectionToPreviousFindMatch"
+    },
+    {
+        "key": "alt+'",
+        "command": "-metaGo.bookmark.toggle",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+/",
+        "command": "-metaGo.bookmark.view",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+f3 m",
+        "command": "metaGo.currentLineToCenter",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+m",
+        "command": "-metaGo.currentLineToCenter",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+f3 t",
+        "command": "metaGo.currentLineToTop",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+t",
+        "command": "-metaGo.currentLineToTop",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "shift+backspace",
+        "command": "-metaGo.delete.softDelete",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+;",
+        "command": "-metaGo.goto",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+f3 shift+f4",
+        "command": "metaGo.selection",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "shift+alt+;",
+        "command": "-metaGo.selection",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+f3 f4",
+        "command": "metaGo.gotoBefore",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+alt+;",
+        "command": "-metaGo.gotoBefore",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+i",
+        "command": "-metaGo.selectLineUp",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+\\",
+        "command": "-metaGo.jumpToBracket",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+i",
+        "command": "-metaGo.selectLineDown",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+b",
+        "command": "-metaGo.currentLineToBottom",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+f3 oem_6",
+        "command": "editor.action.jumpToBracket",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+shift+oem_5",
+        "command": "-editor.action.jumpToBracket",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "alt+f3 f4",
+        "command": "toggleVim"
+    },
+    {
+        "key": "alt+f3 f6",
+        "command": "notifications.showList"
+    }
+]
