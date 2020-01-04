@@ -1,2 +1,2 @@
 # dotfiles
-My "dotfiles" (win/ubunut config files) WIP
+My "dotfiles" (Windows/Ubuntu/... config files) WIP
