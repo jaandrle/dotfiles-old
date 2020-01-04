@@ -1,0 +1,82 @@
+{
+	// Place your snippets for php here. Each snippet is defined under a snippet name and has a prefix, body and 
+	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+	// same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"Loop": {
+		"prefix": "for",
+		"body": [
+			"for($1$i=0; $i<$i_length; $i++){",
+			"\t$0",
+			"}"
+		]
+	},
+	"LoopEach": {
+		"prefix": "foreach",
+		"body": [
+			"foreach(${1:$array_like} as ${2:$key}=>${3:$value}){",
+			"\t$0",
+			"}"
+		]
+	},
+	"<?php": {
+		"prefix": "php",
+		"body": [
+			"<?php $0 ?>"
+		]
+	},
+	"<?=": {
+		"prefix": "pp",
+		"body": [
+			"<?=$0?>"
+		]
+	},
+	"/**/": {
+		"prefix": "cmt",
+		"body": [
+			"/* $0 */"
+		]
+	},
+	"<!---->": {
+		"prefix": "cmth",
+		"body": [
+			"<!-- $0 -->"
+		]
+	},
+	"REST": {
+		"prefix": "REST",
+		"body": [
+			"/*",
+			"POST https://www.dhlcnetwork.com/api/ HTTP/1.1",
+			"content-type: application/x-www-form-urlencoded",
+			"response-type: application/json",
+			"",
+			"key=e15s4ad6dgwqe4d6a1ghzd2-lucid_lynx",
+			"&action=login",
+			"&email=jan.andrle@indigo.cz",
+			"&password=313d0c7aabae657a800e003a606e1d7a77f436f8328233d246ac8cf29ac3c33d",
+			"",
+			"",
+			"POST https://www.dhlcnetwork.com/api/ HTTP/1.1",
+			"content-type: application/x-www-form-urlencoded",
+			"response-type: application/json",
+			"",
+			"key=e15s4ad6dgwqe4d6a1ghzd2-lucid_lynx",
+			"&hash=278ae580ec6e926d0f61ce74",
+			"&action=get_search",
+			"&where=flash",
+			"&search=test",
+			"&last_sync=2019-08-01 17:51:33",
+			"*/"
+		]
+	}
+}
