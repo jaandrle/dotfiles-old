@@ -1,0 +1,27 @@
+#!/bin/bash
+
+case "$1" in
+    --weather|-W )
+        curl wttr.in/prague | less -R -S
+        ;;
+    --youtube|-Y )
+        if [ "$3" == "audio" ]; then
+            youtube-dl -i --yes-playlist --playlist-start 1 --extract-audio --audio-format mp3 -o "%(playlist_index)s-%(title)s.%(ext)s" $2
+        else
+            youtube-dl -i --yes-playlist --playlist-start 1 --write-auto-sub --sub-format srt --format mp4 -o "%(playlist_index)s-%(title)s.%(ext)s" $2
+        fi
+        ;;
+    --calc|-C )
+        #echo "scale=10; $2" |bc
+        #echo $2 |gcalccmd
+        shift
+        python3 -c 'import sys; print(eval(" ".join(sys.argv[1:])))' "$*"
+        ;;
+    --music-A|-MA )
+        tizonia --youtube-audio-playlist "https://www.youtube.com/playlist?list=PL-klPkSyWZtUTmdrTIQz3NGZ__eTiKoEn"
+        ;;
+    *)
+        echo $"Usage: $0 --{weather|calc} (-{W|C})"
+        exit 1
+        ;;
+esac
