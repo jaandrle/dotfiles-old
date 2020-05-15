@@ -1,5 +1,6 @@
 " Jan Andrle
 " ▓ ▓ ▓ GENERAL ▓ ▓ ▓
+set path+=**                           " Not only `:find` navigation for files
 set autoread                           " Auto reload changed files
 au FocusGained,BufEnter * checktime
 set wildmenu                           " Tab autocomplete in command mode
