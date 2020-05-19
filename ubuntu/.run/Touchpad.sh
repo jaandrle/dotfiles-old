@@ -8,5 +8,4 @@ cat /home/jaandrle/.synpadSettings | xargs synclient &
 xinput set-prop 11 "Synaptics Palm Detection" 1 &
 xinput set-prop --type=int --format=8  "Genius Optical Mouse" "Evdev Middle Button Emulation" 1 &
 
-notify-send -i //usr/share/icons/Numix-Circle/48/apps/ubuntu-online-tour.svg "Nastavení poloh. zařízení
-úspěšně restartováno"
+notify-send -i distributor-logo-xubuntu "Nastavení poloh. zařízení úspěšně restartováno"
