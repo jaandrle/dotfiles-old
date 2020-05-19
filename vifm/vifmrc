@@ -17,6 +17,7 @@ if !has('win')
     :bmark! "~/Dokumenty/" documents
     :bmark! "~/Aktivity/OneDrive" onedrive
     :bmark! "~/.vifm/" vifm
+    :bmark! "/media/jaandrle/" volumes
 else
     :bmark! "~/" home
     :bmark! "C:/Projekty/" projects cordova
@@ -28,9 +29,7 @@ else
     :bmark! "~/AppData/Roaming/Vifm/" vifm
 endif
 
-if has('win')
-    set quickview
-endif
+set quickview
 set dotfiles
 
 set vicmd=vim
@@ -192,13 +191,14 @@ if has('win')
     command! zipAll powershell Compress-Archive -Path %"c/* -CompressionLevel Fastest -DestinationPath %c:r.zip
     command! isrunnig %m tasklist /FI "IMAGENAME eq %a" 2>NUL |   find /I /N "%a"
 else
-    command! onedrive gnome-terminal -x bash -c 'echo Microsoft Onedrive Log:; onedrive -m' &
+    command! onedrive xfce4-terminal -x bash -c 'echo Microsoft Onedrive Log:; onedrive -m' &
     command! meld meld %"f %"F 2> /dev/null &
     command! zipAll zip -r "%c:r.zip" ./*
 endif
 
 command! df df -h %m 2> /dev/null
 command! diff vim -d %f %F
+command! vim vim %"f
 command! run !! ./%f
 command! make !!make %a
 command! mkcd :mkdir %a | cd %a
@@ -498,7 +498,7 @@ endif
 if has('win')
     filetype * {File Explorer} explorer %"c:p &, {Total Commander} "C:\Program Files (x86)\totalcmd\TOTALCMD.EXE" /O %"c:p &, {Notepad++} "C:\Program Files\Notepad++\notepad++.exe" %"c:p &
 else
-    filetype * {Native Open} xdg-open > /dev/null 2>&1 &, {Gedit} gedit %"c:p &
+    filetype * {Native Open} xdg-open > /dev/null 2>&1 &
 endif
 
 " ------------------------------------------------------------------------------

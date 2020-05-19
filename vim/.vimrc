@@ -1,11 +1,11 @@
 " Jan Andrle
 " ▓ ▓ ▓ GENERAL ▓ ▓ ▓
-set path+=**                           " Not only `:find` navigation for files
+set path+=**
 set autoread                           " Auto reload changed files
 au FocusGained,BufEnter * checktime
 set wildmenu                           " Tab autocomplete in command mode
-set backspace=indent,eol,start         " http://vi.stackexchange.com/a/2163
-set clipboard=unnamed                  " Clipboard support (OSX)
+set backspace=indent,eol,start         " Allow cursor keys in insert mode:  http://vi.stackexchange.com/a/2163
+set clipboard=unnamed                  " Use the OS clipboard by default (on versions compiled with `+clipboard`)
 set laststatus=2                       " Show status line on startup
 set statusline=\ %{HasPaste()}\ 
 set statusline+=%r%{getcwd()}/%f%h\ 
@@ -25,7 +25,7 @@ set nobackup nowritebackup noswapfile  " Turn off backup files
 set noerrorbells novisualbell          " Turn off visual and audible bells
 set expandtab smarttab                 " Use spaces instead of tabs and be smart
 set shiftwidth=4 tabstop=4             " Two spaces for tabs everywhere
-set ai si                              " Auto indent / Smart indent
+set noai nosi                          " Auto indent / Smart indent
 set history=500                        " How many lines of history has to remember
 set hlsearch                           " Highlight search results
 set ignorecase smartcase               " Search queries intelligently set case
@@ -38,9 +38,14 @@ set showcmd                            " Show size of visual selection
 if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
   syntax on
 endif
+set cursorline
 " Enable filetype plugins
-filetype plugin on
-filetype indent on
+if has("autocmd")
+  " Enable file type detection
+  filetype on
+  " Treat .json files as .js
+  autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
+endif
 " Highlight spec. chars / Display extra whitespace
 set list
 set listchars=tab:»·,trail:·,nbsp:·,space:·
@@ -48,13 +53,9 @@ highlight SpecialKey guifg=darkgrey ctermfg=darkgrey
 highlight Comment cterm=italic " Showcase comments in italics
 highlight ColorColumn ctermbg=darkgrey guibg=darkgrey
 " ▓ ▓ ▓ INTERFACE ▓ ▓ ▓
-set number relativenumber               " Enable line numbers
+set number "relativenumber               " Enable line numbers
 set numberwidth=5
-:augroup numbertoggle
-:  autocmd!
-:  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-:  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
-:augroup END
+nmap TN :set relativenumber!<CR>
 set foldcolumn=0                        " Add a bit extra margin to the left
 set scrolloff=5                         " Leave 5 lines of buffer when scrolling
 set sidescrolloff=10                    " Leave 10 characters of horizontal buffer when scrolling
@@ -115,6 +116,8 @@ function! HasPaste()
 endfunction
 " ▓ ▓ ▓ KEYBOARD ▓ ▓ ▓
 let mapleader = ","
+" Save a file as root (,W)
+noremap <leader>W :w !sudo tee % > /dev/null<CR>
 nnoremap <leader>p i<right><space><esc>p
 nnoremap <leader><shift>p i<right><esc><shift>p<space>
 set pastetoggle=<F2>
