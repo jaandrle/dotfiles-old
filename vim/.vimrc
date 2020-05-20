@@ -1,7 +1,9 @@
 " Jan Andrle
 " ▓ ▓ ▓ GENERAL ▓ ▓ ▓
+set encoding=utf8                      " Set utf8 as standard encoding and en_US as the standard language
 set path+=**
 set autoread                           " Auto reload changed files
+set bg=dark
 au FocusGained,BufEnter * checktime
 set wildmenu                           " Tab autocomplete in command mode
 set backspace=indent,eol,start         " Allow cursor keys in insert mode:  http://vi.stackexchange.com/a/2163
@@ -48,9 +50,10 @@ if has("autocmd")
 endif
 " Highlight spec. chars / Display extra whitespace
 set list
-set listchars=tab:»·,trail:·,nbsp:·,space:·
+set listchars=tab:»·,trail:·,nbsp:~,space:·
 highlight SpecialKey guifg=darkgrey ctermfg=darkgrey
-highlight Comment cterm=italic " Showcase comments in italics
+highlight Comment cterm=italic ctermbg=black guibg=black
+highlight CursorLine cterm=underline gui=underline ctermbg=black guibg=black
 highlight ColorColumn ctermbg=darkgrey guibg=darkgrey
 " ▓ ▓ ▓ INTERFACE ▓ ▓ ▓
 set number "relativenumber               " Enable line numbers
