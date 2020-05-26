@@ -1,0 +1,10 @@
+$include /etc/inputrc
+# Use Vi, not Emacs, style editing
+set editing-mode vi
+# Keymaps for when we're in command mode (e.g., after hitting ESC)
+set keymap vi-command
+set keymap vi-insert
+# Show vim mode indicators
+set show-mode-in-prompt on
+set vi-ins-mode-string "\1\e[1;31m\2ins\1\e[0m\2|"
+set vi-cmd-mode-string "cmd|"
