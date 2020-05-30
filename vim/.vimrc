@@ -18,35 +18,55 @@
     command -nargs=+ MapSmartKey call MapSmartKey(<f-args>)
 
 """ Keys combinations for editing/reading
-    let mapleader = ","
+    let mapleader = "\\"
     nnoremap <F2> :set invpaste paste?<CR>
     set pastetoggle=<F2>
     set showmode
     nmap ; :
-    imap ii <Esc>
     nmap <s-u> <c-r>
+    imap ii <Esc>
     nmap ž ^
+    nmap č $
     MapSmartKey Home
     MapSmartKey End
+                                " Revert to J (K originally called man page!)
+    nmap <s-k> i<cr><esc>
     nmap <c-down> gj
     nmap <c-up> gk
-    nmap <silent> ú : let @/ = ""<cr>
-                                " Paste to line end with space
-    nnoremap <leader>pa a<right><space><esc>p
-    nnoremap <leader>p<s-a> <s-a><right><space><esc>p
-    nnoremap <leader>,o <s-a>,<cr><esc>
-    nnoremap <leader>;o <s-a>;<cr><esc>
-    nnoremap <leader>o o<esc>
-    nnoremap <leader><s-o> <s-o><esc>
+    nmap <silent> ú :nohlsearch<cr>
+                                " Paste with space ??? <c-G>u
+    nnoremap <leader>pa a<space><esc>p
+    nnoremap <leader>p<s-a> <s-a><space><esc>p
+    nnoremap <leader>pi i<space><esc><s-p>
+    nnoremap <leader>p<s-i> <s-i><space><esc><s-p>
+                                " 'multi cursor'
+    nnoremap <leader>cw *``cgn
+    nnoremap <leader>cb #``cgN
+                                " ,; + new line
+    nnoremap <leader>,o <s-a>,<cr><space><bs>
+    nnoremap <leader>;o <s-a>;<cr><space><bs>
+                                " New line with indent and normal mode
+    nnoremap <leader>o o<space><bs><esc>
+    nnoremap <leader><s-o> <s-o><space><bs><esc>
                                 " Visual mode pressing * or # searches for the current selection. From an idea by Michael Naumann.
     vnoremap <silent> * :<C-u>call VisualSelection('')<CR>/<C-R>=@/<CR><CR>
     vnoremap <silent> # :<C-u>call VisualSelection('')<CR>?<C-R>=@/<CR><CR>
+                                " Make like D,C,… instead of yy
+    nnoremap Y y$
+                                " Better insert mode
+    inoremap <> <><Left>
+    inoremap () ()<Left>
+    inoremap {} {}<Left>
+    inoremap [] []<Left>
+    inoremap "" ""<Left>
+    inoremap '' ''<Left>
+    inoremap `` ``<Left>
 
 """ Syntax
     set cursorline
     set list                                        " Highlight spec. chars / Display extra whitespace
     MapSetToggle TS list
-    set listchars=tab:»·,trail:·,nbsp:~,space:·
+    set listchars=tab:»·,trail:·,extends:#,nbsp:~,space:·
     highlight SpecialKey guifg=darkgrey ctermfg=darkgrey
     highlight Comment cterm=italic ctermbg=black guibg=black
     highlight CursorLine cterm=underline gui=underline ctermbg=black guibg=black
@@ -77,7 +97,7 @@
 
 """ Saving files
                                                 " Save a file as root (:W)
-    command W w !sudo tee "%" > /dev/null
+    command! W w !sudo tee > /dev/null %
     set nobackup nowritebackup noswapfile       " Turn off backup files
     set history=500                             " How many lines of history has to remember
                                                 " Savig edit history for next oppening
@@ -115,6 +135,7 @@
     set guioptions-=L
 
 """ UI/UX
+    set title                                   " change the terminal's title
     set clipboard=unnamed                       " Use the OS clipboard by default (on versions compiled with `+clipboard`)
     set lazyredraw                              " Reduce the redraw frequency
     set ttyfast                                 " Send more characters in fast terminals
@@ -133,9 +154,8 @@
     MapSetToggle TW wrap
     set expandtab smarttab                      " Use spaces instead of tabs and be smart
     set shiftwidth=4 tabstop=4 softtabstop=4    " Set spaces for tabs everywhere
-    set noai nosi                               " Auto indent / Smart indent
+    set ai si ci                                " Auto indent / Smart indent / Copy indent
     set wildmenu                                " Tab autocomplete in command mode
-                                                " Tab completion: will insert tab at beginning of line, will use completion if not at beginning
     set wildmode=list:longest,list:full
 
 """ Functions
