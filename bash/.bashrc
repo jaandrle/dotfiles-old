@@ -70,13 +70,17 @@ function setPromt {
         return
         ;;
     esac
-    # color_helper_>>color<<
-    local chR="\e[1;31m"          #red
+    # color_helper_>>color<< (Note: \[\]= escaping)
+    local chR="\[\e[1;31m\]"      #red
     local chW="\[\033[00m\]"      #white
     local chG="\[\033[01;32m\]"   #green
     local chB="\[\033[0;34m\]"    #blue
     local chP="\[\033[0;35m\]"    #purple
-    PS1="  ${debian_chroot:+($debian_chroot)} At ${chP}\A${chW} by ${chG}\u${chW} in ${chB}\w${chW}\n:"
+    PS1="  ${debian_chroot:+($debian_chroot)}"
+    PS1+=" At ${chP}\A${chW}"
+    PS1+=" by ${chG}\u${chW}"
+    PS1+=" in ${chB}\w${chW}"
+    PS1+="\n:"
     PS2="|"
 }
 setPromt
