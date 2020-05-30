@@ -49,6 +49,7 @@
     nnoremap <leader>o o<space><bs><esc>
     nnoremap <leader><s-o> <s-o><space><bs><esc>
                                 " Visual mode pressing * or # searches for the current selection. From an idea by Michael Naumann.
+                                " …alternative: /<C-R><C-W>
     vnoremap <silent> * :<C-u>call VisualSelection('')<CR>/<C-R>=@/<CR><CR>
     vnoremap <silent> # :<C-u>call VisualSelection('')<CR>?<C-R>=@/<CR><CR>
                                 " Make like D,C,… instead of yy
