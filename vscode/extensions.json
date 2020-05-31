@@ -7,7 +7,7 @@
     },
     "name": "bracket-pair-colorizer-2",
     "publisher": "CoenraadS",
-    "version": "0.0.29"
+    "version": "0.1.4"
   },
   {
     "metadata": {
@@ -57,7 +57,7 @@
     },
     "name": "remote-wsl",
     "publisher": "ms-vscode-remote",
-    "version": "0.41.6"
+    "version": "0.44.2"
   },
   {
     "metadata": {
@@ -67,7 +67,7 @@
     },
     "name": "rest-client",
     "publisher": "humao",
-    "version": "0.23.0"
+    "version": "0.23.2"
   },
   {
     "metadata": {
@@ -97,7 +97,17 @@
     },
     "name": "vim",
     "publisher": "vscodevim",
-    "version": "1.12.2"
+    "version": "1.14.5"
+  },
+  {
+    "metadata": {
+      "id": "dd7c983e-6359-4955-94eb-c83b94edd844",
+      "publisherId": "howardzuo.vscode-favorites",
+      "publisherDisplayName": "howardzuo"
+    },
+    "name": "vscode-favorites",
+    "publisher": "howardzuo",
+    "version": "1.8.0"
   },
   {
     "metadata": {
@@ -107,17 +117,7 @@
     },
     "name": "vscode-highlight",
     "publisher": "fabiospampinato",
-    "version": "1.3.4"
-  },
-  {
-    "metadata": {
-      "id": "ffda6552-0ad5-431b-a4fa-0905a7e4f3f0",
-      "publisherId": "bmewburn.vscode-intelephense-client",
-      "publisherDisplayName": "bmewburn"
-    },
-    "name": "vscode-intelephense-client",
-    "publisher": "bmewburn",
-    "version": "1.3.5"
+    "version": "1.4.1"
   },
   {
     "metadata": {
@@ -127,6 +127,16 @@
     },
     "name": "vscode-pull-request-github",
     "publisher": "GitHub",
-    "version": "0.13.0"
+    "version": "0.16.0"
+  },
+  {
+    "metadata": {
+      "id": "f38abf4d-543d-496d-9353-0025faa19abd",
+      "publisherId": "hoovercj.vscode-settings-cycler",
+      "publisherDisplayName": "hoovercj"
+    },
+    "name": "vscode-settings-cycler",
+    "publisher": "hoovercj",
+    "version": "1.0.1"
   }
 ]

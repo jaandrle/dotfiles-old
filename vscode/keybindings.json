@@ -1,16 +1,28 @@
 // Place your key bindings in this file to overwrite the defaults
 [
     {
-        "key": "alt+f3 f2",
-        "command": "workbench.action.terminal.focus"
+        "key": "alt+; f2",
+        "command": "workbench.action.terminal.focus",
+        "when": "isLinux",
+    },
+    {
+        "key": "alt+oem_3 f2",
+        "command": "workbench.action.terminal.focus",
+        "when": "isWindows",
     },
     {
         "key": "f3",
         "command": "workbench.action.toggleEditorGroupLayout"
     },
     {
-        "key": "alt+f3 f1",
-        "command": "workbench.action.togglePanel"
+        "key": "alt+; f1",
+        "command": "workbench.action.togglePanel",
+        "when": "isLinux",
+    },
+    {
+        "key": "alt+oem_3 f1",
+        "command": "workbench.action.togglePanel",
+        "when": "isWindows",
     },
     {
         "key": "shift+alt+0",
@@ -21,8 +33,14 @@
         "command": "workbench.view.extension.outline"
     },
     {
-        "key": "alt+f3 f7",
-        "command": "workbench.action.output.toggleOutput"
+        "key": "alt+; f7",
+        "command": "workbench.action.output.toggleOutput",
+        "when": "isLinux",
+    },
+    {
+        "key": "alt+oem_3 f7",
+        "command": "workbench.action.output.toggleOutput",
+        "when": "isWindows",
     },
     {
         "key": "ctrl+k ctrl+h",
@@ -87,12 +105,24 @@
         "when": "editorTextFocus"
     },
     {
-        "key": "alt+f3 f3",
-        "command": "outline.focus"
+        "key": "alt+; f3",
+        "command": "outline.focus",
+        "when": "isLinux",
     },
     {
-        "key": "alt+f3 f5",
-        "command": "workbench.files.action.focusFilesExplorer"
+        "key": "alt+oem_3 f3",
+        "command": "outline.focus",
+        "when": "isWindows",
+    },
+    {
+        "key": "alt+; f5",
+        "command": "workbench.files.action.focusFilesExplorer",
+        "when": "isLinux",
+    },
+    {
+        "key": "alt+oem_3 f5",
+        "command": "workbench.files.action.focusFilesExplorer",
+        "when": "isWindows",
     },
     {
         "key": "alt+f3 shift+alt+f2",
@@ -101,86 +131,6 @@
     {
         "key": "ctrl+shift+d",
         "command": "editor.action.addSelectionToPreviousFindMatch"
-    },
-    {
-        "key": "alt+'",
-        "command": "-metaGo.bookmark.toggle",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "alt+/",
-        "command": "-metaGo.bookmark.view",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "alt+f3 m",
-        "command": "metaGo.currentLineToCenter",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "alt+m",
-        "command": "-metaGo.currentLineToCenter",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "alt+f3 t",
-        "command": "metaGo.currentLineToTop",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "alt+t",
-        "command": "-metaGo.currentLineToTop",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "shift+backspace",
-        "command": "-metaGo.delete.softDelete",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "alt+;",
-        "command": "-metaGo.goto",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "alt+f3 shift+f4",
-        "command": "metaGo.selection",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "shift+alt+;",
-        "command": "-metaGo.selection",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "alt+f3 f4",
-        "command": "metaGo.gotoBefore",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "ctrl+alt+;",
-        "command": "-metaGo.gotoBefore",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "ctrl+shift+i",
-        "command": "-metaGo.selectLineUp",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "ctrl+shift+\\",
-        "command": "-metaGo.jumpToBracket",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "ctrl+i",
-        "command": "-metaGo.selectLineDown",
-        "when": "editorTextFocus"
-    },
-    {
-        "key": "alt+b",
-        "command": "-metaGo.currentLineToBottom",
-        "when": "editorTextFocus"
     },
     {
         "key": "alt+f3 oem_6",
@@ -193,11 +143,47 @@
         "when": "editorTextFocus"
     },
     {
-        "key": "alt+f3 f4",
-        "command": "toggleVim"
+        "key": "alt+; f4",
+        "command": "toggleVim",
+        "when": "isLinux",
     },
     {
-        "key": "alt+f3 f6",
-        "command": "notifications.showList"
+        "key": "alt+oem_3 f4",
+        "command": "toggleVim",
+        "when": "isWindows",
+    },
+    {
+        "key": "alt+; f6",
+        "command": "notifications.showList",
+        "when": "isLinux",
+    },
+    {
+        "key": "alt+oem_3 f6",
+        "command": "notifications.showList",
+        "when": "isWindows",
+    },
+    {
+        "key": "alt+; ;",
+        "command": "workbench.action.focusActiveEditorGroup",
+        "when": "isLinux",
+    },
+    {
+        "key": "alt+oem_3 oem_3",
+        "command": "workbench.action.focusActiveEditorGroup",
+        "when": "isWindows",
+    },
+    {
+        "key": "alt+f3 w",
+        "command": "settings.cycle.wordWrap",
+    },
+    {
+        "key": "shift+alt+k",
+        "command": "keybindings.editor.recordSearchKeys",
+        "when": "inKeybindings && inKeybindingsSearch"
+    },
+    {
+        "key": "alt+k",
+        "command": "-keybindings.editor.recordSearchKeys",
+        "when": "inKeybindings && inKeybindingsSearch"
     }
 ]

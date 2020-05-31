@@ -1,7 +1,7 @@
 {
     "files.autoSave": "afterDelay",
-    "editor.fontSize": 11,
-    "editor.fontFamily": "'Ubuntu Mono', 'Consolas','Droid Sans Mono', monospace, 'Droid Sans Fallback'",
+    "editor.fontSize": 9.5,
+    "editor.fontFamily": "'iA Writer Duo S','Ubuntu Mono',monospace",
     "editor.renderWhitespace": "boundary",
     "explorer.compressSingleChildFolder": true,
     "files.exclude": {
@@ -17,7 +17,7 @@
     "window.menuBarVisibility": "toggle",
     "workbench.editor.showTabs": false,
     "editor.minimap.maxColumn": 60,
-    "sync.gist": "GIST ID",
+    "sync.gist": "4eebd99cf93d5c93abd5b7b70ee996f4",
     "sync.quietSync": false,
     "sync.askGistName": false,
     "sync.removeExtensions": true,
@@ -29,6 +29,16 @@
     "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\cmd.exe",
     "diffEditor.ignoreTrimWhitespace": true,
     "php.validate.executablePath": "C:\\wamp64\\bin\\php\\php5.6.31\\php.exe",
+    "editor.semanticTokenColorCustomizations": {
+        "[Default Dark+]": {
+            "enabled": true,
+            "rules": {
+                "*.readonly": "#c4c5b8",
+                "property": "#a4d7e2",
+                "function": "#eec691"
+            }
+        }
+     },
     "editor.tokenColorCustomizations": {
         "[Default Dark+]": {
             "comments": "#9ed49a",
@@ -43,7 +53,7 @@
                 {
                     "scope": "support.variable",
                     "settings": {
-                        "foreground": "#c4c5b8"
+                        "foreground": "#e4e5d8"
                     }
                 },
                 {
@@ -61,13 +71,13 @@
                 {
                     "scope": "variable.parameter",
                     "settings": {
-                        "foreground": "#c4c5b8"
+                        "foreground": "#e4e5d8"
                     }
                 },
                 {
                     "scope": "variable.other",
                     "settings": {
-                        "foreground": "#c4c5b8"
+                        "foreground": "#e4e5d8"
                     }
                 },
                 {
@@ -164,6 +174,10 @@
             "after": [ ":" ]
         },
         {
+            "before": [ "U" ],
+            "after": [ "<c-r>" ]
+        },
+        {
            "before": [ "ž" ],
             "after": [ "^" ]
         },
@@ -172,11 +186,63 @@
             "after": [ "$" ]
         },
         {
+            "before": [ "K" ],
+            "after": [ "a", "<cr>", "<esc>" ]
+        },
+        {
+            "before": [ "<leader>", "c", "w" ],
+            "after": [ "*", "`", "`", "c", "g", "n" ]
+        },
+        {
+            "before": [ "<leader>", "c", "b" ],
+            "after": [ "#", "`", "`", "c", "g", "N" ]
+        },
+        {
+            "before": [ "<leader>", "p", "a" ],
+            "after": [ "a", "<space>", "<esc>", "p" ]
+        },
+        {
+            "before": [ "<leader>", "p", "A" ],
+            "after": [ "A", "<space>", "<esc>", "p" ]
+        },
+        {
+            "before": [ "<leader>", "p", "i" ],
+            "after": [ "i", "<space>", "<esc>", "P" ]
+        },
+        {
+            "before": [ "<leader>", "p", "I" ],
+            "after": [ "I", "<space>", "<esc>", "P" ]
+        },
+        {
+            "before": [ "<leader>", "O" ],
+            "after": [ "O", " ", "<BS>", "<Esc>" ]
+        },
+        {
+            "before": [ "<leader>", "o" ],
+            "after": [ "o", " ", "<BS>", "<Esc>" ]
+        },
+        {
+            "before": [ "<leader>", ";", "o" ],
+            "after": [ "A", ";", "<Esc>", "o", " ", "<BS>" ]
+        },
+        {
+            "before": [ "<leader>", ",", "o" ],
+            "after": [ "A", ",", "<Esc>", "o", " ", "<BS>" ]
+        },
+        {
             "before": [ "ú" ],
             "commands": [
                 ":nohl"
             ]
+        },
+        {
+            "before": ["g", "s"],
+            "commands": [
+                "workbench.action.showAllSymbols"
+            ]
         }
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         {
@@ -195,5 +261,30 @@
     "vim.textwidth": 120,
     "vim.vimrc.enable": false,
     "vim.disableExtension": true,
-    "search.enableSearchEditorPreview": true
+    "search.enableSearchEditorPreview": true,
+    "vim.easymotionMarkerFontFamily": "iA Writer Duo S",
+    "vim.easymotionMarkerFontSize": "9,5",
+    "rest-client.fontSize": 9.5,
+    "rest-client.fontWeight": "bold",
+    "terminal.integrated.fontSize": 9.5,
+    "terminal.integrated.lineHeight": 0.95,
+    "terminal.integrated.letterSpacing": -0.1,
+    "editor.wordWrapColumn": 120,
+    "settings.cycle": [
+        {
+            "id": "wordWrap",
+            "overrideWorkspaceSettings": false,
+            "values": [
+                {
+                    "editor.wordWrap": "wordWrapColumn",
+                },
+                {
+                    "editor.wordWrap": "off",
+                }
+            ]
+        }
+    ],
+    "editor.wordWrap": "off",
+    "editor.snippetSuggestions": "top",
+    "typescript.workspaceSymbols.scope": "currentProject",
 }
