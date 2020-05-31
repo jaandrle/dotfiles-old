@@ -1,4 +1,6 @@
-[ $# -eq 0 ] && ls -t -d /media/jaandrle/*/ ~ ~/* ~/*/* ~/*/*/* | sed -e 's:/home/jaandrle:~:' | sed -e "s:'::"
+[ $# -eq 0 ] && ls -a -t -d /media/jaandrle/*/ ~ ~/* ~/*/* ~/*/*/* |\
+    grep -v "/home/jaandrle/\(PlayOnLinux\|Šablony\|Dokumenty/NHL09\|snap\)" |\
+    sed -e 's:/home/jaandrle:~:'
 if [ $# -eq 1 ]
 then
     cmd=$(echo "$1" | sed -e 's:~:/home/jaandrle:')
