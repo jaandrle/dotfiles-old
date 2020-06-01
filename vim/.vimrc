@@ -1,5 +1,6 @@
 """"" VIM config file
 """" Jan Andrle
+:scriptencoding utf-8
 
 """ Helpers
     function MapSetToggle(key, opt)
