@@ -70,21 +70,41 @@ function setPromt {
         return
         ;;
     esac
+    PROMPT_COMMAND=updatePromt
+    PS2="|"
+}
+function updatePromt {
+    local prev_exit="$?"
     # color_helper_>>color<< (Note: \[\]= escaping)
-    local chR="\[\e[1;31m\]"      #red
+    local chR="\[\e[1;91m\]"      #red
     local chW="\[\033[00m\]"      #white
     local chG="\[\033[01;32m\]"   #green
     local chB="\[\033[0;34m\]"    #blue
     local chP="\[\033[0;35m\]"    #purple
-    PS1="  ${debian_chroot:+($debian_chroot)}"
-    PS1+=" At ${chP}\A${chW}"
-    PS1+=" by ${chG}\u${chW}"
-    PS1+=" in ${chB}\w${chW}"
+    local chY="\[\033[0;33m\]"    #yellow
+    PS1=""
+    if [ $prev_exit == 0 ]; then
+        PS1+="$chG✓ $chW";
+    else
+        PS1+="$chR✗ $chW";
+    fi
+    PS1+="${debian_chroot:+($debian_chroot)}"
+    PS1+=" At ${chG}\A${chW}"
+    PS1+=" by ${chP}\u${chW}"
+    if sudo -n true 2>/dev/null; then
+        PS1+="${chR} (sudo)${chW}"
+    fi
+    PS1+=" in "
+    if \git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        local branch="$(\git symbolic-ref -q HEAD)"
+        PS1+="[${branch#refs/heads/}] "
+    fi
+    PS1+="${chB}\w${chW}"
     PS1+="\n:"
-    PS2="|"
 }
 setPromt
 unset color_prompt force_color_prompt
+unset -f setPromt
 
 
 # enable color support of ls and also add handy aliases
