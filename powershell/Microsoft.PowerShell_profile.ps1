@@ -1,9 +1,31 @@
 ﻿# ~/WindowsPowerShell
 Set-PSReadlineOption -BellStyle Visual
 Set-PSReadlineOption -EditMode vi
+function Test-Administrator {
+    $user = [Security.Principal.WindowsIdentity]::GetCurrent();
+    (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
+}
 function prompt {
-    Write-Host -ForegroundColor Green (Get-Location).Path.Replace($HOME, '~')
-    Write-Host -nonewline -ForegroundColor Gray 'λ' 
+    if( $? ){
+        Write-Host -nonewline -ForegroundColor Green "0 "
+    } else {
+        Write-Host -nonewline -ForegroundColor Red "! "
+    }
+    Write-Host -nonewline " At "
+    Write-Host -nonewline -ForegroundColor Magenta "$(Get-Date -Format %H:%m)"
+    Write-Host -nonewline " by "
+    Write-Host -nonewline -ForegroundColor Yellow "jaandrle"
+    if ( Test-Administrator ){
+        Write-Host -nonewline -ForegroundColor DarkRed " (root)"
+    }
+    Write-Host -nonewline " on "
+    if( git rev-parse --is-inside-work-tree 2> $null ){
+        $branch="$(git symbolic-ref -q HEAD)".replace("refs/heads/", "")
+        Write-Host -nonewline -ForegroundColor Cyan "[$branch] "
+    }
+    Write-Host -ForegroundColor Cyan (Get-Location).Path.Replace($HOME, '~')
+    Write-Host -nonewline -ForegroundColor Gray '>_:' 
+    
     ' '
 }
 Set-PSReadLineOption -ViModeIndicator 2
@@ -12,6 +34,9 @@ function ycd {
 }
 function cdp {
     Get-Clipboard | cd
+}
+function help_keybindings {
+    Get-PSReadLineKeyHandler | more
 }
 
 $Host.PrivateData.DebugBackgroundColor = 'Gray'
@@ -22,7 +47,7 @@ $tokenColors = @{
     'Comment'   = 'DarkGreen'
     'Keyword'   = 'Blue'
     'Member'    = 'Cyan'
-    'Number'    =  'Yellow'
+    'Number'    = 'Yellow'
     'Operator'  = 'Magenta'
     'Parameter' = 'Cyan'
     'String'    = 'Yellow'
