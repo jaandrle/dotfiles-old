@@ -1,3 +1,6 @@
+"""" VIFM Config file
+""" Jan Andrle
+
 " vim: filetype=vifm :
 " Sample configuration file for vifm
 " You can edit this file by hand.
