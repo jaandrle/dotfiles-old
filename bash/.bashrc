@@ -84,9 +84,9 @@ function updatePromt {
     local chY="\[\033[0;33m\]"    #yellow
     PS1=""
     if [ $prev_exit == 0 ]; then
-        PS1+="$chG✓ $chW";
+        PS1+="$chG✓ $chW"
     else
-        PS1+="$chR✗ $chW";
+        PS1+="$chR✗ $chW"
     fi
     PS1+="${debian_chroot:+($debian_chroot)}"
     PS1+=" At ${chG}\A${chW}"
@@ -97,7 +97,12 @@ function updatePromt {
     PS1+=" in "
     if \git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
         local branch="$(\git symbolic-ref -q HEAD)"
-        PS1+="[${branch#refs/heads/}] "
+        PS1+="[${branch#refs/heads/}"
+        local status="$(git status --porcelain | awk '!seen[$1]++ {printf $1}')"
+        if [ $status ]; then
+            PS1+="|$chY$status$chW"
+        fi
+        PS1+="] "
     fi
     PS1+="${chB}\w${chW}"
     PS1+="\n:"
