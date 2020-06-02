@@ -98,8 +98,9 @@ function updatePromt {
     if \git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
         local branch="$(\git symbolic-ref -q HEAD)"
         PS1+="[${branch#refs/heads/}"
-        local status="$(git status --porcelain | awk '!seen[$1]++ {printf $1}')"
-        if [ $status ]; then
+        local status="$(git for-each-ref --format='%(upstream:trackshort)' refs/heads | awk '!seen[$1]++ {printf $1}')"
+        status+="$(git status --porcelain | awk '!seen[$1]++ {printf $1}')"
+        if [ "$statua"s ]; then
             PS1+="|$chY$status$chW"
         fi
         PS1+="] "
