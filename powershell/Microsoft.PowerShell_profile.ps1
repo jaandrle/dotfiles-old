@@ -21,7 +21,12 @@ function prompt {
     Write-Host -nonewline " on "
     if( git rev-parse --is-inside-work-tree 2> $null ){
         $branch="$(git symbolic-ref -q HEAD)".replace("refs/heads/", "")
-        Write-Host -nonewline -ForegroundColor Cyan "[$branch] "
+        $status_hash=@{}
+        "$(git for-each-ref --format='%(upstream:trackshort)' refs/heads)".split(" ") | %{if($status_hash.$_ -eq $null){ $status_hash.$_=1 }}
+        "$(git status --porcelain | %{ $_.split(" ")[1]; })".split(" ") | %{if($status_hash.$_ -eq $null){ $status_hash.$_=1 }}
+        $status= $status_hash.Keys -join ""
+        $status= if( $status ) { "|"+$status } else { "" };
+        Write-Host -nonewline -ForegroundColor Cyan "[$branch$status] "
     }
     Write-Host -ForegroundColor Cyan (Get-Location).Path.Replace($HOME, '~')
     Write-Host -nonewline -ForegroundColor Gray '>_:' 
