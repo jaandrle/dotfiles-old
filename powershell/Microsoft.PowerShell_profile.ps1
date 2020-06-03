@@ -7,12 +7,12 @@ function Test-Administrator {
 }
 function prompt {
     if( $? ){
-        Write-Host -nonewline -ForegroundColor Green "0 "
+        Write-Host -nonewline -ForegroundColor Green '¡ '
     } else {
         Write-Host -nonewline -ForegroundColor Red "! "
     }
     Write-Host -nonewline " At "
-    Write-Host -nonewline -ForegroundColor Magenta "$(Get-Date -Format %H:%m)"
+    Write-Host -nonewline -ForegroundColor Magenta "$(Get-Date -Format HH:mm)"
     Write-Host -nonewline " by "
     Write-Host -nonewline -ForegroundColor Yellow "jaandrle"
     if ( Test-Administrator ){
