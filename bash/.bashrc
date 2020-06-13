@@ -7,6 +7,7 @@
 ## General
 [[ $- != *i* ]] && return           # If not running interactively, don't do anything
 set -o vi                           # VIM mode for bash
+PATH=~/.local/bin:$PATH
 export MANPAGER="/bin/sh -c \"col -b | vim --not-a-term -c 'set ft=man ts=8 nomod nolist noma' -\""
 shopt -s checkwinsize               # check the window size after each command and, if necessary, update the values of LINES and COLUMNS.
                                     # If set, the pattern "**" used in a pathname expansion context will, match all files and zero or more directories and subdirectories.
@@ -97,6 +98,12 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
+
+function GKeep {
+    #https://github.com/Nekmo/gkeep/tree/master
+    gkeep --auth ~/Dokumenty/Google\ Keep/auth.txt search-notes > ~/Dokumenty/Google\ Keep/all.txt
+    vim ~/Dokumenty/Google\ Keep/all.txt
+}
 
 # some more ls aliases
 alias ll='ls -alF'
