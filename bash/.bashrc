@@ -1,61 +1,30 @@
+#### BASH Config file
+### Jan Andrle
+## Info:
 # ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
-set -o vi
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc) for examples
 
-# If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
+## General
+[[ $- != *i* ]] && return           # If not running interactively, don't do anything
+set -o vi                           # VIM mode for bash
+shopt -s checkwinsize               # check the window size after each command and, if necessary, update the values of LINES and COLUMNS.
+                                    # If set, the pattern "**" used in a pathname expansion context will, match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+shopt -s expand_aliases
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
+## History
+HISTCONTROL=ignoreboth:erasedups    # No duplicate entries and started with spaces. See bash(1) for more options
+shopt -s histappend                 # append to the history file, don't overwrite it
+HISTSIZE=1000                       # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTFILESIZE=2000
 
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
 
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
-
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    # We have color support; assume it's compliant with Ecma-48
-    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-    # a case would tend to support setf rather than setaf.)
-    color_prompt=yes
-    else
-    color_prompt=
-    fi
-fi
+## UI/UX
+                                    # set variable identifying the chroot you work in (used in the prompt below)
+[ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ] && debian_chroot=$(cat /etc/debian_chroot)
+                                    # Set a fancy prompt (non-color, unless we know we "want" color)
+[[ $TERM == "xterm-color" ]] || [[ $TERM == *-256color ]] && color_prompt=yes
+[ ! -x /usr/bin/tput ] || ! tput setaf 1 >&/dev/null && color_prompt=
 
 function setPromt {
     if [ "$color_prompt" != yes ]; then
@@ -109,10 +78,13 @@ function updatePromt {
     PS1+="\n:"
 }
 setPromt
-unset color_prompt force_color_prompt
+unset color_prompt
 unset -f setPromt
 
 
+## Programs/utils
+                                    # Make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -124,9 +96,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
-
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
 alias ll='ls -alF'
@@ -141,11 +110,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
+[ -f ~/.bash_aliases ] && . ~/.bash_aliases
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
