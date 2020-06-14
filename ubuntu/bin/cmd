@@ -1,8 +1,50 @@
 #!/bin/bash
+function _awk() {
+    USAGE="\
+usage:  _awk [<awk_args>] <field_no>
+        Ex: getent passwd | grep andy | _awk -F: 5
+"
+    if [ $# -eq 0 ]; then
+        echo -e "$USAGE" >&2
+        return
+        #exit 1 # whoops! that would quit the shell!
+    fi
+
+    # bail if the *last* argument isn't a number (source:
+    # http://stackoverflow.com/a/808740)
+    last=${@:(-1)}
+    if ! [ $last -eq $last ] &>/dev/null; then
+        echo "_awk! Last argument (awk field) must be numeric." >&2
+        echo -e "$USAGE" >&2;
+        return
+    fi
+
+    if [ $# -gt 1 ]; then
+        # Source:
+        # http://www.cyberciti.biz/faq/linux-unix-bsd-apple-osx-bash-get-last-argument/
+        rest=${@:1:$(( $# - 1 ))}
+    else
+        rest='' # just to be sure
+    fi
+    awk $rest "{ print  \$$last }"
+} # _awk
+function _echo(){
+    [ -t 0 ] && echo "$1" && exit
+    echo "$1" | zenity --text-info && exit
+}
 
 case "$1" in
+    --awk-column|-aC)
+        shift
+        _awk $*
+        ;;
     --weather|-W )
-        curl wttr.in/prague | less -R -S
+        if [ ! -t 0 ]; then
+            xfce4-terminal -e "cmd $*"
+            exit;
+        else
+            curl -H 'Accept-Language: cs' wttr.in/${2:-prague} | less -R -S
+        fi
         ;;
     --youtube|-Y )
         if [ "$3" == "audio" ]; then
@@ -12,10 +54,8 @@ case "$1" in
         fi
         ;;
     --calc|-C )
-        #echo "scale=10; $2" |bc
-        #echo $2 |gcalccmd
         shift
-        python3 -c 'import sys; print(eval(" ".join(sys.argv[1:])))' "$*"
+        _echo `python3 -c 'import sys; print(eval(" ".join(sys.argv[1:])))' "$*"`
         ;;
     --music-A|-MA )
         tizonia --youtube-audio-playlist "https://www.youtube.com/playlist?list=PL-klPkSyWZtUTmdrTIQz3NGZ__eTiKoEn"

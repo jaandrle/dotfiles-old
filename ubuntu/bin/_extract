@@ -1,0 +1,32 @@
+#!/bin/bash
+SCRIPTNAME="${0##*/}"
+
+err() {
+    printf >&2 "$SCRIPTNAME: $*\n"
+    exit 1
+}
+
+ARC="$1"
+[[ -f $ARC ]] || err $"'$ARC' does not exist"
+ARC_name_ext="${ARC##*/}"
+ARC="$(readlink -f "$ARC")"
+ARC_name="${ARC_name_ext%.*}"
+mkdir "$ARC_name" || err $"Directory '$ARC_name' can not be created"
+[[ -d $ARC_name ]] || err $"Directory '$ARC_name' does not exist"
+[[ -w $ARC_name ]] || err $"Permission denied: '$ARC_name' is not writable"
+
+cd "$ARC_name"
+case "$ARC" in
+    *.tar.bz2)   tar xjf "$ARC"     ;;
+    *.tar.gz)    tar xzf "$ARC"     ;;
+    *.bz2)       bunzip2 "$ARC"     ;;
+    *.rar)       unrar e "$ARC"     ;;
+    *.gz)        gunzip "$ARC"      ;;
+    *.tar)       tar xf "$ARC"      ;;
+    *.tbz2)      tar xjf "$ARC"     ;;
+    *.tgz)       tar xzf "$ARC"     ;;
+    *.zip)       unzip "$ARC"       ;;
+    *.Z)         uncompress "$ARC"  ;;
+    *.7z)        7z x "$ARC"        ;;
+    *)           err $"'$ARC' cannot be extracted by $SCRIPTNAME" ;;
+esac

@@ -26,6 +26,10 @@ case "$1" in
         gv="$github_dotfiles/ubuntu"
         run "$2" "$gv/.run" "$HOME/.run"
         ;;
+    bin)
+        gv="$github_dotfiles/ubuntu"
+        run "$2" "$gv/bin" "$HOME/bin"
+        ;;
     *)
         echo :::    syncDotfiles.sh \(jaandrle\)   :::
         echo \    This script helps me to keep my dot files up to date.

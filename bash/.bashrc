@@ -5,20 +5,21 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc) for examples
 
 ## General
-[[ $- != *i* ]] && return           # If not running interactively, don't do anything
-set -o vi                           # VIM mode for bash
+[[ $- != *i* ]] && return                   # If not running interactively, don't do anything
+set -o vi                                   # VIM mode for bash
 PATH=~/.local/bin:$PATH
 export MANPAGER="/bin/sh -c \"col -b | vim --not-a-term -c 'set ft=man ts=8 nomod nolist noma' -\""
-shopt -s checkwinsize               # check the window size after each command and, if necessary, update the values of LINES and COLUMNS.
-                                    # If set, the pattern "**" used in a pathname expansion context will, match all files and zero or more directories and subdirectories.
+shopt -s checkwinsize                       # check the window size after each command and, if necessary, update the values of LINES and COLUMNS.
+                                            # If set, the pattern "**" used in a pathname expansion context will, match all files and zero or more directories and subdirectories.
 #shopt -s globstar
 shopt -s expand_aliases
 
 ## History
-HISTCONTROL=ignoreboth:erasedups    # No duplicate entries and started with spaces. See bash(1) for more options
-shopt -s histappend                 # append to the history file, don't overwrite it
-HISTSIZE=1000                       # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTFILESIZE=2000
+export HISTCONTROL=ignoreboth:erasedups     # No duplicate entries and started with spaces. See bash(1) for more options
+shopt -s histappend                         # append to the history file, don't overwrite it
+shopt -s cmdhist
+export HISTSIZE=1000                        # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+export HISTFILESIZE=2000
 
 
 ## UI/UX
@@ -84,7 +85,7 @@ unset color_prompt
 unset -f setPromt
 
 
-## Programs/utils
+## Programs/utils/aliases
                                     # Make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 # enable color support of ls and also add handy aliases
@@ -98,17 +99,27 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
-
-function GKeep {
+LAST_PWD_PATH="`pwd`/.bash_last_pwd"
+[ -f "$LAST_PWD_PATH" ] && OLDPWD=`cat $LAST_PWD_PATH`
+cd(){ builtin cd "$@" && echo `pwd` > "$LAST_PWD_PATH"; }
+alias rm='rm -vi'
+alias cp='cp -vi'
+alias mv='mv -vi'
+function _gkeep {
     #https://github.com/Nekmo/gkeep/tree/master
     gkeep --auth ~/Dokumenty/Google\ Keep/auth.txt search-notes > ~/Dokumenty/Google\ Keep/all.txt
     vim ~/Dokumenty/Google\ Keep/all.txt
 }
+_?(){ alias | grep "alias _"; echo "_cd.."; echo "_gkeep"; ls ~/bin | grep -P "^_"; }
+alias _ls='ls -pQF'
+alias _ls.='_ls -A'
+alias _cd.='clear;_ls'
+_cd..(){ cd $(eval printf '../'%.0s {1..$1}); }
+alias _find.='find . -maxdepth 1'
 
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+alias _='clear'
+
+alias _dotfiles='~/.run/syncDotfiles.sh'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
