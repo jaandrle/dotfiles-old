@@ -8,8 +8,6 @@ set hintfiltermode simple
 set hintchars fsahjklgyuiopqwertnmzxcvb
 
 " Binds
-bind i set modeindicator false
-bind I set modeindicator true
 bind gnm tabopen https://github.com/tridactyl/tridactyl
 bind gom open https://github.com/tridactyl/tridactyl
 bind gwm winopen https://github.com/tridactyl/tridactyl
