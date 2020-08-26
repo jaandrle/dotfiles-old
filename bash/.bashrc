@@ -118,6 +118,11 @@ alias _cd.='clear;_ls'
 _cd..(){ cd $(eval printf '../'%.0s {1..$1}); }
 alias _find.='find . -maxdepth 1'
 
+alias _psmem_all='ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem'
+alias _psmem='_psmem_all | head -n 10'
+alias _pscpu_all='ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu'
+alias _pscpu='_pscpu_all | head -n 10'
+
 alias _='clear'
 
 alias _dotfiles='~/.run/syncDotfiles.sh'
