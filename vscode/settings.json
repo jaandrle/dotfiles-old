@@ -17,7 +17,7 @@
     "window.menuBarVisibility": "toggle",
     "workbench.editor.showTabs": false,
     "editor.minimap.maxColumn": 60,
-    "sync.gist": "4eebd99cf93d5c93abd5b7b70ee996f4",
+    "sync.gist": "7330306954363d72d3b5d49b6616deb0",
     "sync.quietSync": false,
     "sync.askGistName": false,
     "sync.removeExtensions": true,
@@ -126,13 +126,25 @@
         }
     },
     "highlight.regexes": {
-        "(_this)":{
+        "(_this(?=\\.|[ ]*\\)))":{
             "filterLanguageRegex": "JavaScript",
             "decorations":[
                 {"color": "white"}
             ]
         },
-        "(gulp_place)":{
+        "((?<=\\/\\* global )([^, \\*]+,? ?)+(?= \\*\\/))":{
+            "filterLanguageRegex": "JavaScript",
+            "decorations":[
+                {"color": "#fbca04"}
+            ]
+        },
+        "((?<=\\/\\* )global (?=([^, \\*]+,? ?)+ \\*\\/))":{
+            "filterLanguageRegex": "JavaScript",
+            "decorations":[
+                {"color": "white"}
+            ]
+        },
+        "(gulp_place(?=\\([ ]*(\"[^\\)\"]+\"|'[^\\)']+')[ ]*,[ ]*[\"'](file|file_once|file_if_exists|eval|eval_out|variable|files|glob|files_once|glob_once|clean|combine)[\"'][ ]*\\)))":{
             "decorations":[
                 {"color": "#fbca04"}
             ]
@@ -142,33 +154,17 @@
     "breadcrumbs.enabled": true,
     "window.newWindowDimensions": "inherit",
     "terminal.integrated.rendererType": "dom",
-    "git.enabled": false,
     "bracket-pair-colorizer-2.colors": [
         "#C7A349",
         "#e6aad0",
         "#FFFFFF"
     ],
-    "sync.forceUpload": true,
+    "sync.forceUpload": false,
     "task.autoDetect": "off",
     "editor.acceptSuggestionOnCommitCharacter": false,
-    "metaGo.decoration.backgroundColor": "#2b2b2b,#2b2b2b",
-    "metaGo.decoration.color": "yellow",
-    "metaGo.decoration.backgroundOpacity": "1",
-    "metaGo.decoration.borderColor": "yellow",
-    "metaGo.jumper.screenLineRange": 80,
-    "metaGo.jumper.findAllMode": "off",
-    "metaGo.decoration.x": 3,
-    "metaGo.decoration.width": 6,
-    "metaGo.jumper.wordSeparatorPattern": "[\\{\\}\\[\\]\\(\\) ,._!?;\"'`<>\\/+\\-*$]",
     "vim.visualstar": true,
     "vim.easymotion": true,
-    "vim.insertModeKeyBindings": [
-        {
-            "before": ["i", "i"],
-            "after": ["<Esc>"]
-        }
-    ],
-    "vim.normalModeKeyBindings": [
+    "vim.normalModeKeyBindingsNonRecursive": [
         {
             "before": [ ";" ],
             "after": [ ":" ]
@@ -236,13 +232,35 @@
             ]
         },
         {
+            "before": ["g", "f"],
+            "commands": [
+                "seito-openfile.openFileFromText"
+            ]
+        },
+        {
             "before": ["g", "s"],
             "commands": [
                 "workbench.action.showAllSymbols"
             ]
+        },
+        {
+            "before": ["<leader>", "m"],
+            "commands": [
+                "bookmarks.toggleLabeled"
+            ]
+        },
+        {
+            "before": ["<leader>", "M"],
+            "commands": [
+                "bookmarks.toggle"
+            ]
+        },
+        {
+            "before": ["<leader>", "b"],
+            "commands": [
+                "bookmarks.listFromAllFiles"
+            ]
         }
-    ],
-    "vim.normalModeKeyBindingsNonRecursive": [
     ],
     "vim.visualModeKeyBindingsNonRecursive": [
         {
@@ -255,6 +273,18 @@
                 "v",
                 "y"
             ]
+        },
+        {
+            "before": ["g", "f"],
+            "commands": [
+                "seito-openfile.openFileFromText"
+            ]
+        },
+        {
+            "before": ["g", "s"],
+            "commands": [
+                "workbench.action.showAllSymbols"
+            ]
         }
     ],
     "vim.history": 500,
@@ -262,8 +292,6 @@
     "vim.vimrc.enable": false,
     "vim.disableExtension": true,
     "search.enableSearchEditorPreview": true,
-    "vim.easymotionMarkerFontFamily": "iA Writer Duo S",
-    "vim.easymotionMarkerFontSize": "9,5",
     "rest-client.fontSize": 9.5,
     "rest-client.fontWeight": "bold",
     "terminal.integrated.fontSize": 9.5,
@@ -287,4 +315,11 @@
     "editor.wordWrap": "off",
     "editor.snippetSuggestions": "top",
     "typescript.workspaceSymbols.scope": "currentProject",
+    "terminal.external.windowsExec": "%SystemRoot%\\system32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "git.enabled": false,
+    "vim.highlightedyank.enable": true,
+    "vim.easymotionMarkerForegroundColorTwoCharFirst": "#fc0",
+    "vim.easymotionMarkerForegroundColorOneChar": "#ec5f5f",
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue"
 }
