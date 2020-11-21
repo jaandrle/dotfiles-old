@@ -25,16 +25,16 @@
     set showmode
     nmap ; :
     nmap <s-u> <c-r>
-    imap ii <Esc>
+    "imap ii <Esc>
     nmap ž ^
     nmap č $
     MapSmartKey Home
     MapSmartKey End
                                 " Revert to J (K originally called man page!)
-    nmap <s-k> i<cr><esc>
+    nmap <s-k> a<cr><esc>
     nmap <c-down> gj
     nmap <c-up> gk
-    nmap <silent> ú :nohlsearch<cr>
+    nmap <silent>ú :nohlsearch<cr>
                                 " Paste with space ??? <c-G>u
     nnoremap <leader>pa a<space><esc>p
     nnoremap <leader>p<s-a> <s-a><space><esc>p

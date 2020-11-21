@@ -273,7 +273,7 @@ endif
 " program.
 
 " Pdf
-filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
+filextype *.pdf firefox %c %i &, zathura %c %i &, apvlv %c, xpdf %c
 fileviewer *.pdf pdftotext -nopgbrk %c -
 
 " PostScript
@@ -391,7 +391,7 @@ if has('win')
            \ {View contents}
            \ zip -sf %c | less,
            \ {Extract here}
-           \ mkdir %"c:r & tar -xf %c -C %"c:r,
+           \ mkdir %"c:r && tar -xf %c -C %"c:r,
     fileviewer *.zip,*.jar,*.war,*.ear,*.oxt tar -tf %c
 else
     filetype *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg
@@ -400,7 +400,7 @@ else
        \ {View contents}
        \ zip -sf %c | less,
        \ {Extract here}
-       \ mkdir %"c:r & unzip %c -d %"c:r,
+       \ mkdir %"c:r && unzip %c -d %"c:r,
     fileviewer *.zip,*.jar,*.war,*.ear,*.oxt zip -sf %c
 endif
 
