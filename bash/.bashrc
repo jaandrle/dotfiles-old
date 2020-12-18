@@ -7,6 +7,8 @@
 ## General
 [[ $- != *i* ]] && return                   # If not running interactively, don't do anything
 set -o vi                                   # VIM mode for bash
+bind -m vi-command 'Control-l: clear-screen'
+bind -m vi-insert 'Control-l: clear-screen'
 PATH=~/.local/bin:$PATH
 export MANPAGER="/bin/sh -c \"col -b | vim --not-a-term -c 'set ft=man ts=8 nomod nolist noma' -\""
 shopt -s checkwinsize                       # check the window size after each command and, if necessary, update the values of LINES and COLUMNS.
