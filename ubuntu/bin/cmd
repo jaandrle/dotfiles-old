@@ -32,11 +32,20 @@ function _echo(){
     [ -t 0 ] && echo "$1" && exit
     echo "$1" | zenity --text-info && exit
 }
+function _notify(){
+    notify-send -i distributor-logo-xubuntu "$1" && exit 0
+}
 
 case "$1" in
     --awk-column|-aC)
         shift
         _awk $*
+        ;;
+    --restart-wm|-rWM)
+        pkill xfwm4 && nohup xfwm4 &>/dev/null && _notify "Služba 'xfwm4' restartována" && exit 0
+        ;;
+    --restart-bt|-rBT)
+        pkill blueman-tray && nohup blueman-tray &>/dev/null & _notify "Služba 'blueman-tray' restartována" && exit 0
         ;;
     --weather|-W )
         if [ ! -t 0 ]; then

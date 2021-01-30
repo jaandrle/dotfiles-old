@@ -1,5 +1,6 @@
 #!/bin/bash
 SCRIPTNAME="${0##*/}"
+printf >&2 "$SCRIPTNAME: Utility for extracting archives.\n"
 
 err() {
     printf >&2 "$SCRIPTNAME: $*\n"
@@ -7,6 +8,11 @@ err() {
 }
 
 ARC="$1"
+[[ ! -z "$ARC" ]] || ARC="--help"
+[[ "$ARC" = "--help" ]] \
+    && printf >&2 "Usage: $SCRIPTNAME FILE\n" \
+    && exit 0
+
 [[ -f $ARC ]] || err $"'$ARC' does not exist"
 ARC_name_ext="${ARC##*/}"
 ARC="$(readlink -f "$ARC")"
