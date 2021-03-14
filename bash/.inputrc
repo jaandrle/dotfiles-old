@@ -8,3 +8,5 @@ set keymap vi-insert
 set show-mode-in-prompt on
 set vi-ins-mode-string ">_"
 set vi-cmd-mode-string "$_"
+
+set colored-stats On

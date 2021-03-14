@@ -11,20 +11,18 @@ bind -m vi-command 'Control-l: clear-screen'
 bind -m vi-insert 'Control-l: clear-screen'
 PATH=~/.local/bin:$PATH
 export MANPAGER="/bin/sh -c \"col -b | vim --not-a-term -c 'set ft=man ts=8 nomod nolist noma' -\""
-shopt -s checkwinsize                       # check the window size after each command and, if necessary, update the values of LINES and COLUMNS.
-                                            # If set, the pattern "**" used in a pathname expansion context will, match all files and zero or more directories and subdirectories.
-#shopt -s globstar
-shopt -s expand_aliases
+shopt -s checkwinsize expand_aliases        # dynamic columns update after every cmd
 
 ## History
 export HISTCONTROL=ignoreboth:erasedups     # No duplicate entries and started with spaces. See bash(1) for more options
-shopt -s histappend                         # append to the history file, don't overwrite it
-shopt -s cmdhist
+shopt -s histappend cmdhist                 # saving multiline + append
 export HISTSIZE=1000                        # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 export HISTFILESIZE=2000
 
 
 ## UI/UX
+                                    # clors for .inputrc (set colored-stats On)
+export LS_COLORS='fi=0;37:di=1;37:ln=1;30:mh=1;30:ex=7;1;30:no=1;37:or=1;30:mi=1;30'
                                     # set variable identifying the chroot you work in (used in the prompt below)
 [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ] && debian_chroot=$(cat /etc/debian_chroot)
                                     # Set a fancy prompt (non-color, unless we know we "want" color)
