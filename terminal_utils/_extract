@@ -1,0 +1,54 @@
+#!/bin/bash
+this="${0##*/}"
+this_version="2021-03-14"
+while read; do printf '%s\n' "$REPLY"
+done <<-EOF
+    $this ($this_version) <andrle.jan@centrum.cz>
+    Utility for extracting archives into folder with the same name.
+
+EOF
+err() {
+    printf >&2 "Error: $*\n"
+    exit 1
+}
+
+ARC="$1"
+[[ ! -z "$ARC" ]] || ARC="--help"
+
+if [[ "$ARC" = "--help" ]]; then
+    while read; do printf '%s\n' "$REPLY"
+    done <<-EOF
+    Usage: $this [file|--help|]
+        [--help|] - show this text
+           [file] - path to file for extracting
+    Supported formats (used utilities):
+EOF
+    sed -n 42,52p $0 | sed -e 's/^/    /'
+    exit 0
+fi
+
+[[ -f $ARC ]] || err $"'$ARC' does not exist"
+
+ARC_name_ext="${ARC##*/}"
+ARC="$(readlink -f "$ARC")"
+ARC_name="${ARC_name_ext%.*}"
+
+mkdir "$ARC_name"  || err $"Directory '$ARC_name' can not be created"
+[[ -d $ARC_name ]] || err $"Directory '$ARC_name' does not exist"
+[[ -w $ARC_name ]] || err $"Permission denied: '$ARC_name' is not writable"
+
+cd "$ARC_name"
+case "$ARC" in
+    *.tar.bz2)   tar xjf "$ARC"     ;;
+    *.tar.gz)    tar xzf "$ARC"     ;;
+    *.bz2)       bunzip2 "$ARC"     ;;
+    *.rar)       unrar e "$ARC"     ;;
+    *.gz)        gunzip "$ARC"      ;;
+    *.tar)       tar xf "$ARC"      ;;
+    *.tbz2)      tar xjf "$ARC"     ;;
+    *.tgz)       tar xzf "$ARC"     ;;
+    *.zip)       unzip "$ARC"       ;;
+    *.Z)         uncompress "$ARC"  ;;
+    *.7z)        7z x "$ARC"        ;;
+    *)           err $"'$ARC' cannot be extracted by $this" ;;
+esac
