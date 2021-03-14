@@ -23,9 +23,9 @@
     nnoremap <F2> :set invpaste paste?<CR>
     set pastetoggle=<F2>
     set showmode
-    nmap ; :
+    nnoremap ů ;
+    nnoremap ; :
     nmap <s-u> <c-r>
-    "imap ii <Esc>
     nmap ž ^
     nmap č $
     MapSmartKey Home
@@ -66,6 +66,7 @@
 
 """ Syntax
     set cursorline
+    set showmatch
     set list                                        " Highlight spec. chars / Display extra whitespace
     MapSetToggle TS list
     set listchars=tab:»·,trail:·,extends:#,nbsp:~,space:·
