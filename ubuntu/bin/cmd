@@ -1,8 +1,11 @@
 #!/bin/bash
 function _awk() {
+    this="${0##*/} $1"
+    shift
     USAGE="\
-usage:  _awk [<awk_args>] <field_no>
-        Ex: getent passwd | grep andy | _awk -F: 5
+usage:  $this [<awk_args>] <field_no>
+        Ex: getent passwd | grep andy | $this -F: 5
+        Ex: echo \"A B\" | $this 2
 "
     if [ $# -eq 0 ]; then
         echo -e "$USAGE" >&2
@@ -38,7 +41,7 @@ function _notify(){
 
 case "$1" in
     --awk-column|-aC)
-        shift
+        #shift
         _awk $*
         ;;
     --restart-wm|-rWM)

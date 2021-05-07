@@ -1,0 +1,44 @@
+{
+    "packages": [
+        {
+            "repository": "shiftkey/desktop",
+            "name": "GitHub Desktop",
+            "group": "main",
+            "file_name": "github-desktop",
+            "exec": "yes",
+            "downloads": "/home/jaandrle/bin/github-desktop",
+            "version": "release-2.8.1-linux1",
+            "last_update": "2021-05-06T18:40:58Z"
+        },
+        {
+            "repository": "AppImage/AppImageKit",
+            "name": "AppImageKit",
+            "group": "skip",
+            "file_name": "appimagekit",
+            "exec": "yes"
+        },
+        {
+            "repository": "Inventitech/strans",
+            "name": "strans",
+            "description": "ls | strans -b Document.pdf -a pdf | sort -u",
+            "group": "skip",
+            "file_name": "strans",
+            "exec": "yes"
+        },
+        {
+            "repository": "rvpanoz/luna",
+            "name": "luna",
+            "description": "Manage npm dependencies through a modern UI.",
+            "group": "skip",
+            "file_name": "luna",
+            "exec": "yes"
+        },
+        {
+            "repository": "angela-d/wifi-channel-watcher",
+            "name": "wifi-channel-watcher",
+            "group": "skip",
+            "file_name": "wifi-channel-watcher",
+            "exec": "no"
+        }
+    ]
+}
