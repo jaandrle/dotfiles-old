@@ -208,11 +208,7 @@ async function check_({ packages }){
         updates+= status===3;
         const skip= group==="skip";
         skipped+= skip;
-        logSection("  ", repository, {
-            "Name/Group": name+" / "+group,
-            "Local/Remote version": (version || "not installed")+" / "+(tag_name || "no release"),
-            "Status": packageStatusText(status, skip)
-        });
+        log(2, `@g_${repository}: `+( !version ? "not installed" : packageStatusText(status, skip) ));
     }
     const u= updates-skipped;
     const s= skipped ? ` (inc. skipped: ${updates})` : ""
@@ -231,6 +227,7 @@ async function register_(config){
     log(1, "Registering: "+repository);
     const spaces= "    ";
     local.name= await promt_(spaces+"Name", local.name || remote.name || "");
+    if(!local.description) local.description= remote.description;
     logLines(2, [
         "@g_Group info:",
         "- you can update specific packages by using their group name",

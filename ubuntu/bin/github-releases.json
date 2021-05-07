@@ -8,14 +8,16 @@
             "exec": "yes",
             "downloads": "/home/jaandrle/bin/github-desktop",
             "version": "release-2.8.1-linux1",
-            "last_update": "2021-05-06T18:40:58Z"
+            "last_update": "2021-05-06T18:40:58Z",
+            "description": "Fork of GitHub Desktop to support various Linux distributions"
         },
         {
             "repository": "AppImage/AppImageKit",
             "name": "AppImageKit",
             "group": "skip",
             "file_name": "appimagekit",
-            "exec": "yes"
+            "exec": "yes",
+            "description": "Package desktop applications as AppImages that run on common Linux-based operating systems, such as RHEL, CentOS, openSUSE, SLED, Ubuntu, Fedora, debian and derivatives. Join #AppImage on irc.freenode.net"
         },
         {
             "repository": "Inventitech/strans",
@@ -38,7 +40,8 @@
             "name": "wifi-channel-watcher",
             "group": "skip",
             "file_name": "wifi-channel-watcher",
-            "exec": "no"
+            "exec": "no",
+            "description": "Monitor channel usage of neighboring routers & get an alert if your active channel is not optimal.  Troubleshoot wifi without lifting a finger!"
         }
     ]
 }
