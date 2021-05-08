@@ -1,11 +1,12 @@
 #!/usr/bin/env node
+/* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true */
 const /* dependencies */
     [ fs, readline, https, { spawn } ]= [ "fs", "readline", "https", "child_process" ].map(p=> require(p));
 const /* helper for coloring console | main program params */
     colors= { e: "\x1b[38;2;252;76;76m", s: "\x1b[38;2;76;252;125m", w: "\x1b[33m", R: "\x1b[0m", y: "\x1b[38;2;200;190;90m", g: "\x1b[38;2;150;150;150m" },
     info= {
         name: __filename.slice(__filename.lastIndexOf("/")+1, __filename.lastIndexOf(".")),
-        version: "1.0.0",
+        version: "1.1.0",
         description: "Helper for working with “packages” stored in GitHub releases.",
         config: `${__filename.slice(0, __filename.lastIndexOf("."))}.json`,
         folder: __filename.slice(0, __filename.lastIndexOf("/")+1),
@@ -100,7 +101,7 @@ async function uninstall_(cmd, config){
     const { downloads }= pkg;
     if(downloads&&fs.existsSync(downloads)){
         try{ fs.unlinkSync(downloads); progress[0][1]= "done"; }
-        catch{ progress[0][1]= colors.e+"error, try manually – "+downloads; }
+        catch (_){ progress[0][1]= colors.e+"error, try manually – "+downloads; }
     }
     Reflect.deleteProperty(pkg, "last_update");
     Reflect.set(pkg, "group", "skip");
@@ -128,7 +129,7 @@ async function update_(config){
     const filter= current.param;
     const is_all= filter==="all";
     let updates= [];
-    log(1, "Collecting packages to download:")
+    log(1, "Collecting packages to download:");
     for(const [
         i, { repository, version, last_update, group, file_name, exec, downloaded }
     ] of Object.entries(config.packages)){
@@ -139,9 +140,9 @@ async function update_(config){
         const status= packageStatus(last_update, published_at);
         if(status!==3) continue;
 
-        const assets= await downloadJSON_(assets_url);
+        const assets= await downloadJSON_(repository, assets_url);
         if(!assets.length){
-            console.log("  Nothing to download: Visit "+html_url)
+            console.log("  Nothing to download: Visit "+html_url);
             continue;
         }
 
@@ -211,7 +212,7 @@ async function check_({ packages }){
         log(2, `@g_${repository}: `+( !version ? "not installed" : packageStatusText(status, skip) ));
     }
     const u= updates-skipped;
-    const s= skipped ? ` (inc. skipped: ${updates})` : ""
+    const s= skipped ? ` (inc. skipped: ${updates})` : "";
     return (!u ? "" : colors.w)+u+" update(s) available"+s;
 }
 async function register_(config){
@@ -247,7 +248,7 @@ function packageStatusText(status, skip){
         case 0: return s+"nothing to compare";
         case 1: return s+"@s_up-to-date";
         case 2: return s+"newer";
-        case 3: return s+"@e_outdated/not instaled"
+        case 3: return s+"@e_outdated/not instaled";
     }
 }
 function packageStatus(local, remote){
@@ -262,15 +263,10 @@ function logSection(spaces, name, data){
         console.log(spaces.repeat(2)+colors.g+key+": "+value.replace(/@(\w)_/g, (_, m)=> colors[m])+colors.R);
 }
 function githubRelease_(repository){
-    return downloadJSON_("https://api.github.com/repos/"+repository+"/releases")
+    return downloadJSON_(repository, "https://api.github.com/repos/"+repository+"/releases")
     .then(data=> data.find(({ draft, published_at })=> !draft&&published_at) || {});
 }
-function githubRepo_(repository){ return downloadJSON_("https://api.github.com/repos/"+repository); }
-async function allSequential_(funs){
-    let out= [];
-    for(const f of funs) out.push(await f());
-    return out;
-}
+function githubRepo_(repository){ return downloadJSON_(repository, "https://api.github.com/repos/"+repository); }
 function promt_(q, def){
     const rl= readline.createInterface({ input: process.stdin, output: process.stdout });
     return new Promise(function(resolve){
@@ -281,7 +277,7 @@ function promt_(q, def){
 function getConfig(){
     let config;
     try{ config= JSON.parse(fs.readFileSync(info.config)); }
-    catch(e){ config= {}; log(1, "@w_Missing or corrupted config file. Creates empty one.") }
+    catch(e){ config= {}; log(1, "@w_Missing or corrupted config file. Creates empty one."); }
     return config;
 }
 function save(config){
@@ -289,10 +285,11 @@ function save(config){
 }
 function getCurrent(args){
     let command, command_arg, param;
+    const hasArg= arg=> ({ args })=> args.includes(arg);
     for(let i=0, { length }= args, arg; i<length; i++){
         arg= args[i];
         if(!command){
-            command= info.commands.find(({ args })=> args.includes(arg));
+            command= info.commands.find(hasArg(arg));
             command_arg= arg;
             continue;
         }
@@ -306,12 +303,13 @@ function getCurrent(args){
         return error(`Missign arguments for '${command_arg}'.`);
     return { command, param };
 }
-function downloadJSON_(url){
+function downloadJSON_(repository, url){
     return downloadText_(url)
     .then(function(data){
         try{ return Promise.resolve(JSON.parse(data)); }
         catch(e){
-            console.log("  Received data: "+ data);
+            log(1, "Received data: "+data);
+            log(1, "@e_"+e);
             return Promise.reject(`JSON from '${repository}' failed.`);
         }
     });
@@ -322,7 +320,7 @@ function downloadText_(url){
         let data= "";
         response.on("data", chunk=> data+= chunk);
         response.on("end", ()=> resolve(data));
-    })});
+    }); });
 }
 function downloadFile_(to, { url, repository, size }){
     const file= fs.createWriteStream(to);
@@ -351,9 +349,9 @@ function downloadFile_(to, { url, repository, size }){
             clearInterval(i);
             readline.clearLine(process.stdout);
             log(2, repository+": @s_OK");
-            file.close(()=> resolve({ success: 1, message: to })) /* close() is async, call cb after close completes. */
+            file.close(()=> resolve({ success: 1, message: to })); /* close() is async, call cb after close completes. */
         });
-    })})
+    }); })
     .catch(({ message })=> {
         fs.unlink(to); // Delete the file async. (But we don't check the result)
         return { success: 0, message };
@@ -369,8 +367,9 @@ function get_(url){ return new Promise(function(resolve, reject){
 function applySequentially_(input, pF){
     const data= [];
     const p= pF(input[0]);
+    const tie= nth=> result_mth=> ( data.push(result_mth), pF(input[nth]) );
     for(let i= 1, { length }= input; i<length; i++)
-        p.then(o=> (data.push(o), pF(input[i])));
+        p.then(tie(i));
     return p.then(o=> (data.push(o), data));
 }
 function error(message){
