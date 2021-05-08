@@ -6,7 +6,7 @@ const /* helper for coloring console | main program params */
     colors= { e: "\x1b[38;2;252;76;76m", s: "\x1b[38;2;76;252;125m", w: "\x1b[33m", R: "\x1b[0m", y: "\x1b[38;2;200;190;90m", g: "\x1b[38;2;150;150;150m" },
     info= {
         name: __filename.slice(__filename.lastIndexOf("/")+1, __filename.lastIndexOf(".")),
-        version: "1.0.0",
+        version: "1.1.0",
         description: "Helper for managing functional CSS classes",
         cwd: process.cwd(),
         commands: [
@@ -210,12 +210,13 @@ function fromClassMultiple(param){
 }
 function fromClass(param){
     if(/[TBLR][TBLR]/.test(param)) return fromClassMultiple(param);
-    const [ to_property, to_value ]= param.split("__");
+    let [ to_property, to_value ]= param.split("__");
     const p_idx= Object.values(cp).indexOf(to_property);
     const property= p_idx!==-1 ? Object.keys(cp)[p_idx] : to_property.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+    if(p_idx===-1&&typeof cp[property]!=="undefined") to_property= cp[property];
     const v_idx= Object.values(csv).indexOf(to_value);
     const value= v_idx!==-1 ? Object.keys(csv)[v_idx] : toValue(property, to_value);
-    return [ param, property+": "+value+";" ];
+    return [ to_property+toClassValue(property, value), property+": "+value+";" ];
 }
 function fromCSSMultiple(param){
     const params= param.split(";").map(l=> l.trim()).filter(Boolean);
