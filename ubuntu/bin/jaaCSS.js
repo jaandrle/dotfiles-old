@@ -246,12 +246,11 @@ function toValue(property, value){
 }
 function toClassValue(property, value){
     if(!/\d/.test(value)) return "__"+(Reflect.has(csv, value)?Reflect.get(csv, value):toCamelCase(value));
-    value= value.replace(/%/g, "pct");
     if(/ /.test(value))
-        return "__"+value.replace(/ /g, "_");
+        return "__"+value.replace(/%/g, "pct").replace(/ /g, "_");
     const [ number, measurement ]= value.split(/(?<=\d)(?=\D)/);
     const number_s= parseFloat(number).toString().split("").map(l=> l==="-"?"m":(l==="."?"d":l)).join("");
-    return "__"+number_s+(Reflect.get(cnv, property)===measurement?"":measurement);
+    return "__"+number_s+(Reflect.get(cnv, property)===measurement?"":measurement.replace(/%/g, "pct"));
 }
 function toCamelCase(property){
     return property.split(/[- ]/).map((t, i)=> i?t[0].toUpperCase()+t.slice(1):t).join("");
