@@ -6,7 +6,7 @@ const /* helper for coloring console | main program params */
     colors= { e: "\x1b[38;2;252;76;76m", s: "\x1b[38;2;76;252;125m", w: "\x1b[33m", R: "\x1b[0m", y: "\x1b[38;2;200;190;90m", g: "\x1b[38;2;150;150;150m" },
     info= {
         name: __filename.slice(__filename.lastIndexOf("/")+1, __filename.lastIndexOf(".")),
-        version: "1.1.0",
+        version: "1.1.1",
         description: "Helper for working with “packages” stored in GitHub releases.",
         config: `${__filename.slice(0, __filename.lastIndexOf("."))}.json`,
         folder: __filename.slice(0, __filename.lastIndexOf("/")+1),
@@ -134,7 +134,7 @@ async function update_(config){
         i, { repository, version, last_update, group, file_name, exec, downloaded }
     ] of Object.entries(config.packages)){
         if(group==="skip") continue;
-        if(!is_all||group&&filter!==group) continue;
+        if(!is_all&&group&&filter!==group) continue;
 
         const { tag_name, published_at, html_url, assets_url }= await githubRelease_(repository);
         const status= packageStatus(last_update, published_at);
