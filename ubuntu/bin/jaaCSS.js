@@ -6,7 +6,7 @@ const /* helper for coloring console | main program params */
     colors= { e: "\x1b[38;2;252;76;76m", s: "\x1b[38;2;76;252;125m", w: "\x1b[33m", R: "\x1b[0m", y: "\x1b[38;2;200;190;90m", g: "\x1b[38;2;150;150;150m" },
     info= {
         name: __filename.slice(__filename.lastIndexOf("/")+1, __filename.lastIndexOf(".")),
-        version: "1.1.1",
+        version: "1.2.0",
         description: "Helper for managing functional CSS classes",
         cwd: process.cwd(),
         commands: [
@@ -15,7 +15,7 @@ const /* helper for coloring console | main program params */
                 desc: "Shows this text"
             },
             {
-                cmd: "init", args: [ "--init" ], param: "file",
+                cmd: "init", args: [ "--init" ], param: "css_like_file",
                 desc: [
                     "Creates inital file structure with `jaaCSS` section",
                     "The section is separated by comments `/* jaaCSS:start/end */`",
@@ -24,7 +24,13 @@ const /* helper for coloring console | main program params */
                 ]
             },
             {
-                cmd: "shell", args: [ "--interactive", "-I" ], param: "file",
+                cmd: "html", args: [ "--html" ], param: "html_like_file",
+                desc: [
+                    "[WIP] Show classes from HTML"
+                ]
+            },
+            {
+                cmd: "shell", args: [ "--interactive", "-I" ], param: "css_like_file",
                 desc: [
                     "Interactive shell for manipulating with `jaaCSS` section.",
                     "With prefixes +/- you can add/remove styles from file (e.g. `+ fontS__1`).",
@@ -39,7 +45,8 @@ const /* helper for coloring console | main program params */
             }
         ],
         params: {
-            file: "CSS (like) file",
+            css_like_file: "CSS (like) file",
+            html_like_file: "HTML (like) file",
             value_c: [
                 "The value part for evaluing in the form:",
                 "  - `property: value;` …or",
@@ -54,6 +61,7 @@ const /* helper for coloring console | main program params */
         "+: Add rule to the file (e.g. `+ fontS__1`)",
         "-: Remove rule to the file (e.g. `- fontS__1`)",
         "!: Add rule by full recepy (e.g. `! color__urgent { color: red; }`",
+        "=: [WIP] Compare classes in CSS like file and HTML like one (`>` only in CSS | `<` only in HTML)",
         "@: Converting class names (for example from HTML) to the CSS rules/SASS includes."
     ],
     shell_cmds_l= shell_cmds.map(line=> (l=> l==="q"?"@R_q@g_":l)(line.charAt(0))).join("/");
@@ -65,6 +73,7 @@ const { cp, cnv, csv }= defaultConvertData();
     const current= getCurrent(process.argv.slice(2));
     switch(current.command.cmd){
         case    "help":  return printHelp();
+        case    "html":  return showHTML(current).forEach(c=> log(1, c));
         case    "init":  return initCSS(current);
         case   "shell":  return shell_(current);
         case    "eval":  return logRule(1, fromMixed(current.param));
@@ -75,14 +84,14 @@ const { cp, cnv, csv }= defaultConvertData();
 
 function initCSS({ param: file }){
     if(!file) throw Error("No 'file' defined");
-    fileData(file);
-    saveFile();
+    fileDataCSS(file);
+    saveFileCSS();
 }
 async function shell_({ param: file }){
     if(!file) throw Error("No 'file' defined");
     process.stdout.write(String.fromCharCode(27) + "]0;"+info.name+": interactive mode"+String.fromCharCode(7));
     const rl= readline.createInterface({ input: process.stdin, output: process.stdout, historySize: 30 });
-    const filterFileData= line=> fileData(file)[2].filter(l=> l.indexOf(line.slice(1).trim())!==-1).forEach(l=> log(2, l));
+    const filterFileData= line=> fileDataCSS(file)[2].filter(l=> l.indexOf(line.slice(1).trim())!==-1).forEach(l=> log(2, l));
     log(1, "@s_Interactive shell");
     logLines(1, shell_cmds);
     while(true){
@@ -98,6 +107,7 @@ async function shell_({ param: file }){
                         updateFile(file, line.slice(0,1), fromMixed(line.slice(1).trim()));
                         break;
                 case "@": fromClassToInclude(file, line.slice(1).trim()); break;
+                case "=": compareFiles(file, line.slice(1).trim()); break;
                 default:
                     log(1, "@g_printing…");
                     logRule(1, fromMixed(line));
@@ -107,24 +117,53 @@ async function shell_({ param: file }){
         }
     }
 }
+function compareFiles(file_css, file_other){
+    const classes_other= showHTML({ param: file_other });
+    const classes_css= fileDataCSS(file_css)[2].map(l=> /\.([^ \{]+) *\{/.exec(l)[1]);
+    const classes_together= new Set([ ...classes_css, ...classes_other ]);
+    classes_together.forEach(function(c){
+        const status= compareNth(c);
+        if(status==="=") return false;
+        log(1, c+": "+status);
+    });
+    function compareNth(c){
+        const in_css= classes_css.indexOf(c)!==-1;
+        const in_other= classes_other.indexOf(c)!==-1;
+        return in_css&&in_other ? "=" : ( in_css ? ">" : "<" );
+    }
+}
+function showHTML({ param: file }){
+    file= filePathExpanded(file);
+    if(!fs.existsSync(file)) return "";
+    let out= new Set();
+    const is_jaaCSS= c=> c.indexOf("__")!==-1;
+    const append= c=> out.add(c);
+    for(const line of fs.readFileSync(file).toString().split(/\r?\n/)){
+        const reg= /class=(?:"|')([^"']*)(?:"|')/.exec(line);
+        if(!reg||!is_jaaCSS(reg[1])) continue;
+        reg[1].split(/ +/).filter(is_jaaCSS).forEach(append);
+    }
+    out= Array.from(out).sort();
+    return out;
+}
 function updateFileCustom(file, rule_full){
     log(2, "@s_adding…");
     const [ name_candidate, rule_candidate ]= rule_full.split(/ *(?:\{|\}) */);
     const name= name_candidate[0]==="." ? name_candidate.slice(1) : name_candidate;
     const rule= rule_candidate+(rule_candidate[rule_candidate.length-1]===";"?"":";");
-    const [ , , rules ]= fileData(file);
+    const [ , , rules ]= fileDataCSS(file);
     const rule_final= isFileExtEq(file, "scss") ?
         `@mixin ${name} { ${rule} } .${name} { @include ${name}(); }` :
         `.${name} { ${rule} }`;
     log(2, rule_final);
     rules.push(rule_final);
     rules.sort();
-    saveFile();
+    saveFileCSS();
 }
 function updateFile(file, op, [ name, rule ]){
     log(2, op==="+"?"@s_adding…":"@e_removing…");
     logRule(2, [ name, rule ]);
-    const [ , , rules ]= fileData(file);
+    const [ , , rules ]= fileDataCSS(file);
     if(op==="-") file_data[2]= rules.filter(l=> l.indexOf(name.trim()+" ")===-1);
     else {
         //'.styl'?: `fontS__1(){font-size: 1rem;}\n.fontS__1{\nfontS__1();\n}`
@@ -133,13 +172,18 @@ function updateFile(file, op, [ name, rule ]){
             `.${name} { ${rule} }`);
         rules.sort();
     }
-    saveFile();
+    saveFileCSS();
 }
-function fileData(file){
-    if(file.slice(0, file.indexOf("/")).slice(-1)===".")
-        file= file[1]!=="." ?
-            info.cwd+file.slice(1) :
-            info.cwd.slice(0, info.cwd.lastIndexOf("/"))+file.slice(2);
+function filePathExpanded(file_path){
+    if(file_path.slice(0, file_path.indexOf("/")).slice(-1)!==".") 
+        return file_path;
+    // ./a-z | ../a-z
+    return file_path[1]!=="." ?
+        info.cwd+file_path.slice(1) :
+        info.cwd.slice(0, info.cwd.lastIndexOf("/"))+file_path.slice(2);
+}
+function fileDataCSS(file){
+    file= filePathExpanded(file);
     if(!fs.existsSync(file)){
         file_path= file;
         file_data= [ Date.now(), "", [], "" ];
@@ -166,7 +210,7 @@ function fileData(file){
     file_data= [ mtime, ...content ];
     return file_data;
 }
-function saveFile(){
+function saveFileCSS(){
     const [ , pre= "", curr= [], post= "" ]= file_data || [];
     const data= ([ pre,
         "/* jaaCSS:start */",
