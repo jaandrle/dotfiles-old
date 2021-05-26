@@ -6,7 +6,7 @@ const /* helper for coloring console | main program params */
     colors= { e: "\x1b[38;2;252;76;76m", s: "\x1b[38;2;76;252;125m", w: "\x1b[33m", R: "\x1b[0m", y: "\x1b[38;2;200;190;90m", g: "\x1b[38;2;150;150;150m" },
     info= {
         name: __filename.slice(__filename.lastIndexOf("/")+1, __filename.lastIndexOf(".")),
-        version: "1.2.0",
+        version: "1.2.1",
         description: "Helper for managing functional CSS classes",
         cwd: process.cwd(),
         commands: [
@@ -175,7 +175,7 @@ function updateFile(file, op, [ name, rule ]){
     saveFileCSS();
 }
 function filePathExpanded(file_path){
-    if(file_path.slice(0, file_path.indexOf("/")).slice(-1)!==".") 
+    if(file_path.slice(0, file_path.indexOf("/")).slice(-1)!==".")
         return file_path;
     // ./a-z | ../a-z
     return file_path[1]!=="." ?
@@ -292,7 +292,7 @@ function toClassValue(property, value){
     if(!/\d/.test(value)) return "__"+(Reflect.has(csv, value)?Reflect.get(csv, value):toCamelCase(value));
     if(/ /.test(value))
         return "__"+value.replace(/%/g, "pct").replace(/ /g, "_");
-    const [ number, measurement ]= value.split(/(?<=\d)(?=\D)/);
+    const [ number, measurement= "" ]= value.split(/(?<=\d)(?=\D)/);
     const number_s= parseFloat(number).toString().split("").map(l=> l==="-"?"m":(l==="."?"d":l)).join("");
     return "__"+number_s+(Reflect.get(cnv, property)===measurement?"":measurement.replace(/%/g, "pct"));
 }
