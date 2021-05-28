@@ -18,6 +18,7 @@ if !has('win')
     :bmark! "~/" home
     :bmark! "~/Stažené/" downloads
     :bmark! "~/Dokumenty/" documents
+    :bmark! "~/Dokumenty/GitHub/" projects git github
     :bmark! "~/Aktivity/OneDrive" onedrive
     :bmark! "~/.vifm/" vifm
     :bmark! "/media/jaandrle/" volumes
