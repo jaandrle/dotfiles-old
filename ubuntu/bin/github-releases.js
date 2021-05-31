@@ -6,7 +6,7 @@ const /* helper for coloring console | main program params */
     colors= { e: "\x1b[38;2;252;76;76m", s: "\x1b[38;2;76;252;125m", w: "\x1b[33m", R: "\x1b[0m", y: "\x1b[38;2;200;190;90m", g: "\x1b[38;2;150;150;150m" },
     info= {
         name: __filename.slice(__filename.lastIndexOf("/")+1, __filename.lastIndexOf(".")),
-        version: "1.1.1",
+        version: "1.1.2",
         description: "Helper for working with “packages” stored in GitHub releases.",
         config: `${__filename.slice(0, __filename.lastIndexOf("."))}.json`,
         folder: __filename.slice(0, __filename.lastIndexOf("/")+1),
@@ -63,6 +63,7 @@ printMain();
 const current= getCurrent(process.argv.slice(2));
 (function main_(){
     const { cmd }= current.command;
+    if(!cmd) return Promise.resolve("No arguments (use `--help` for showing all oprions).");
     switch(cmd){
         case "help":        return Promise.resolve(printHelp());
         case "config":      return vim_(info.config);
@@ -122,7 +123,7 @@ async function uninstall_(cmd, config){
     }
 }
 function vim_(file){ return new Promise(function(resolve, reject){
-    const cmd= spawn(process.env.EDITOR||"vim", [ file ], { stdio: 'inherit' });
+    const cmd= spawn((process.env.EDITOR||"vim")+(process.platform==="win32"?".bat":""), [ file ], { stdio: 'inherit' });
     cmd.on('exit', e=> e ? reject("Editor error, try manually: "+file) : resolve("OK"));
 });}
 async function update_(config){
@@ -298,7 +299,7 @@ function getCurrent(args){
         param= arg;
     }
     if(!command)
-        command= { cmd: "help" };
+        command= { cmd: "" };
     if(command.param&&typeof param==="undefined")
         return error(`Missign arguments for '${command_arg}'.`);
     return { command, param };
@@ -306,8 +307,11 @@ function getCurrent(args){
 function downloadJSON_(repository, url){
     return downloadText_(url)
     .then(function(data){
-        try{ return Promise.resolve(JSON.parse(data)); }
-        catch(e){
+        try{
+            const response= JSON.parse(data);
+            if(Reflect.has(response, "message")) throw new Error(response.message);
+            return Promise.resolve(JSON.parse(data));
+        } catch(e){
             log(1, "Received data: "+data);
             log(1, "@e_"+e);
             return Promise.reject(`JSON from '${repository}' failed.`);
