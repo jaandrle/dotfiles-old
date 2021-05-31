@@ -1,0 +1,115 @@
+{
+  "jshint": {
+      "prefix": "jshint",
+    "body": [
+        "/* jshint esversion: 6,-W097, -W040, browser: true, expr: true, undef: true */",
+      "/* global */"
+    ],
+    "description": "lze pridat /* global gp: true, ... */"
+  },
+  "global": {
+      "prefix": "global",
+    "body": [
+        "/* global $0 */"
+    ],
+    "description": "lze pridat /* global gp: true, ... */"
+  },
+  "devel":{
+      "prefix": "devel",
+    "body": [
+        " /* jshint devel: true *///gulp.keep.line$0"
+    ]
+  },
+  "Print to console": {
+      "prefix": "log",
+    "body": [
+        "console.log('$0');"
+    ]
+  },
+  "localStorage.get": {
+      "prefix": "stor",
+    "body": [
+        "localStorage.getItem('$0');"
+    ]
+  },
+  "Function without name": {
+      "prefix": "f",
+    "body": [
+        "function$1($2){$0}"
+    ]
+  },
+  "Promise": {
+      "prefix": "promise",
+    "body": [
+        "return new Promise(function(resolve,reject){",
+      "\t$0",
+      "});"
+    ]
+  },
+  "Loop": {
+      "prefix": "for",
+    "body": [
+        "for($1let i=0, i_length= ITERABLE.length; i<i_length; i++){",
+      "\t$0",
+      "}"
+    ]
+  },
+  "Switch": {
+      "prefix": "switch",
+    "body": [
+        "switch ($1){",
+      "\tcase $2:\n\t\t$0",
+      "\t\tbreak;\n\tdefault $3:\n}"
+    ]
+  },
+  "Try": {
+      "prefix": "try",
+    "body": [
+        "try{",
+      "\t$0\n}catch(){",
+      "\t\n}"
+    ]
+  },
+  "selid": {
+      "prefix": "selid",
+    "body": [
+        "document.getElementById('$0')"
+    ]
+  },
+  "seltag": {
+      "prefix": "seltag",
+    "body": [
+        "getElementsByTagName('$0')"
+    ]
+  },
+  "selclass": {
+      "prefix": "selclass",
+    "body": [
+        "getElementsByClassName('$0')"
+    ]
+  },
+  "sel": {
+      "prefix": "sel",
+    "body": [
+        "querySelector('$0')"
+    ]
+  },
+  "selall": {
+      "prefix": "selall",
+    "body": [
+        "querySelectorAll('$0')"
+    ]
+  },
+  "desctructure_object": {
+      "prefix": "desctr",
+    "body": [
+        "${1:const} { $0 }= ${2:def};"
+    ]
+  },
+  "ready": {
+      "prefix": "ready",
+    "body": [
+        "document.addEventListener('DOMContentLoaded', $0, false);"
+    ]
+  }
+}
