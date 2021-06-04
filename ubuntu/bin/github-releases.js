@@ -6,7 +6,7 @@ const /* helper for coloring console | main program params */
     colors= { e: "\x1b[38;2;252;76;76m", s: "\x1b[38;2;76;252;125m", w: "\x1b[33m", R: "\x1b[0m", y: "\x1b[38;2;200;190;90m", g: "\x1b[38;2;150;150;150m" },
     info= {
         name: __filename.slice(__filename.lastIndexOf("/")+1, __filename.lastIndexOf(".")),
-        version: "1.1.2",
+        version: "1.1.3",
         description: "Helper for working with “packages” stored in GitHub releases.",
         config: `${__filename.slice(0, __filename.lastIndexOf("."))}.json`,
         folder: __filename.slice(0, __filename.lastIndexOf("/")+1),
@@ -210,7 +210,7 @@ async function check_({ packages }){
         updates+= status===3;
         const skip= group==="skip";
         skipped+= skip;
-        log(2, `@g_${repository}: `+( !version ? "not installed" : packageStatusText(status, skip) ));
+        log(2, `@g_${repository} [${group}]: `+( !version ? "not installed" : packageStatusText(status, skip) ));
     }
     const u= updates-skipped;
     const s= skipped ? ` (inc. skipped: ${updates})` : "";
