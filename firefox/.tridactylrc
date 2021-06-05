@@ -1,19 +1,11 @@
 " General Settings
-set configversion 1.8
-js tri.config.set("update", {"lastchecktime": 1578035859225})
 set theme dark
 set modeindicatorshowkeys true
 set modeindicator true
 set hintfiltermode simple
 set hintchars fsahjklgyuiopqwertnmzxcvb
 
-" Binds
-bind gnm tabopen https://github.com/tridactyl/tridactyl
-bind gom open https://github.com/tridactyl/tridactyl
-bind gwm winopen https://github.com/tridactyl/tridactyl
-bind gn1 tabopen https://github.com/tridactyl/tridactyl
-bind go1 open https://github.com/tridactyl/tridactyl
-bind gw1 winopen https://github.com/tridactyl/tridactyl
+set keytranslatemap.ž ^
 unbind d
 bind dd tabclose
 
