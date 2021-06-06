@@ -201,6 +201,9 @@ else
     command! meld meld %"f %"F 2> /dev/null &
     command! zipAll zip -r "%c:r.zip" ./*
 endif
+if !has('win')
+    command! volumes :cd /media/jaandrle/ | :!gigolo 2> /dev/null &
+endif
 
 command! df df -h %m 2> /dev/null
 command! diff vim -d %f %F
