@@ -1,12 +1,13 @@
 #!/bin/bash
+this="${0##*/}"
 this_version="2021-08-28"
 plugin_path="$HOME/.vim/plugin/"
+plugin_path_native="$HOME/.vim/pack/$this/start/"
 err() { printf >&2 "Error: $*\n"; exit 1; }
 
 action="$1"
 [[ ! -z "$action" ]] || action="--help"
 
-this="${0##*/}"
 if [[ "$action" = "--help" ]]; then
     while read; do printf '%s\n' "$REPLY"
     done <<-EOF
@@ -27,13 +28,14 @@ EOF
     exit 0
 fi
 
-cd "$plugin_path"
 if [[ "$action" = "--init" ]]; then
-    [[ -f $plugin_path ]] || mkdir -p $plugin_path
+    mkdir -p $plugin_path
+    cd "$plugin_path"
     [[ -d "$plugin_path.git" ]] || git init
     echo $plugin_path
     exit 0
 fi
+cd "$plugin_path"
 if [[ "$action" = "--ls" ]]; then
     ls -1
     exit 0
@@ -45,7 +47,8 @@ if [[ "$action" = "--add" ]]; then
         wget $2 || err $"Wrong url adress: $2"
         echo $2 >> $file_log
         echo >> $file_log
-        git commit -m "Added file: $(basename $git_candidate)" 2> /dev/null
+        git add .
+        git commit -m "Added file: $(basename $2)" 2> /dev/null
         exit 0
     fi
     git_candidate="$2"
@@ -56,7 +59,7 @@ if [[ "$action" = "--add" ]]; then
         git submodule init
         git submodule add $git_candidate || err $"Wrong repository: $git_candidate"
         git add .
-        git commit -m "Added git: $git_candidate" 2> /dev/null
+        git commit -m "Added git: $(basename $git_candidate)" 2> /dev/null
         exit 0
     fi
     err $"Unknown argument for '--add': $2"
