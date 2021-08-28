@@ -1,6 +1,7 @@
 """"" VIM config file
 """" Jan Andrle
 :scriptencoding utf-8
+let g:cwordhi#autoload= 1
 
 """ Helpers
     function MapSetToggle(key, opt)
@@ -78,14 +79,16 @@
     if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
       syntax on
     endif
-                                                    " Enable filetype plugins
+    if v:version > 703 || v:version == 703 && has("patch541")
+      set formatoptions+=j " Delete comment character when joining commented lines
+    endif
     if has("autocmd")
-      " Enable file type detection
       filetype on
-      " Treat .json files as .js
+      filetype plugin on
+      autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
       autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
     endif
-    let g:html_indent_tags = 'li\|p'                " Treat <li> and <p> tags like the block tags they are
+    let g:html_indent_tags = 'li\|p'
 
 """ Opening+files
     set encoding=utf8                           " Set utf8 as standard encoding and en_US as the standard language

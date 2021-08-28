@@ -1,0 +1,90 @@
+#!/bin/bash
+this_version="2021-08-28"
+plugin_path="$HOME/.vim/plugin/"
+err() { printf >&2 "Error: $*\n"; exit 1; }
+
+action="$1"
+[[ ! -z "$action" ]] || action="--help"
+
+this="${0##*/}"
+if [[ "$action" = "--help" ]]; then
+    while read; do printf '%s\n' "$REPLY"
+    done <<-EOF
+$this ($this_version) <andrle.jan@centrum.cz>
+Utility for managing vim plugins native way.
+Inspiration from https://shapeshed.com/vim-packages/
+
+Usage: $this --[ls|add|remove|update|init|help] [args]
+    --help: show this text
+    --init: prepares space for plugins and/or print plugins folder
+      --ls: show list of plugins
+     --add: [GitHub repository | file url] add new plugin (download+registration)
+        * \`$this --add user/repo\`
+        * \`$this --add https://…/plugin.vim\`
+  --remove: [name] remove plugin by its local name (see --ls)
+  --update: updates all installed plugins
+EOF
+    exit 0
+fi
+
+cd "$plugin_path"
+if [[ "$action" = "--init" ]]; then
+    [[ -f $plugin_path ]] || mkdir -p $plugin_path
+    [[ -d "$plugin_path.git" ]] || git init
+    echo $plugin_path
+    exit 0
+fi
+if [[ "$action" = "--ls" ]]; then
+    ls -1
+    exit 0
+fi
+
+file_log="$plugin_path.one_file"
+if [[ "$action" = "--add" ]]; then
+    if [[ $2 =~ ^(http|ftp)s?:.*\.vim ]]; then
+        wget $2 || err $"Wrong url adress: $2"
+        echo $2 >> $file_log
+        echo >> $file_log
+        git commit -m "Added file: $(basename $git_candidate)" 2> /dev/null
+        exit 0
+    fi
+    git_candidate="$2"
+    if [[ $2 =~ ^[^\S/]+/[^\S/]+$ ]]; then
+        git_candidate="https://github.com/$2.git"
+    fi
+    if [[ $git_candidate =~ .*\.git$ ]]; then
+        git submodule init
+        git submodule add $git_candidate || err $"Wrong repository: $git_candidate"
+        git add .
+        git commit -m "Added git: $git_candidate" 2> /dev/null
+        exit 0
+    fi
+    err $"Unknown argument for '--add': $2"
+fi
+if [[ "$action" = "--update" ]]; then
+    git submodule update --remote --merge
+    [[ -f "$file_log" ]] && grep -q '[^[:space:]]' < "$file_log" && xargs -a $file_log -I{} curl -# -O {}
+    git commit -m "Update" 2> /dev/null
+    exit 0
+fi
+if [[ "$action" = "--remove" ]]; then
+    removed=0
+    if [[ -f "$2/.git" ]]; then
+        git submodule deinit -f $2
+        git rm $2
+        rm -Rf .git/modules/$2
+        removed=1
+    fi
+    if [[ -f "$2" ]]; then
+        sed -i "/$2/d" $file_log
+        rm -f $2
+        removed=1
+    fi
+    if [ $removed = 1 ]; then
+        git commit -m "Removed: $2" 2> /dev/null
+        exit 0
+    fi
+    err $"Unknown git submodule or file: $2"
+fi
+
+err $"Unknown action: $action"
