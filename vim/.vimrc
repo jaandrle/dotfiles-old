@@ -8,7 +8,6 @@ let g:cwordhi#autoload= 1
         let cmd = ':set '.a:opt.'! \| set '.a:opt."?\<CR>"
         exec 'nnoremap '.a:key.' '.cmd
         exec 'vnoremap <silent>'.a:key.' <Esc>'.cmd." gv"
-        "exec 'inoremap '.a:key." \<C-O>".cmd
     endfunction
     command -nargs=+ MapSetToggle call MapSetToggle(<f-args>)
     function MapSmartKey(key_name)
@@ -18,6 +17,9 @@ let g:cwordhi#autoload= 1
         exec 'vmap <silent><'.a:key_name.'> <Esc>:call '.cmd.'("v")<CR>'
     endfunction
     command -nargs=+ MapSmartKey call MapSmartKey(<f-args>)
+    function ToggleExplorer()
+        if(exists(':Rexplore')) | execute ':Rexplore' | else | execute ':Explore' | endif
+    endfunction
 
 """ Keys combinations for editing/reading
     let mapleader = "\\"
@@ -65,6 +67,8 @@ let g:cwordhi#autoload= 1
     inoremap '' ''<Left>
     inoremap `` ``<Left>
 
+    nmap <leader>E :call ToggleExplorer()<CR>
+
 """ Syntax
     set cursorline
     set showmatch
@@ -89,10 +93,14 @@ let g:cwordhi#autoload= 1
       autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
     endif
     let g:html_indent_tags = 'li\|p'
+    let g:gjavascript_plugin_gjsdoc = 1
 
 """ Opening+files
     set encoding=utf8                           " Set utf8 as standard encoding and en_US as the standard language
     set path+=**                                " File matching for `:find`
+    for ignore in [ '.git', '.npm', 'node_modules' ]
+        exec ':set wildignore+=**'.ignore.'**'
+    endfor
     set autoread                                " Auto reload changed files
     au FocusGained,BufEnter * checktime         " …still autoread
                                                 " Return to last edit position when opening files (You want this!)
@@ -126,7 +134,7 @@ let g:cwordhi#autoload= 1
     set ruler                                   " Always show current position
     set noerrorbells novisualbell               " Turn off visual and audible bells
     set showcmd                                 " Show size of visual selection
-    set number "relativenumber                  " Enable line numbers
+    set number                                  " Enable line numbers
     "set numberwidth=5
     MapSetToggle TN relativenumber
     set foldcolumn=0                            " Add a bit extra margin to the left
@@ -134,11 +142,9 @@ let g:cwordhi#autoload= 1
     set sidescrolloff=10                        " Leave characters of horizontal buffer when scrolling
     set textwidth=120                           " Line width marker
     set colorcolumn=+1                          " …marker visual
-                                                " Disable scrollbars (real hackers don't use scrollbars for navigation!)
-    set guioptions-=r
-    set guioptions-=R
-    set guioptions-=l
-    set guioptions-=L
+    for l in [ 'r', 'R', 'l', 'L' ]             " Disable scrollbars (real hackers don't use scrollbars for navigation!)
+        exec ':set guioptions-='.l
+    endfor
 
 """ UI/UX
     set title                                   " change the terminal's title
@@ -149,10 +155,10 @@ let g:cwordhi#autoload= 1
     set ignorecase smartcase                    " Search queries intelligently set case
     set incsearch                               " Show search results as you type
     set timeoutlen=1000 ttimeoutlen=0           " Remove timeout when hitting escape
+    set completeopt=menuone,preview,noinsert,noselect
 
 """ Multiple buffers
-    set splitright                              " Open new splits to the right
-    set splitbelow                              " Open new splits to the bottom
+    set splitright splitbelow                   " Splits open to the right and below
 
 """ Editing experience
     set backspace=indent,eol,start              " Allow cursor keys in insert mode:  http://vi.stackexchange.com/a/2163
@@ -160,6 +166,7 @@ let g:cwordhi#autoload= 1
     MapSetToggle TW wrap
     set expandtab smarttab                      " Use spaces instead of tabs and be smart
     set shiftwidth=4 tabstop=4 softtabstop=4    " Set spaces for tabs everywhere
+    set shiftround                              " round diff shifts to the base of n*shiftwidth
     set ai si ci                                " Auto indent / Smart indent / Copy indent
     set wildmenu                                " Tab autocomplete in command mode
     set wildmode=list:longest,list:full

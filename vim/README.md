@@ -12,4 +12,6 @@ To navigate my primary editor use [../vscode](../vscode).
 _vim_plugins --add tpope/vim-surround
 _vim_plugins --add tpope/vim-liquid
 _vim_plugins --add https://gist.githubusercontent.com/jaandrle/9356d737ef5dfda2efbe50248d32cb78/raw/7f73e223b93d9cb889eecc77850604ebe7e102a3/cwordhi.vim
+
+git clone https://github.com/pangloss/vim-javascript.git ~/.vim/pack/vim-javascript/start/vim-javascript
 ```
