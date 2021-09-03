@@ -6,6 +6,8 @@ set hintfiltermode simple
 set hintchars fsahjklgyuiopqwertnmzxcvb
 set smoothscroll true
 
+command hint_focus hint -;
+
 " Off defaults/previous
 " autocmddelete DocLoad .* unfocus
 unbind d " => dd … see later
@@ -21,4 +23,4 @@ bind dd tabclose
 bind --mode=visual \gt composite js "https://translate.google.com/?sl=auto&tl=cs&op=translate&text="+encodeURI(document.getSelection().toString()) | tabopen
 bind \ym composite js ({ textContent= "", href= "", alt= "", src= "" }= document.getSelection().focusNode, `[${textContent?textContent:"!"+alt}](${href?href:src})`) | clipboard yank
 
-bindurl ^https://mail.centrum.cz/* ;; composite hint_hover ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
+bindurl ^https://mail.centrum.cz/* ;; composite hint_focus ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
