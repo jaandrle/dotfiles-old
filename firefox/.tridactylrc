@@ -4,10 +4,21 @@ set modeindicatorshowkeys true
 set modeindicator true
 set hintfiltermode simple
 set hintchars fsahjklgyuiopqwertnmzxcvb
+set smoothscroll true
 
+" Off defaults/previous
+" autocmddelete DocLoad .* unfocus
+unbind d " => dd … see later
+unbind <C-f> " scrollpage 1
+
+unbindurl ^https://www.youtube.com/* >>
+unbindurl ^https://www.youtube.com/* <<
+
+" Binds
 set keytranslatemap.ž ^
-unbind d
+bind gž tabfirst
 bind dd tabclose
+bind --mode=visual \gt composite js "https://translate.google.com/?sl=auto&tl=cs&op=translate&text="+encodeURI(document.getSelection().toString()) | tabopen
+bind \ym composite js ({ textContent= "", href= "", alt= "", src= "" }= document.getSelection().focusNode, `[${textContent?textContent:"!"+alt}](${href?href:src})`) | clipboard yank
 
-" For syntax highlighting see https://github.com/tridactyl/vim-tridactyl
-" vim: set filetype=tridactyl
+bindurl ^https://mail.centrum.cz/* ;; composite hint_hover ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
