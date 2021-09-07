@@ -24,3 +24,6 @@ bind --mode=visual \gt composite js "https://translate.google.com/?sl=auto&tl=cs
 bind \ym composite js ({ textContent= "", href= "", alt= "", src= "" }= document.getSelection().focusNode, `[${textContent?textContent:"!"+alt}](${href?href:src})`) | clipboard yank
 
 bindurl ^https://mail.centrum.cz/* ;; composite hint_focus ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
+
+" Marks (typically gn*)
+quickmark k https://keep.google.com/u/0/#NOTE/1UXE_BEihe2EexHwZqEYA2oSdILLxF74SPcaLFMStfIpMkWPnStWJDQqH5C1TryJld_dC

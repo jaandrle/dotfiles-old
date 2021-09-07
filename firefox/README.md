@@ -20,3 +20,4 @@ So this folder contains just some infos around and settings for [tridactyl](#tri
 1. Plugin can be found on [tridactyl/tridactyl](https://github.com/tridactyl/tridactyl).
 1. Load/Export settings see [tridactyl/tridactyl FAQ section](https://github.com/tridactyl/tridactyl#frequently-asked-questions-faq).
 1. My config see [./.tridactylrc](./.tridactylrc).
+1. `gn*` (goto quickmark – new tab), `o` in vmode ⇒ reverse selection
