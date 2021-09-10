@@ -8,6 +8,7 @@ let g:cwordhi#autoload= 1
         let cmd = ':set '.a:opt.'! \| set '.a:opt."?\<CR>"
         exec 'nnoremap '.a:key.' '.cmd
         exec 'vnoremap <silent>'.a:key.' <Esc>'.cmd." gv"
+        "exec 'inoremap '.a:key." \<C-O>".cmd
     endfunction
     command -nargs=+ MapSetToggle call MapSetToggle(<f-args>)
     function MapSmartKey(key_name)
@@ -68,6 +69,7 @@ let g:cwordhi#autoload= 1
     inoremap `` ``<Left>
 
     nmap <leader>E :call ToggleExplorer()<CR>
+    nnoremap <leader>rc :call <sid>CopyRegister()<cr>
 
 """ Syntax
     set cursorline
@@ -156,6 +158,10 @@ let g:cwordhi#autoload= 1
     set incsearch                               " Show search results as you type
     set timeoutlen=1000 ttimeoutlen=0           " Remove timeout when hitting escape
     set completeopt=menuone,preview,noinsert,noselect
+    set signcolumn=number                       " e.g. linting error symbol instead of number – see https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
+    set breakindent
+    set breakindentopt=shift:2
+    set showbreak=↳ 
 
 """ Multiple buffers
     set splitright splitbelow                   " Splits open to the right and below
@@ -235,3 +241,18 @@ let g:cwordhi#autoload= 1
         call setpos('.', save_cursor)
         call setreg('/', old_query)
     endfun
+    "see https://vi.stackexchange.com/a/180
+    function! s:CopyRegister()
+        let sourceReg = nr2char(getchar())
+        if sourceReg !~# '\v^[a-z0-9"]'
+            echo "Invalid register given: " . sourceReg
+            return
+        endif
+        let destinationReg = nr2char(getchar())
+        if destinationReg !~# '\v^[a-z0-9]'
+            echo "Invalid register given: " . destinationReg
+            return
+        endif
+        call setreg(destinationReg, getreg(sourceReg, 1))
+        echo "Replaced register '". destinationReg ."' with contents of register '". sourceReg ."'"
+    endfunction
