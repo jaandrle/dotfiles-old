@@ -28,9 +28,6 @@
     au FocusGained,BufEnter * checktime         " …still autoread
                                                 " Return to last edit position when opening files (You want this!)
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-    if has("autocmd")
-        autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
-    endif
                                                 " Save a file as root (:W)
     command! W w !sudo tee > /dev/null %
     set nobackup nowritebackup noswapfile       " Turn off backup files
@@ -52,24 +49,18 @@
     let g:netrw_liststyle= 3
     hi! link netrwMarkFile Search
     let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
-    set sessionoptions-=options
 "" #endregion B
 "" #region EA – Editor Appearance
     colorscheme codedark
-    "highlight CocFloating ctermbg=darkgray ctermfg=white
-    "highlight SpecialKey guifg=darkgrey ctermfg=darkgrey
-    "highlight Comment cterm=italic ctermbg=black guibg=black
-    "highlight CursorLine cterm=underline gui=underline ctermbg=black guibg=black
-    "highlight ColorColumn ctermbg=darkgrey guibg=darkgrey
     set laststatus=2                                                                           " Show status line on startup
-    set statusline+=%r%{getcwd()}/%f%h\ 
-    set statusline+=%=\ 
-    set statusline+=%{&fileencoding?&fileencoding:&encoding}
-    set statusline+=\[%{&fileformat}\]
+    set statusline+=%{coc#status()}\ %{get(b:,'coc_current_function','')}\ 
     set statusline+=\ %p%%
-    set statusline+=\ %l:%c\ 
-    set statusline+=\ 
-    set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+    set statusline+=\ %c:%l\/%L\ 
+    set statusline+=%=
+    set statusline+=%<%F\ 
+    set statusline+=\[%{&fileformat}\]
+    set statusline+=\[%{&fileencoding?&fileencoding:&encoding}\]
+    set statusline+=%y\ %r\ 
     set ruler                                                                                " Always show current position
     set noerrorbells novisualbell                                                       " Turn off visual and audible bells
     set showcmd                                                                             " Show size of visual selection
@@ -104,20 +95,54 @@
     endif
 "" #endregion EA
 "" #region H – Helpers
-    function MapSetToggle(key, opt)
+    command! BDOthers execute '%bdelete|edit #|normal `"'
+    "" #region S – Sessions
+        set sessionoptions-=options
+        let this_session_name=""
+        set statusline+=%{get(g:,'this_session_name','')}
+        let sessions_dir= $HOME."/.vim/sessions/"
+        if(filewritable(g:sessions_dir) != 2)
+            exe 'silent !mkdir -p ' g:sessions_dir
+            redraw!
+        endif
+        function! s:SessionSave(name)
+            let b:path= g:sessions_dir.a:name.".vim"
+            exe "mksession! ".b:path
+            silent execute 'split' b:path
+            call append(line('$')-3, "let this_session_name='".a:name."'")
+            setlocal bufhidden=delete
+            silent update
+            silent hide
+        endfunction
+        function! s:SessionCreate(name)
+            let b:swd= input("Session working directory:\n", system('echo $(pwd)'), "file")
+            exe "cd ".b:swd
+            exe "lcd ".b:swd
+            call <sid>SessionSave(a:name)
+            echo "\nSession '".a:name."' successfully created."
+        endfunction
+        function! s:SessionAutosave()
+            if g:this_session_name != ""
+                call <sid>SessionSave(g:this_session_name)
+            endif
+        endfunction
+        autocmd VimLeave,BufWinEnter * :call <sid>SessionAutosave()
+        command! -nargs=1 SessionCreate :call <sid>SessionCreate(<f-args>)
+        command! SessionLoad :call feedkeys(":so ".g:sessions_dir, "normal")
+        nmap <leader>SL :SessionLoad<cr>
+    "" #endregion S
+    function s:MapSetToggle(key, opt)
         let cmd = ':set '.a:opt.'! \| set '.a:opt."?\<CR>"
         exec 'nnoremap '.a:key.' '.cmd
         exec 'vnoremap <silent>'.a:key.' <Esc>'.cmd." gv"
         "exec 'inoremap '.a:key." \<C-O>".cmd
     endfunction
-    command -nargs=+ MapSetToggle call MapSetToggle(<f-args>)
-    function MapSmartKey(key_name)
+    function s:MapSmartKey(key_name)
         let cmd = '<sid>Smart'.a:key_name
         exec 'nmap <silent><'.a:key_name.'> :call '.cmd.'("n")<CR>'
         exec 'imap <silent><'.a:key_name.'> <C-r>='.cmd.'("i")<CR>'
         exec 'vmap <silent><'.a:key_name.'> <Esc>:call '.cmd.'("v")<CR>'
     endfunction
-    command -nargs=+ MapSmartKey call MapSmartKey(<f-args>)
 "" #endregion H
 "" #region K – Keys
     set foldmarker=#region,#endregion
@@ -135,6 +160,8 @@
     nmap <s-u> <c-r>
     nmap ž ^
     nmap č $
+    nmap <c-n>] <c-]>
+    nmap <c-n>[ <c-[>
     nmap <s-k> a<cr><esc>
     nmap <c-down> gj
     nmap <c-up> gk
@@ -146,8 +173,15 @@
     nnoremap <leader>o o<space><bs><esc>
     nnoremap <leader><s-o> <s-o><space><bs><esc>
     nnoremap Y y$
-    MapSmartKey Home
-    MapSmartKey End
+    call <sid>MapSmartKey("Home")
+    call <sid>MapSmartKey("End")
+    call <sid>MapSetToggle("TW", "wrap")
+    call <sid>MapSetToggle("TL", "list")
+    call <sid>MapSetToggle("TN", "relativenumber")
+    nmap TP :call rainbow_parentheses#toggle()<cr>
+    nmap <leader>b :buffers<CR>:buffer<Space>
+    nmap <leader>e :Explore %:p:h<CR>
+    nnoremap <silent> <leader>" :call <sid>CopyRegister()<cr>
     inoremap <> <><Left>
     inoremap () ()<Left>
     inoremap {} {}<Left>
@@ -155,8 +189,8 @@
     inoremap "" ""<Left>
     inoremap '' ''<Left>
     inoremap `` ``<Left>
-    nnoremap <leader>b :buffers<CR>:buffer<Space>
-    nmap <c-e> :Explore %:p:h<CR>
+    vnoremap <silent> * :<C-u>call VisualSelection('')<CR>/<C-R>=@/<CR><CR>
+    vnoremap <silent> # :<C-u>call VisualSelection('')<CR>?<C-R>=@/<CR><CR>
     " #region K+COC – COC
         inoremap <silent><expr> <TAB>
             \ pumvisible() ? "\<C-n>" :
@@ -230,9 +264,11 @@
         nmap <buffer> <leader>mm mtmm
         nmap <buffer> <leader>mf :echo join(netrw#Expose("netrwmarkfilelist"), "\n")<CR>
 
+        nnoremap <silent> <Leader>c :clear<bar>silent exec "!cp '%:p' '%:p:h/%:t:r-copy.%:e'"<bar>redraw<bar>echo "Copied " . expand('%:t') . ' to ' . expand('%:t:r') . '-copy.' . expand('%:e')<cr>
+
         nmap <buffer> <leader>r :Ntree<CR>
         nmap <buffer> x :call <sid>NetrwCollapse()<CR>
-        nmap <buffer> <c-e> :bd<cr>
+        nmap <buffer> <leader>e :bd<cr>
     endfunction
 "" #endregion Keys
 "" #region U – Utils
@@ -320,5 +356,12 @@
         endif
         call setreg(destinationReg, getreg(sourceReg, 1))
         echo "Replaced register '". destinationReg ."' with contents of register '". sourceReg ."'"
+    endfunction
+    function! VisualSelection(direction) range
+        let l:saved_reg = @"
+        execute "normal! vgvy"
+        let l:pattern = escape(@", "\\/.*'$^~[]")
+        let @/ = substitute(l:pattern, "\n$", "", "")
+        let @" = l:saved_reg
     endfunction
 "" #endregion U

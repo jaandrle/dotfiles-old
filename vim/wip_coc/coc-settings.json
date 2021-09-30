@@ -1,3 +1,10 @@
 {
-    "signature.floatConfig": {"border": true}
-} 
+    "coc.preferences.rootPatterns": [ ".git", ".vscode" ],
+    "diagnostic.separateRelatedInformationAsDiagnostics": true,
+    "diagnostic.errorSign": "✘",
+    "diagnostic.infoSign": "ℹ",
+    "diagnostic.hintSign": "➤",
+    "javascript.showUnused": true,
+    "html.enable": true,
+    "html.suggest.html5": true
+}
