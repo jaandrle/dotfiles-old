@@ -194,6 +194,7 @@
     command! BDOthers execute '%bdelete|edit #|normal `"'
 "" #endregion BW
 "" #region FOS – File(s) + Openning + Saving
+    set autowrite
     set autoread                                                                            " Auto reload changed files
     au FocusGained,BufEnter * checktime                                                               " …still autoread
     
