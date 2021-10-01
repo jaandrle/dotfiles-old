@@ -190,7 +190,7 @@
     endfunction
 "" #endregion C
 "" #region BW – Buffers + Windows + …
-    nmap <leader>b :buffers<CR>:buffer<Space>
+    nmap <leader>b :buffers<CR>:b<Space>
     command! BDOthers execute '%bdelete|edit #|normal `"'
 "" #endregion BW
 "" #region FOS – File(s) + Openning + Saving
