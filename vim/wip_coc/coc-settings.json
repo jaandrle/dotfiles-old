@@ -4,7 +4,5 @@
     "diagnostic.errorSign": "✘",
     "diagnostic.infoSign": "ℹ",
     "diagnostic.hintSign": "➤",
-    "javascript.showUnused": true,
-    "html.enable": true,
-    "html.suggest.html5": true
+    "javascript.showUnused": true
 }
