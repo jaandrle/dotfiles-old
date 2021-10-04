@@ -197,7 +197,7 @@
     endfunction
 "" #endregion C
 "" #region BW – Buffers + Windows + …
-    "nmap <leader>b :buffers<CR>:b<Space>
+    nmap <leader>B :buffers<CR>:b<Space>
     nmap <leader>b :CtrlPBuffer<cr>
     command! BDOthers execute '%bdelete|edit #|normal `"'
 "" #endregion BW
@@ -338,6 +338,8 @@
         endif
         return ""
     endfunction
+    
+    map <leader><leader> <Plug>(JumpMotion)
 "" #endregion EN
 "" #region EA – Editing adjustment
     set showmatch                                               " Quick highlight oppening bracket/… for currently writted
@@ -375,6 +377,19 @@
     inoremap `` ``<Left>
 "" #endregion EA
 "" #region COC
+    let g:coc_global_extensions= [
+        \ 'coc-marketplace',
+        \ 'coc-snippets',
+        \ 'coc-tsserver',
+        \ 'coc-docthis',
+        \ 'coc-json',
+        \ 'coc-css',
+        \ 'coc-scssmodules',
+        \ 'coc-html',
+        \ 'coc-emmet',
+        \ 'coc-emoji'
+    \]
+
     inoremap <silent><expr> <TAB>
         \ pumvisible() ? "\<C-n>" :
         \ <SID>check_back_space() ? "\<TAB>" :

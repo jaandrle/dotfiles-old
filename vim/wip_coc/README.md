@@ -15,6 +15,7 @@ _vim_plugins --add tpope/vim-liquid
 _vim_plugins --add junegunn/rainbow_parentheses.vim
 _vim_plugins --add https://gist.githubusercontent.com/jaandrle/9356d737ef5dfda2efbe50248d32cb78/raw/7f73e223b93d9cb889eecc77850604ebe7e102a3/cwordhi.vim
 _vim_plugins --add NikolayFrantsev/jshint2.vim
+_vim_plugins --add zsugabubus/vim-jumpmotion
 
 mkdir -p ~/.vim/pack/coc/start
 cd ~/.vim/pack/coc/start
