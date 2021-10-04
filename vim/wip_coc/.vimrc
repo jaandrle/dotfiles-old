@@ -24,6 +24,9 @@
         endtry
     endfunction
     autocmd VimEnter * :call OnVimEnter()
+    
+    set runtimepath^=~/.vim/bundle/ctrlp.vim
+    let g:ctrlp_clear_cache_on_exit = 0
 "" #endregion B
 "" #region H – Helpers
     function s:MapSetToggle(key, opt)
@@ -70,6 +73,7 @@
     endtry
     set sessionoptions-=options
     let this_session_name=""
+    let this_session_saving=0
     set statusline+=%{get(g:,'this_session_name','')}
     let sessions_dir= $HOME."/.vim/sessions/"
     if(filewritable(g:sessions_dir) != 2)
@@ -93,11 +97,14 @@
         echo "\nSession '".a:name."' successfully created."
     endfunction
     function! s:SessionAutosave()
-        if g:this_session_name != ""
-            call <sid>SessionSave(g:this_session_name)
+        if g:this_session_name == "" || g:this_session_saving
+            return 0
         endif
+        let g:this_session_saving=1
+        call <sid>SessionSave(g:this_session_name)
+        let g:this_session_saving=0
     endfunction
-    autocmd VimLeave,BufWinEnter * :call <sid>SessionAutosave()
+    autocmd VimLeave,BufWritePost * :call <sid>SessionAutosave()
     command! -nargs=1 SessionCreate :call <sid>SessionCreate(<f-args>)
     command! SessionLoad :call feedkeys(":so ".g:sessions_dir, "normal")
     nmap <leader>SL :SessionLoad<cr>
@@ -190,7 +197,8 @@
     endfunction
 "" #endregion C
 "" #region BW – Buffers + Windows + …
-    nmap <leader>b :buffers<CR>:b<Space>
+    "nmap <leader>b :buffers<CR>:b<Space>
+    nmap <leader>b :CtrlPBuffer<cr>
     command! BDOthers execute '%bdelete|edit #|normal `"'
 "" #endregion BW
 "" #region FOS – File(s) + Openning + Saving
