@@ -211,6 +211,7 @@
     set path+=**                                                                            " File matching for `:find`
     for ignore in [ '.git', '.npm', 'node_modules' ]
         exec ':set wildignore+=**'.ignore.'**'
+        exec ':set wildignore+=**/'.ignore.'/**'
     endfor
     set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
     set wildignore+=*.pdf,*.psd
