@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-09-29 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-10-05 (VIM >=8.1)
 "" #region B – Base
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
     set encoding=utf-8                                                 " unicode characters in the file autoload/float.vim
@@ -227,44 +227,10 @@
         endif
     endfunction
     
-    let g:netrw_fastbrowse= 0
-    let g:netrw_keepdir= 0
-    let g:netrw_localcopydircmd= 'cp -r'
-    let g:netrw_liststyle= 3
-    hi! link netrwMarkFile Search
-    let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
-    nmap <leader>e :Explore %:p:h<CR>
-    augroup netrw_mapping
-        autocmd!
-        autocmd filetype netrw call <sid>NetrwMapping()
-    augroup END
-    function! s:NetrwMapping()
-        nmap <buffer> H u
-        nmap <buffer> h -^
-        nmap <buffer> <Left> -^
-        nmap <buffer> l <CR>
-        nmap <buffer> <Right> <CR>
-        nmap <buffer> P <C-w><Down>:q<cr>
-
-        nmap <buffer> <leader>% %:w<CR>:buffer #<CR>
-        nmap <buffer> <leader>mc mtmc
-        nmap <buffer> <leader>mm mtmm
-        nmap <buffer> <leader>mf :echo join(netrw#Expose("netrwmarkfilelist"), "\n")<CR>
-
-        nnoremap <silent> <Leader>c :clear<bar>silent exec "!cp '%:p' '%:p:h/%:t:r-copy.%:e'"<bar>redraw<bar>echo "Copied " . expand('%:t') . ' to ' . expand('%:t:r') . '-copy.' . expand('%:e')<cr>
-
-        nmap <buffer> <leader>r :Ntree<CR>
-        nmap <buffer> zc :call <sid>NetrwCollapse()<CR>
-        nmap <buffer> <leader>e :bd<cr>
-    endfunction
-    function! s:NetrwCollapse()
-        redir => cnt
-            silent .s/|//gn
-        redir END
-        let lvl = substitute(cnt, '\n', '', '')[0:0] - 1
-        exec '?^\(| \)\{' . lvl . '\}\w'
-        exec "normal \<CR>"
-    endfunction
+    let g:vifm_replace_netrw = 1
+    let g:loaded_netrw       = 1
+    let g:loaded_netrwPlugin = 1
+    nmap <leader>e :Vifm<cr>
 "" #endregion FOS
 "" #region EN – Editor navigation + search
     nmap ž ^
