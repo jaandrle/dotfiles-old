@@ -107,7 +107,7 @@
     autocmd VimLeave,BufWritePost * :call <sid>SessionAutosave()
     command! -nargs=1 SessionCreate :call <sid>SessionCreate(<f-args>)
     command! SessionLoad :call feedkeys(":so ".g:sessions_dir, "normal")
-    nmap <leader>SL :SessionLoad<cr>
+    command CLsessionLoad :call feedkeys(":so ".g:sessions_dir, "normal")
 "" #endregion HS
 "" #region LLW – Left Column + Line + Wrap
     if has("nvim-0.5.0") || has("patch-8.1.1564")           " Recently vim can merge signcolumn and number column into one
@@ -375,19 +375,12 @@
                                                     " Make <CR> auto-select the first completion item and notify coc.nvim to
                                                     " format on enter, <cr> could be remapped by other vim plugin
     nmap <silent> gd <Plug>(coc-definition)
-    nmap <silent> <leader>gdt <Plug>(coc-type-definition)
-    nmap <silent> <leader>gdi <Plug>(coc-implementation)
-    nmap <silent> <leader>gdr <Plug>(coc-references)
     nmap <silent> [g <Plug>(coc-diagnostic-prev)
     nmap <silent> ]g <Plug>(coc-diagnostic-next)
                     " navigate diagnostics, use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
     nnoremap <silent> gh :call <SID>show_documentation()<CR>
     autocmd CursorHold * silent call CocActionAsync('highlight')
                                                         " Highlight the symbol and its references when holding the cursor.
-    nmap <leader><F2> <Plug>(coc-rename)
-    xmap <leader>a <Plug>(coc-codeaction-selected)
-    nmap <leader>a <Plug>(coc-codeaction-selected)
-    nmap <leader>qf  <Plug>(coc-fix-current)
     if has('nvim-0.4.0') || has('patch-8.2.0750')                   " Remap <C-f> and <C-b> for scroll float windows/popups.
         nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
         nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
@@ -402,15 +395,28 @@
     xmap <silent> <C-s> <Plug>(coc-range-select)
     command! -nargs=0 Format :call CocAction('format')
     command! -nargs=? Fold :call CocAction('fold', <f-args>)
-    " Mappings for CoCList
-    nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-    nnoremap <silent><nowait> <space>d  :<C-u>CocList diagnostics<cr>
-    nnoremap <silent><nowait> <space>r  :<C-u>CocListResume<CR>
-    nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-    nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-    nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-    nnoremap <silent><nowait> <F8>      :<C-u>CocNext<CR>
-    nnoremap <silent><nowait> <S-F8>    :<C-u>CocPrev<CR>
+
+    command CLdocumentation         call <sid>show_documentation()
+    command CLoutline               exec 'CocList outline'
+    command CLsymbols               exec 'CocList -I symbols'
+    command CLdiagnostics           exec 'CocList diagnostics'
+    command CLcmdCoc                exec 'CocList commands'
+    command CLrename                call CocActionAsync('rename')
+    command CLrenameFile            exec 'CocCommand workspace.renameCurrentFile'
+    command CLjsdoc                 exec 'CocCommand docthis.documentThis'
+    command CLcodeactionCursor      call CocActionAsync('codeAction', 'cursor')
+    command CLfixCodeQuick          call CocActionAsync('doQuickfix')
+    command CLjumpDefinition        call CocActionAsync('jumpDefinition')
+    command CLjumpType              call CocActionAsync('jumpTypeDefinition')
+    command CLjumpImplementation    call CocActionAsync('jumpImplementation')
+    command CLjumpReferences        call CocActionAsync('jumpReferences')
+    command CLextensions            exec 'CocList extensions'
+    command CLextensionsMarket      exec 'CocList marketplace'
+    nnoremap <F1> :<C-u>CL
+    vnoremap <F1> :<C-u>CL
+    nnoremap [1;2P :<C-u>CocListResume<CR>
+    nnoremap <F8>      :<C-u>CocNext<CR>
+    nnoremap [19;2~  :<C-u>CocPrev<CR>
     
     function! s:check_back_space() abort
         let col = col('.') - 1
