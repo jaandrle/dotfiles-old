@@ -350,7 +350,8 @@
     set expandtab smarttab                                                        " Use spaces instead of tabs and be smart
     set shiftwidth=4 tabstop=4 softtabstop=4                                      " Set spaces for tabs everywhere
     set shiftround                                                          " round diff shifts to the base of n*shiftwidth
-    set autoindent smartindent cindent
+    set autoindent                                                              " https://stackoverflow.com/a/18415867
+    filetype plugin indent on
 
     nnoremap <leader>cw *``cgn
     nnoremap <leader>cb #``cgN
