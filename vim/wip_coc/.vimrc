@@ -4,10 +4,10 @@
     set encoding=utf-8                                                 " unicode characters in the file autoload/float.vim
     set hidden                                                                  " TextEdit might fail if hidden is not set.
     set updatetime=300      " Having longer updatetime (default is 4s) leads to noticeable delays and poor user experience.
-    set shortmess+=c                                                        " Don't pass messages to |ins-completion-menu|.
     set lazyredraw                                                                          " Reduce the redraw frequency
     set ttyfast                                                                 " Send more characters in fast terminals
     set noerrorbells novisualbell
+    set shortmess=
     set title
     colorscheme codedark
     let mapleader = "\\"
