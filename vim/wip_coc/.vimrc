@@ -22,6 +22,7 @@
         try
             call rainbow_parentheses#toggle()
         endtry
+        call s:JSHintOnWrite()
     endfunction
     autocmd VimEnter * :call OnVimEnter()
     
@@ -62,7 +63,7 @@
     nmap <s-u> <c-r>
     set nobackup nowritebackup                                      " Some servers have issues with backup files, see #649.
                                                                     " Return to last edit position when opening files (You want this!)
-    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
     set nobackup nowritebackup noswapfile                                                       " Turn off backup files
     set history=500                                                         " How many lines of history has to remember
                                                                                  " Savig edit history for next oppening
@@ -108,6 +109,7 @@
     command! -nargs=1 SessionCreate :call <sid>SessionCreate(<f-args>)
     command! SessionLoad :call feedkeys(":so ".g:sessions_dir, "normal")
     command CLsessionLoad :call feedkeys(":so ".g:sessions_dir, "normal")
+    abbreviate CLSL CLsessionLoad
 "" #endregion HS
 "" #region LLW – Left Column + Line + Wrap
     if has("nvim-0.5.0") || has("patch-8.1.1564")           " Recently vim can merge signcolumn and number column into one
@@ -204,7 +206,7 @@
 "" #region FOS – File(s) + Openning + Saving
     set autowrite
     set autoread                                                                            " Auto reload changed files
-    au FocusGained,BufEnter * checktime                                                               " …still autoread
+    autocmd FocusGained,BufEnter * checktime                                                          " …still autoread
     
     command! W w !sudo tee > /dev/null %
                                                                                             " Save a file as root (:W)
@@ -306,6 +308,28 @@
         return ""
     endfunction
     
+    command CLjumpMotion            call s:GotoJumpChange('jump')
+    abbreviate CLJJ CLjumpMotion
+    abbreviate CLJM CLjumpMotion
+    command CLjumpChanges           call s:GotoJumpChange('change')
+    abbreviate CLJC CLjumpChanges
+    function! s:GotoJumpChange(cmd)
+        let b:key_shotcuts= a:cmd=="jump" ? [ "\<c-i>", "\<c-o>" ] : [ "g,", "g;" ]
+        set nomore
+        execute a:cmd."s"
+        set more
+        let j = input("[see help for ':".a:cmd."(s).' | -/+ for up/down]\nselect ".a:cmd.": ")
+        if j == '' | return 0 | endif
+        
+        let pattern = '\v\c^\+'
+        if j =~ pattern
+            let j = substitute(j, pattern, '', 'g')
+            execute "normal " . j . b:key_shotcuts[0]
+        else
+            execute "normal " . j . b:key_shotcuts[1]
+        endif
+    endfunction
+    
     map <leader><leader> <Plug>(JumpMotion)
 "" #endregion EN
 "" #region EA – Editing adjustment
@@ -326,8 +350,8 @@
     set expandtab smarttab                                                        " Use spaces instead of tabs and be smart
     set shiftwidth=4 tabstop=4 softtabstop=4                                      " Set spaces for tabs everywhere
     set shiftround                                                          " round diff shifts to the base of n*shiftwidth
-    set ai si ci                                                                " Auto indent / Smart indent / Copy indent
-    
+    set autoindent smartindent cindent
+
     nnoremap <leader>cw *``cgn
     nnoremap <leader>cb #``cgN
     nnoremap <leader>,o <s-a>,<cr><space><bs>
@@ -343,7 +367,21 @@
     inoremap '' ''<Left>
     inoremap `` ``<Left>
 "" #endregion EA
-"" #region COC
+"" #region COC – COC, code linting and so on
+    function! s:JSHintOnWrite()
+        if !exists(':JSHint') | return 0 | endif
+        if !exists('#JSHint#BufWritePost')
+            augroup JSHint
+                autocmd!
+                autocmd BufWritePost *.js silent exe ':JSHint'
+            augroup END
+        else
+            augroup JSHint
+                autocmd!
+            augroup END
+        endif
+    endfunction
+    
     let g:coc_global_extensions= [
         \ 'coc-marketplace',
         \ 'coc-snippets',
@@ -403,6 +441,7 @@
     command CLcmdCoc                exec 'CocList commands'
     command CLrename                call CocActionAsync('rename')
     command CLrenameFile            exec 'CocCommand workspace.renameCurrentFile'
+    command CLjshintToggle          call s:JSHintOnWrite()
     command CLjsdoc                 exec 'CocCommand docthis.documentThis'
     command CLcodeactionCursor      call CocActionAsync('codeAction', 'cursor')
     command CLfixCodeQuick          call CocActionAsync('doQuickfix')
@@ -414,7 +453,7 @@
     command CLextensionsMarket      exec 'CocList marketplace'
     nnoremap <F1> :<C-u>CL
     vnoremap <F1> :<C-u>CL
-    nnoremap [1;2P :<C-u>CocListResume<CR>
+    nnoremap [1;2P @:
     nnoremap <F8>      :<C-u>CocNext<CR>
     nnoremap [19;2~  :<C-u>CocPrev<CR>
     
