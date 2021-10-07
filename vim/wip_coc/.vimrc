@@ -26,8 +26,9 @@
     endfunction
     autocmd VimEnter * :call OnVimEnter()
     
-    set runtimepath^=~/.vim/bundle/ctrlp.vim
+    set runtimepath^=~/.vim/bundle/*
     let g:ctrlp_clear_cache_on_exit = 0
+    nmap <c-P> :CtrlP
 "" #endregion B
 "" #region H – Helpers
     function s:MapSetToggle(key, opt)
