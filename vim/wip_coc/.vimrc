@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-10-05 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-10-07 (VIM >=8.1)
 "" #region B – Base
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
     set encoding=utf-8                                                 " unicode characters in the file autoload/float.vim
@@ -66,7 +66,7 @@
     set showmode
     set laststatus=2                                                                           " Show status line on startup
     let g:statusline_echo= ''
-    set statusline+=%{get(g:,'statusline_echo','')}
+    set statusline+=%{get(g:,'statusline_echo','\ ')}
     set statusline+=%{coc#status()}\ %{get(b:,'coc_current_function','')}\ 
     set statusline+=\ %p%%
     set statusline+=\ %c:%l\/%L\ 
@@ -369,7 +369,6 @@
     if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
       syntax on
     endif
-    
     if v:version > 703 || v:version == 703 && has("patch541")
       set formatoptions+=j " Delete comment character when joining commented lines
     endif
@@ -480,9 +479,9 @@
     command CLjumpReferences        call CocActionAsync('jumpReferences')
     command CLextensions            exec 'CocList extensions'
     command CLextensionsMarket      exec 'CocList marketplace'
-    nnoremap <F1> :<C-u>CL
-    vnoremap <F1> :<C-u>CL
-    nnoremap [1;2P @:
+    nnoremap <F2> :<C-u>CL
+    vnoremap <F2> :<C-u>CL
+    nnoremap [1;2Q @:
     nnoremap <F8>      :<C-u>CocNext<CR>
     nnoremap [19;2~  :<C-u>CocPrev<CR>
     
@@ -500,3 +499,5 @@
         endif
     endfunction
 "" #endregion K+COC – COC
+
+" setqflist([])
