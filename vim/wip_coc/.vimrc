@@ -163,7 +163,10 @@
         autocmd BufWinEnter *.* silent! loadview
     augroup END
     command!            SetFoldRegions set foldmethod=marker
-    command! -nargs=1   SetFoldIndent set foldmethod=indent foldlevel=<q-args>
+    abbreviate SFR SetFoldRegions
+    command! -nargs=1   SetFoldIndent set foldmethod=indent | let &foldlevel=<q-args> | let &foldnestmax=<q-args>+1
+    abbreviate SFI SetFoldIndent
+    command! -nargs=*   SetFoldIndents set foldmethod=indent | let &foldlevel=split(<q-args>, ' ')[0] | let &foldnestmax=split(<q-args>, ' ')[1]
 
     nnoremap <silent> <leader>zJ :call <sid>NextFoldOpen('j')<cr>
     nnoremap <silent> <leader>zj :call <sid>NextFoldClosed('j')<cr>
@@ -453,7 +456,7 @@
     nmap <silent> <C-s> <Plug>(coc-range-select)
     xmap <silent> <C-s> <Plug>(coc-range-select)
     command! -nargs=0 Format :call CocAction('format')
-    command! -nargs=? FoldCoc :call CocAction('fold', <f-args>)
+    command! -nargs=? SetFoldCoc :call CocAction('fold', <f-args>)
 
     command CLdocumentation         call <sid>show_documentation()
     command CLoutline               exec 'CocList outline'
