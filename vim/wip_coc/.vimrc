@@ -42,6 +42,21 @@
         exec 'imap <silent><'.a:key_name.'> <C-r>='.cmd.'("i")<CR>'
         exec 'vmap <silent><'.a:key_name.'> <Esc>:call '.cmd.'("v")<CR>'
     endfunction
+    function! s:ExecuteInShell(command)
+        let command = join(map(split(a:command), 'expand(v:val)'))
+        let winnr_id = bufwinnr('^' . command . '$')
+        silent! execute  winnr_id < 0 ? 'botright new ' . fnameescape(command) : winnr_id . 'wincmd w'
+        setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap number
+        echo 'Execute ' . command . '...'
+        silent! execute 'silent %!'. command
+        silent! execute 'resize ' . line('$')
+        silent! redraw
+        silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
+        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
+        if line('$')==1 && col('$')==1 | silent! execute 'q' | endif
+        echomsg 'Shell command ' . command . ' executed.'
+    endfunction
+    command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
 "" #endregion H
 "" #region SL – Status Line + Command Line + …
     set showcmd                                                                             " Show size of visual selection
@@ -147,6 +162,8 @@
         autocmd BufWinLeave *.* mkview
         autocmd BufWinEnter *.* silent! loadview
     augroup END
+    command!            SetFoldRegions set foldmethod=marker
+    command! -nargs=1   SetFoldIndent set foldmethod=indent foldlevel=<q-args>
 
     nnoremap <silent> <leader>zJ :call <sid>NextFoldOpen('j')<cr>
     nnoremap <silent> <leader>zj :call <sid>NextFoldClosed('j')<cr>
@@ -344,11 +361,13 @@
     if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
       syntax on
     endif
+    
     if v:version > 703 || v:version == 703 && has("patch541")
       set formatoptions+=j " Delete comment character when joining commented lines
     endif
     set expandtab smarttab                                                        " Use spaces instead of tabs and be smart
     set shiftwidth=4 tabstop=4 softtabstop=4                                      " Set spaces for tabs everywhere
+    command! -nargs=1 SetTab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
     set shiftround                                                          " round diff shifts to the base of n*shiftwidth
     set autoindent                                                              " https://stackoverflow.com/a/18415867
     filetype plugin indent on
@@ -367,14 +386,15 @@
     inoremap "" ""<Left>
     inoremap '' ''<Left>
     inoremap `` ``<Left>
+    
+    command ReformatDosToUnix update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
 "" #region COC – COC, code linting and so on
     function! s:JSHintOnWrite()
-        if !exists(':JSHint') | return 0 | endif
         if !exists('#JSHint#BufWritePost')
             augroup JSHint
                 autocmd!
-                autocmd BufWritePost *.js silent exe ':JSHint'
+                autocmd BufWritePost *.js silent execute ':Shell jshint %:p'
             augroup END
         else
             augroup JSHint
@@ -433,7 +453,7 @@
     nmap <silent> <C-s> <Plug>(coc-range-select)
     xmap <silent> <C-s> <Plug>(coc-range-select)
     command! -nargs=0 Format :call CocAction('format')
-    command! -nargs=? Fold :call CocAction('fold', <f-args>)
+    command! -nargs=? FoldCoc :call CocAction('fold', <f-args>)
 
     command CLdocumentation         call <sid>show_documentation()
     command CLoutline               exec 'CocList outline'
