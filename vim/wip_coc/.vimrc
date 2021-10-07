@@ -22,7 +22,7 @@
         try
             call rainbow_parentheses#toggle()
         endtry
-        call s:JSHintOnWrite()
+        call s:JSHintOnWriteToggle()
     endfunction
     autocmd VimEnter * :call OnVimEnter()
     
@@ -65,14 +65,19 @@
     set wildmode=list:longest,list:full
     set showmode
     set laststatus=2                                                                           " Show status line on startup
+    let g:statusline_echo= ''
+    set statusline+=%{get(g:,'statusline_echo','')}
     set statusline+=%{coc#status()}\ %{get(b:,'coc_current_function','')}\ 
     set statusline+=\ %p%%
     set statusline+=\ %c:%l\/%L\ 
     set statusline+=%=
     set statusline+=%<%F\ 
-    set statusline+=\[%{&fileformat}\]
-    set statusline+=\[%{&fileencoding?&fileencoding:&encoding}\]
-    set statusline+=%y\ %r\ 
+    set statusline+=\(
+    set statusline+=%{&fileformat}
+    set statusline+=\/%{&fileencoding?&fileencoding:&encoding}
+    set statusline+=\/%{&filetype}
+    set statusline+=\)
+    set statusline+=\[%R\%M\]\ 
 "" #endregion SL
 "" #region HS – History (general) + Sessions + File Update
     nmap <s-u> <c-r>
@@ -393,11 +398,11 @@
     command ReformatDosToUnix update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
 "" #region COC – COC, code linting and so on
-    function! s:JSHintOnWrite()
+    function! s:JSHintOnWriteToggle()
         if !exists('#JSHint#BufWritePost')
             augroup JSHint
                 autocmd!
-                autocmd BufWritePost *.js silent execute ':Shell jshint %:p'
+                autocmd BufWritePost *.js let g:statusline_echo= " JSHint" | execute "silent Shell jshint %:p" | sleep 1 | let g:statusline_echo= ""
             augroup END
         else
             augroup JSHint
@@ -465,7 +470,7 @@
     command CLcmdCoc                exec 'CocList commands'
     command CLrename                call CocActionAsync('rename')
     command CLrenameFile            exec 'CocCommand workspace.renameCurrentFile'
-    command CLjshintToggle          call s:JSHintOnWrite()
+    command CLjshintToggle          call s:JSHintOnWriteToggle()
     command CLjsdoc                 exec 'CocCommand docthis.documentThis'
     command CLcodeactionCursor      call CocActionAsync('codeAction', 'cursor')
     command CLfixCodeQuick          call CocActionAsync('doQuickfix')
