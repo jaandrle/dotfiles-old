@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-10-07 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-10-08 (VIM >=8.1)
 "" #region B – Base
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
     set encoding=utf-8                                                 " unicode characters in the file autoload/float.vim
