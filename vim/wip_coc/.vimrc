@@ -83,7 +83,8 @@
     set laststatus=2                                                                           " Show status line on startup
     let g:statusline_echo= ''
     function! SLE(msg)
-        let g:statusline_echo= ' '.a:msg
+        let g:statusline_echo= a:msg!='' ? ' ' : ''
+        let g:statusline_echo.= a:msg
     endfunction
     set statusline+=%{get(g:,'statusline_echo','\ ')}
     set statusline+=%{coc#status()}\ %{get(b:,'coc_current_function','')}\ 
@@ -253,7 +254,7 @@
 "" #endregion BW
 "" #region FOS – File(s) + Openning + Saving
     set autowrite autoread
-    autocmd FocusGained,BufEnter *.* checktime
+    autocmd FocusGained,BufEnter * checktime                                                          " …still autoread
     
     command! W w !sudo tee > /dev/null %
                                                                                             " Save a file as root (:W)
