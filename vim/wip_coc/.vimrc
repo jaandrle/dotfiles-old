@@ -11,25 +11,40 @@
     set title
     colorscheme codedark
     let mapleader = "\\"
-    cabbr <expr> %% fnameescape(expand('%:p:h'))
+    cabbr <expr> %PWD%  execute('pwd')
+    cabbr <expr> %CD%   fnameescape(expand('%:p:h'))
+    cabbr <expr> %CW%   expand('<cword>')
     
     nnoremap ů ;
     nnoremap ; :
-    
-    let jshint2_save = 1
 
     function OnVimEnter()
         try
             call rainbow_parentheses#toggle()
+        catch
         endtry
         call s:JSHintOnWriteToggle()
     endfunction
     autocmd VimEnter * :call OnVimEnter()
     
     set runtimepath^=~/.vim/bundle/*
-    let g:ctrlp_clear_cache_on_exit = 0
-    nmap <c-P> :CtrlP
+    nmap <leader>gt <c-]>
+    nmap <leader>gT <c-T>
 "" #endregion B
+"" #region S – Remap 'sS' (primary s<tab>)
+                                                                                                            " use cl/cc
+    nmap s <nop>
+    vmap s <nop>
+    nmap S <nop>
+    vmap S <nop>
+                                                            " s<tab>:   for leverage native Vim command tab competition
+                                                            "                      name your command starting with 'CL'
+    nmap s<tab> :call feedkeys(':CL<tab>', 'tn')<cr>
+    vmap s<tab> :<c-u>call feedkeys(':CL<tab>', 'tn')<cr>
+    nmap s<s-tab> q:?^CL<cr><cr>
+    vmap s<s-tab> q:?^CL<cr><cr>
+    " …folow the same logic for similar behaviour
+"" #endregion S
 "" #region H – Helpers
     function s:MapSetToggle(key, opt)
         let cmd = ':set '.a:opt.'! \| set '.a:opt."?\<CR>"
@@ -67,6 +82,9 @@
     set showmode
     set laststatus=2                                                                           " Show status line on startup
     let g:statusline_echo= ''
+    function! SLE(msg)
+        let g:statusline_echo= ' '.a:msg
+    endfunction
     set statusline+=%{get(g:,'statusline_echo','\ ')}
     set statusline+=%{coc#status()}\ %{get(b:,'coc_current_function','')}\ 
     set statusline+=\ %p%%
@@ -144,8 +162,9 @@
     set number                                                                                        " Enable line numbers
     call <sid>MapSetToggle("TN", "relativenumber")
     set foldcolumn=2                                                                   " Add a bit extra margin to the left
-    set textwidth=120                                                                                   " Line width marker
+    set textwidth=250                                                                                   " Line width marker
     set nowrap                                                                                      " Don't wrap long lines
+    set colorcolumn=120,240
     call <sid>MapSetToggle("TW", "wrap")
     set breakindent
     set breakindentopt=shift:2
@@ -224,15 +243,17 @@
         echo "Replaced register '". destinationReg ."' with contents of register '". sourceReg ."'"
     endfunction
 "" #endregion C
-"" #region BW – Buffers + Windows + …
-    nmap <leader>B :buffers<CR>:b<Space>
-    nmap <leader>b :CtrlPBuffer<cr>
+"" #region N – Navigation throught Buffers + Windows + … (CtrlP)
+    nmap sB :buffers<CR>:b<Space>
+    nmap sb :CtrlPBuffer<cr>
     command! BDOthers execute '%bdelete|edit #|normal `"'
+    let g:ctrlp_clear_cache_on_exit = 0
+    nmap sp :call feedkeys(':CtrlP<tab>', 'tn')<cr>
+    nmap sP q:?^CtrlP<cr><cr>
 "" #endregion BW
 "" #region FOS – File(s) + Openning + Saving
-    set autowrite
-    set autoread                                                                            " Auto reload changed files
-    autocmd FocusGained,BufEnter * checktime                                                          " …still autoread
+    set autowrite autoread
+    autocmd FocusGained,BufEnter *.* checktime
     
     command! W w !sudo tee > /dev/null %
                                                                                             " Save a file as root (:W)
@@ -259,12 +280,11 @@
     let g:loaded_netrw       = 1
     let g:loaded_netrwPlugin = 1
     nmap <leader>e :Vifm<cr>
+    nmap se :call feedkeys(':Vifm<tab>', 'tn')<cr>
 "" #endregion FOS
 "" #region EN – Editor navigation + search
     nmap ž ^
     nmap č $
-    nmap <c-n>] <c-]>
-    nmap <c-n>[ <c-[>
     nmap <c-down> gj
     nmap <c-up> gk
     call <sid>MapSmartKey("Home")
@@ -356,7 +376,7 @@
         endif
     endfunction
     
-    map <leader><leader> <Plug>(JumpMotion)
+    map sj <Plug>(JumpMotion)
 "" #endregion EN
 "" #region EA – Editing adjustment
     set showmatch                                               " Quick highlight oppening bracket/… for currently writted
@@ -402,7 +422,7 @@
         if !exists('#JSHint#BufWritePost')
             augroup JSHint
                 autocmd!
-                autocmd BufWritePost *.js let g:statusline_echo= " JSHint" | execute "silent Shell jshint %:p" | sleep 1 | let g:statusline_echo= ""
+                autocmd BufWritePost *.js call SLE("JSHint") | execute "silent Shell jshint %:p" | sleep 1 | call SLE("")
             augroup END
         else
             augroup JSHint
@@ -442,8 +462,8 @@
                                                     " Make <CR> auto-select the first completion item and notify coc.nvim to
                                                     " format on enter, <cr> could be remapped by other vim plugin
     nmap <silent> gd <Plug>(coc-definition)
-    nmap <silent> [g <Plug>(coc-diagnostic-prev)
-    nmap <silent> ]g <Plug>(coc-diagnostic-next)
+    nmap <silent> <leader>gd <Plug>(coc-diagnostic-next)
+    nmap <silent> <leader>gD <Plug>(coc-diagnostic-prev)
                     " navigate diagnostics, use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
     nnoremap <silent> gh :call <SID>show_documentation()<CR>
     autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -480,11 +500,13 @@
     command CLjumpReferences        call CocActionAsync('jumpReferences')
     command CLextensions            exec 'CocList extensions'
     command CLextensionsMarket      exec 'CocList marketplace'
-    nnoremap <F2> :<C-u>CL
-    vnoremap <F2> :<C-u>CL
-    nnoremap [1;2Q @:
     nnoremap <F8>      :<C-u>CocNext<CR>
     nnoremap [19;2~  :<C-u>CocPrev<CR>
+    
+    nmap S<tab> :call feedkeys(':Coc<tab>', 'tn')<cr>
+    nmap S<s-tab> :CocListResume<cr>
+    nmap <leader>/ :CocSearch 
+    nmap <leader>? <leader>/
     
     function! s:check_back_space() abort
         let col = col('.') - 1
@@ -500,5 +522,3 @@
         endif
     endfunction
 "" #endregion K+COC – COC
-
-" setqflist([])
