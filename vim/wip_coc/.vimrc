@@ -38,12 +38,13 @@
     nmap S <nop>
     vmap S <nop>
                                                             " s<tab>:   for leverage native Vim command tab competition
-                                                            "                      name your command starting with 'CL'
+                                                            " name your command starting with 'CL'
     nmap s<tab> :call feedkeys(':CL<tab>', 'tn')<cr>
     vmap s<tab> :<c-u>call feedkeys(':CL<tab>', 'tn')<cr>
     nmap s<s-tab> q:?^CL<cr><cr>
     vmap s<s-tab> q:?^CL<cr><cr>
     " …folow the same logic for similar behaviour
+    nmap sS :call feedkeys(':Set<tab>', 'tn')<cr>
 "" #endregion S
 "" #region H – Helpers
     function s:MapSetToggle(key, opt)
@@ -166,6 +167,7 @@
     set textwidth=250                                                                                   " Line width marker
     set nowrap                                                                                      " Don't wrap long lines
     set colorcolumn=120,240
+    command -nargs=? SetTextWidth if <q-args> | let &textwidth=<q-args> | let &colorcolumn='<args>,120,240' | else | let &textwidth=250 | let &colorcolumn='120,240' | endif
     call <sid>MapSetToggle("TW", "wrap")
     set breakindent
     set breakindentopt=shift:2
