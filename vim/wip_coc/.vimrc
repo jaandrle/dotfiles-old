@@ -92,13 +92,11 @@
     set statusline+=\ %p%%
     set statusline+=\ %c:%l\/%L\ 
     set statusline+=%=
-    set statusline+=%<%F\ 
-    set statusline+=\(
+    set statusline+=%<%F
+    set statusline+=%R\%M\ 
     set statusline+=%{&fileformat}
-    set statusline+=\/%{&fileencoding?&fileencoding:&encoding}
-    set statusline+=\/%{&filetype}
-    set statusline+=\)
-    set statusline+=\[%R\%M\]\ 
+    set statusline+=·%{&fileencoding?&fileencoding:&encoding}
+    set statusline+=·%{&filetype}\ 
 "" #endregion SL
 "" #region HS – History (general) + Sessions + File Update
     nmap <s-u> <c-r>
@@ -114,9 +112,9 @@
     catch
     endtry
     set sessionoptions-=options
-    let this_session_name=""
+    let this_session_name="—"
     let this_session_saving=0
-    set statusline+=%{get(g:,'this_session_name','')}
+    set statusline+=:%{get(g:,'this_session_name')}\ 
     let sessions_dir= $HOME."/.vim/sessions/"
     if(filewritable(g:sessions_dir) != 2)
         exe 'silent !mkdir -p ' g:sessions_dir
