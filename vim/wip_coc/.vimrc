@@ -14,7 +14,7 @@
     cabbr <expr> %PWD%  execute('pwd')
     cabbr <expr> %CD%   fnameescape(expand('%:p:h'))
     cabbr <expr> %CW%   expand('<cword>')
-    
+
     nnoremap ů ;
     nnoremap ; :
 
@@ -26,7 +26,7 @@
         call s:JSHintOnWriteToggle()
     endfunction
     autocmd VimEnter * :call OnVimEnter()
-    
+
     set runtimepath^=~/.vim/bundle/*
     nmap <leader>gt <c-]>
     nmap <leader>gT <c-T>
@@ -88,8 +88,7 @@
         let g:statusline_echo.= a:msg
     endfunction
     set statusline+=%{get(g:,'statusline_echo','\ ')}
-    set statusline+=%{coc#status()}\ %{get(b:,'coc_current_function','')}\ 
-    set statusline+=\ %p%%
+	set statusline+=%{coc#status()}\ %{get(b:,'coc_current_function','')}\ 
     set statusline+=\ %c:%l\/%L\ 
     set statusline+=%=
     set statusline+=%<%F
@@ -254,8 +253,14 @@
 "" #endregion BW
 "" #region FOS – File(s) + Openning + Saving
     set autowrite autoread
-    autocmd FocusGained,BufEnter * checktime                                                          " …still autoread
-    
+    autocmd FocusGained,BufEnter *.* checktime                                                          " …still autoread
+    function s:TrimEndLineSpaces(line_start, line_end)
+        let b:pos= getpos(".") | let b:s= @/
+        execute a:line_start.','.a:line_end.'s/\s\+$//e' | nohl
+        let @/= b:s | call setpos('.', b:pos)
+    endfunction
+    command -bar -nargs=0 -range=% TrimEndLineSpaces call s:TrimEndLineSpaces(<line1>,<line2>)
+
     command! W w !sudo tee > /dev/null %
                                                                                             " Save a file as root (:W)
     set path+=**                                                                            " File matching for `:find`
@@ -265,7 +270,7 @@
     endfor
     set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
     set wildignore+=*.pdf,*.psd
-    
+
     function! RenameFile()
         let old_name = expand('%')
         let new_name = input('New file name: ', expand('%'), 'file')
@@ -276,7 +281,7 @@
             redraw!
         endif
     endfunction
-    
+
     let g:vifm_replace_netrw = 1
     let g:loaded_netrw       = 1
     let g:loaded_netrwPlugin = 1
@@ -292,12 +297,12 @@
     call <sid>MapSmartKey("End")
     vnoremap <silent> * :<C-u>call VisualSelection('')<CR>/<C-R>=@/<CR><CR>
     vnoremap <silent> # :<C-u>call VisualSelection('')<CR>?<C-R>=@/<CR><CR>
-    
+
     set hlsearch                                                                                " Highlight search results
     set ignorecase smartcase                                                        " Search queries intelligently set case
     set incsearch                                                                        " Show search results as you type
     nmap <silent>ú :nohlsearch<cr>
-    
+
     function! VisualSelection(direction) range
         let l:saved_reg = @"
         execute "normal! vgvy"
@@ -354,7 +359,7 @@
         endif
         return ""
     endfunction
-    
+
     command CLjumpMotion            call s:GotoJumpChange('jump')
     abbreviate CLJJ CLjumpMotion
     abbreviate CLJM CLjumpMotion
@@ -367,7 +372,7 @@
         set more
         let j = input("[see help for ':".a:cmd."(s).' | -/+ for up/down]\nselect ".a:cmd.": ")
         if j == '' | return 0 | endif
-        
+
         let pattern = '\v\c^\+'
         if j =~ pattern
             let j = substitute(j, pattern, '', 'g')
@@ -376,8 +381,16 @@
             execute "normal " . j . b:key_shotcuts[1]
         endif
     endfunction
-    
+
     map sj <Plug>(JumpMotion)
+    " https://gist.github.com/romainl/f7e2e506dc4d7827004e4994f1be2df6
+    command! -bang -nargs=1 CLjumpSearch call setloclist(0, [], ' ',
+        \ {'title': 'Global ' .. <q-args>,
+        \  'efm':   '%f:%l\ %m,%f:%l',
+        \  'lines': execute('g<bang>/' .. <q-args> .. '/#')
+        \           ->split('\n')
+        \           ->map({_, val -> expand("%") .. ":" .. trim(val, 1)})
+        \ })
 "" #endregion EN
 "" #region EA – Editing adjustment
     set showmatch                                               " Quick highlight oppening bracket/… for currently writted
@@ -405,9 +418,11 @@
     nnoremap <leader>cb #``cgN
     nnoremap <leader>,o <s-a>,<cr><space><bs>
     nnoremap <leader>;o <s-a>;<cr><space><bs>
+    nnoremap <leader>*o o * <space><bs>
     nnoremap <leader>o o<space><bs><esc>
     nnoremap <leader><s-o> <s-o><space><bs><esc>
     nmap <s-k> a<cr><esc>
+
     inoremap <> <><Left>
     inoremap () ()<Left>
     inoremap {} {}<Left>
@@ -415,7 +430,7 @@
     inoremap "" ""<Left>
     inoremap '' ''<Left>
     inoremap `` ``<Left>
-    
+
     command ReformatDosToUnix update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
 "" #region COC – COC, code linting and so on
@@ -431,7 +446,7 @@
             augroup END
         endif
     endfunction
-    
+
     let g:coc_global_extensions= [
         \ 'coc-marketplace',
         \ 'coc-snippets',
