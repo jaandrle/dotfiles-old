@@ -136,7 +136,7 @@
         echo "\nSession '".a:name."' successfully created."
     endfunction
     function! s:SessionAutosave()
-        if g:this_session_name == "" || g:this_session_saving
+        if g:this_session_name == "—" || g:this_session_saving
             return 0
         endif
         let g:this_session_saving=1
