@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-10-08 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-10-11 (VIM >=8.1)
 "" #region B – Base
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
     set encoding=utf-8                                                 " unicode characters in the file autoload/float.vim
@@ -88,7 +88,7 @@
         let g:statusline_echo.= a:msg
     endfunction
     set statusline+=%{get(g:,'statusline_echo','\ ')}
-	set statusline+=%{coc#status()}\ %{get(b:,'coc_current_function', '')}\ 
+    set statusline+=%{coc#status()}\ %{get(b:,'coc_current_function','')}\ 
     set statusline+=\ %c:%l\/%L\ 
     set statusline+=%=
     set statusline+=%<%F
@@ -113,7 +113,7 @@
     set sessionoptions-=options
     let this_session_name="—"
     let this_session_saving=0
-    set statusline+=:%{get(g:,'this_session_name', '')}\ 
+    set statusline+=:%{get(g:,'this_session_name','')}\ 
     let sessions_dir= $HOME."/.vim/sessions/"
     if(filewritable(g:sessions_dir) != 2)
         exe 'silent !mkdir -p ' g:sessions_dir
