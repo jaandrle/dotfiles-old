@@ -145,8 +145,8 @@
     endfunction
     autocmd VimLeave,BufWritePost * :call <sid>SessionAutosave()
     command! -nargs=1 SessionCreate :call <sid>SessionCreate(<f-args>)
-    command! SessionLoad :call feedkeys(":so ".g:sessions_dir, "normal")
-    command CLsessionLoad :call feedkeys(":so ".g:sessions_dir, "normal")
+    command! SessionLoad :call feedkeys(":so ".g:sessions_dir.'<tab>', 'tn')
+    command CLsessionLoad :call feedkeys(":so ".g:sessions_dir.'<tab>', 'tn')
     abbreviate CLSL CLsessionLoad
 "" #endregion HS
 "" #region LLW – Left Column + Line + Wrap
