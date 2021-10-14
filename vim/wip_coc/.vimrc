@@ -1,5 +1,6 @@
 """ VIM config file | Jan Andrle | 2021-10-11 (VIM >=8.1)
 "" #region B – Base
+    let $BASH_ENV = "~/.bashrc"
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
     set encoding=utf-8                                                 " unicode characters in the file autoload/float.vim
     set hidden                                                                  " TextEdit might fail if hidden is not set.
