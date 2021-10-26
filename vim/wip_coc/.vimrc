@@ -31,6 +31,7 @@
     set runtimepath^=~/.vim/bundle/*
     nmap <leader>gt <c-]>
     nmap <leader>gT <c-T>
+    command! README :e ~/Dokumenty/GitHub/dotfiles/vim/README.md
 "" #endregion B
 "" #region S – Remap 'sS' (primary s<tab>)
                                                                                                             " use cl/cc

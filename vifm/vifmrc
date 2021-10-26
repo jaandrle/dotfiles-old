@@ -295,6 +295,9 @@
         nnoremap ycn :!echo -n %c | xsel --input --primary %i && echo -n %c | xsel --clipboard --input %i<cr>:echo expand('%"c') "is yanked to clipboard"<cr>
     endif
 " #endregion Y
+
+command! README :!vim ~/Dokumenty/GitHub/dotfiles/vifm/README.md
+
 "" #region N – Notes
     "Filter-out build and temporary files
     "    windo filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/
