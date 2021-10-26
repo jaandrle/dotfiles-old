@@ -96,7 +96,6 @@
 "" #region AS – Apperance/Sorting+Numbers
     set sortnumbers sort=+iname
     command! SetSortAll :sort
-    set number
     command! SetSort
             \ :if &sort == '-size,+name'
             \ |    set sort=-mtime
