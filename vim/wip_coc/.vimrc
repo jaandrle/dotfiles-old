@@ -223,7 +223,6 @@
     endfunction
 "" #endregion F
 "" #region C – Clipboard
-    set clipboard=unnamed                       " Use the OS clipboard by default (on versions compiled with `+clipboard`)
     nnoremap <F2> :set invpaste paste?<CR>
     set pastetoggle=<F2>
     nnoremap Y y$
@@ -383,7 +382,7 @@
         endif
     endfunction
 
-    map sj <Plug>(JumpMotion)
+    nmap sj <Plug>(JumpMotion)
     " https://gist.github.com/romainl/f7e2e506dc4d7827004e4994f1be2df6
     command! -bang -nargs=1 CLjumpSearch call setloclist(0, [], ' ',
         \ {'title': 'Global ' .. <q-args>,
