@@ -6,10 +6,10 @@
             "group": "dev",
             "file_name": "github-desktop",
             "exec": "yes",
+            "description": "Fork of GitHub Desktop to support various Linux distributions",
+            "last_update": "2021-10-22T17:14:40Z",
             "downloads": "/home/jaandrle/bin/github-desktop",
-            "version": "release-2.9.2-linux1",
-            "last_update": "2021-08-24T20:33:30Z",
-            "description": "Fork of GitHub Desktop to support various Linux distributions"
+            "version": "release-2.9.4-linux1"
         },
         {
             "repository": "AppImage/AppImageKit",
@@ -50,9 +50,9 @@
             "group": "dev",
             "file_name": "jaaCSS.js",
             "exec": "yes",
-            "last_update": "2021-07-01T10:37:21Z",
             "downloads": "/home/jaandrle/bin/jaaCSS.js",
-            "version": "v1.3.1"
+            "version": "v1.3.1",
+            "last_update": "2021-07-01T10:37:21Z"
         },
         {
             "repository": "vinceliuice/Tela-circle-icon-theme",

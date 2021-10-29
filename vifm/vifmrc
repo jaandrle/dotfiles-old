@@ -7,8 +7,8 @@
         :bmark! "~/Dokumenty/" documents
         :bmark! "~/Dokumenty/GitHub/" projects git github
         :bmark! "~/Dokumenty/ftp/" ftp
-        :bmark! "~/Aktivity/OneDrive" onedrive
-        :bmark! "~/.vifm/" vifm
+        :bmark! "~/OneDrive" onedrive
+        :bmark! "~/.config/vifm/" vifm
         :bmark! "/media/jaandrle/" volumes
     else
         :bmark! "~/" home
@@ -124,6 +124,8 @@
             \ |endif
 "" #endregion AS
 "" #region C – Commands
+    cnoremap <c-b> <a-b>
+    cnoremap <c-f> <a-f>
     " #region :com[mand][!] command_name action
     " The following macros can be used in a command
     " %a is replaced with the user arguments.
@@ -266,6 +268,7 @@
     " #endregion Fimages
 " #endregion F
 " #region S – sS keys
+    nnoremap sj :cd ~/
     nnoremap sS :Set
     nnoremap SS :<up><cr>
     if has('win')

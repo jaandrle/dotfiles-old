@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ ! -t 0 ]; then
+    exo-open --launch TerminalEmulator -- -e "_weather $*"
+    exit
+fi
+curl -H 'Accept-Language: cs' wttr.in/${1:-prague} | less -R -S

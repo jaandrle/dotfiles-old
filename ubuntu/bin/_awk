@@ -1,0 +1,26 @@
+#!/bin/bash
+this="${0##*/}"
+USAGE="\
+usage:  $this [<awk_args>] <field_no>
+    Ex: getent passwd | grep andy | $this -F: 5
+    Ex: echo \"A B\" | $this 2
+"
+err(){ echo -e "$USAGE" >&2; exit 1; }
+
+[[ $# -eq 0 ]] && err
+# bail if the *last* argument isn't a number (source:
+# http://stackoverflow.com/a/808740)
+last=${@:(-1)}
+if ! [ $last -eq $last ] &>/dev/null; then
+    echo "_awk! Last argument (awk field) must be numeric." >&2
+    err
+fi
+
+if [ $# -gt 1 ]; then
+    # Source:
+    # http://www.cyberciti.biz/faq/linux-unix-bsd-apple-osx-bash-get-last-argument/
+    rest=${@:1:$(( $# - 1 ))}
+else
+    rest='' # just to be sure
+fi
+awk $rest "{ print  \$$last }"

@@ -6,13 +6,16 @@
 [ -f ~/.bash_aliases ] && . ~/.bash_aliases
 shopt -s expand_aliases
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 [[ $- != *i* ]] && return                   # If not running interactively, don't do anything
 
 ## General
 set -o vi                                   # VIM mode for bash
 bind -m vi-command 'Control-l: clear-screen'
 bind -m vi-insert 'Control-l: clear-screen'
-PATH=~/.local/bin:$PATH
 export MANPAGER="/bin/sh -c \"col -b | vim --not-a-term -c 'set ft=man ts=8 nomod nolist noma' -\""
 shopt -s checkwinsize                       # dynamic columns update after every cmd
 

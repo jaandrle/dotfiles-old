@@ -12,18 +12,13 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 clean_history(){ awk '!seen[$0]++ {print $0}' /home/jaandrle/.bash_history; }
-LAST_PWD_PATH="`pwd`/.bash_last_pwd"
+LAST_PWD_PATH="$HOME/.bash_last_pwd"
 [ -f "$LAST_PWD_PATH" ] && OLDPWD=`cat $LAST_PWD_PATH`
 cd(){ builtin cd "$@" && echo `pwd` > "$LAST_PWD_PATH"; }
 alias rm='rm -vi'
 alias cp='cp -vi'
 alias mv='mv -vi'
-function _gkeep {
-    #https://github.com/Nekmo/gkeep/tree/master
-    gkeep --auth ~/Dokumenty/Google\ Keep/auth.txt search-notes > ~/Dokumenty/Google\ Keep/all.txt
-    vim ~/Dokumenty/Google\ Keep/all.txt
-}
-_help(){ alias | grep "alias _"; echo "_cd.."; echo "_gkeep"; ls ~/bin | grep -P "^_"; }
+_?(){ alias | grep "alias _"; echo "_cd.."; echo "_gkeep"; ls ~/bin | grep -P "^_"; }
 alias _ls='ls -pQF'
 alias _ls.='_ls -A'
 alias _cd.='clear;_ls'

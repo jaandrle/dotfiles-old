@@ -1,0 +1,18 @@
+[Desktop Entry]
+Actions=
+Categories=Development;RevisionControl;
+Comment=
+Exec=github-desktop %U
+GenericName=Simple collaboration from your desktop
+Icon=/home/jaandrle/.icons/github-desktop.svg
+MimeType=x-scheme-handler/x-github-client;x-scheme-handler/x-github-desktop-auth;x-scheme-handler/x-github-desktop-dev-auth;
+Name=GitHub Desktop
+NoDisplay=false
+Path[$e]=
+StartupNotify=true
+Terminal=0
+TerminalOptions=
+Type=Application
+Version=1.1
+X-KDE-SubstituteUID=false
+X-KDE-Username=

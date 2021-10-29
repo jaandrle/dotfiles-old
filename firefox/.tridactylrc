@@ -1,29 +1,35 @@
 " General Settings
+set update.lastchecktime 1635159555061
+set configversion 2.0
 set theme dark
 set modeindicatorshowkeys true
 set modeindicator true
 set hintfiltermode simple
 set hintchars fsahjklgyuiopqwertnmzxcvb
 set smoothscroll true
-
-command hint_focus hint -;
-
-" Off defaults/previous
-" autocmddelete DocLoad .* unfocus
-unbind d " => dd … see later
-unbind <C-f> " scrollpage 1
-
-unbindurl ^https://www.youtube.com/* >>
-unbindurl ^https://www.youtube.com/* <<
+set keytranslatemap.ž ^
 
 " Binds
-set keytranslatemap.ž ^
+unbindurl ^https://www.youtube.com/* >>
+unbindurl ^https://www.youtube.com/* <<
+bindurl ^https://mail.centrum.cz/* ;; composite hint_focus ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
 bind gž tabfirst
 bind dd tabclose
-bind --mode=visual \gt composite js "https://translate.google.com/?sl=auto&tl=cs&op=translate&text="+encodeURI(document.getSelection().toString()) | tabopen
 bind \ym composite js ({ textContent= "", href= "", alt= "", src= "" }= document.getSelection().focusNode, `[${textContent?textContent:"!"+alt}](${href?href:src})`) | clipboard yank
+bind gnk tabopen -c osobní https://keep.google.com/u/0/#NOTE/1UXE_BEihe2EexHwZqEYA2oSdILLxF74SPcaLFMStfIpMkWPnStWJDQqH5C1TryJld_dC
+bind gok open -c osobní https://keep.google.com/u/0/#NOTE/1UXE_BEihe2EexHwZqEYA2oSdILLxF74SPcaLFMStfIpMkWPnStWJDQqH5C1TryJld_dC
+bind gwk winopen -c osobní https://keep.google.com/u/0/#NOTE/1UXE_BEihe2EexHwZqEYA2oSdILLxF74SPcaLFMStfIpMkWPnStWJDQqH5C1TryJld_dC
+bind gnC tabopen -c osobní https://calendar.google.com
+bind goC open -c osobní https://calendar.google.com
+bind gwC winopen -c osobní https://calendar.google.com
+unbind --mode=normal d
+bind --mode=visual \gt composite js "https://translate.google.com/?sl=auto&tl=cs&op=translate&text="+encodeURI(document.getSelection().toString()) | tabopen
 
-bindurl ^https://mail.centrum.cz/* ;; composite hint_focus ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
+" Aliases
+alias hint_focus hint -;
 
-" Marks (typically gn*)
-quickmark k https://keep.google.com/u/0/#NOTE/1UXE_BEihe2EexHwZqEYA2oSdILLxF74SPcaLFMStfIpMkWPnStWJDQqH5C1TryJld_dC
+" Marks
+quickmark c moz-extension://616498c0-3916-4f0b-b0a9-ce01ecf2298d/popup.html
+
+" For syntax highlighting see https://github.com/tridactyl/vim-tridactyl
+" vim: set filetype=tridactyl

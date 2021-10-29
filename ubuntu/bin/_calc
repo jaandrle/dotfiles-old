@@ -1,0 +1,6 @@
+#!/bin/bash
+function _echo(){
+    [ -t 0 ] && echo "$1" && exit
+    notify-send -i kcalc "$1" && exit
+}
+_echo `python3 -c 'import sys; print(eval(" ".join(sys.argv[1:])))' "$*"`
