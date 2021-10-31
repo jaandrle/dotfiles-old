@@ -1,5 +1,4 @@
 "" VIFM Config file / 21-10-26 / Jan Andrle
-" vim: filetype=vifm
 "" #region B – Bookmarks
     if !has('win')
         :bmark! "~/" home
@@ -48,7 +47,8 @@
     nnoremap <c-s> :filter !{}<left><left>
     " Open console in current directory
     if !has('win')
-        nnoremap ,t :!(exo-open --launch TerminalEmulator --working-directory %d > /dev/null 2>&1)<cr>
+        nnoremap ,t :!(exo-open --launch TerminalEmulator --working-directory %d > /dev/null 2>&1) &<cr>
+        nnoremap ,v :!(exo-open --launch TerminalEmulator --working-directory %d -- -e "vifm ." > /dev/null 2>&1) &<cr>
     else
         nnoremap ,t :!start "[Vifm] PowerShell %d" powershell.exe -c "powershell.exe -NoExit -Command Set-Location -LiteralPath '%d'"<cr>
     endif
@@ -154,33 +154,21 @@
     command! df df -h %m 2> /dev/null
     command! diff vim -d %f %F
     command! vim vim %"f
-    command! run !! ./%f
     command! make !!make %a
     command! mkcd :mkdir %a | cd %a
     command! vgrep vim "+grep %a"
     command! reload :write | restart
+    
+    command! run !! ./%f
+    command! runGUI !! ./%f &
+    nmap or :runGUI<cr>
+    nmap oR :run<cr>
 "" #endregion C
 " #region F – Filetypes
-    if has('win')
-        " filetype * start, explorer
-        filetype *
-            \ {File Explorer}
-                \ explorer %"c:p &,
-            \ {Total Commander}
-                \ "C:\Program Files (x86)\totalcmd\TOTALCMD.EXE" /O %"c:p &,
-            \ {Notepad++}
-                \ "C:\Program Files\Notepad++\notepad++.exe" %"c:p &
-        filextype *.txt {Open with Notepad} start notepad.exe %f
-    else
-        filetype * {Native Open} xdg-open > /dev/null 2>&1 &
-    endif
     nnoremap ov :!vim %"f<cr>
-    " nnoremap Oo :!gvim --remote-tab-silent %f<cr>
-    " nnoremap OO :!gvim %f<cr>
-                                                        " Open file in the background using its default program
-    nnoremap gb :file &<cr>l
+    nnoremap oo :file &<cr>l
+    nnoremap oO :file &<cr>jl
     
-    filextype *.pdf firefox %c %i &
     fileviewer *.pdf pdftotext -nopgbrk %c -
     " #region Farch – Archives
         if has('win')
@@ -214,14 +202,28 @@
         fileviewer *.rar unrar v %c
         filetype *.iso {Mount with fuseiso}
             \ FUSE_MOUNT|fuseiso %SOURCE_FILE %DESTINATION_DIR,
-        filetype *.ssh {Mount with sshfs}
-            \ FUSE_MOUNT2|sshfs %PARAM %DESTINATION_DIR %FOREGROUND,
-        filetype *.ftp {Mount with curlftpfs}
-            \ FUSE_MOUNT2|curlftpfs -o ftp_port=-,,disable_eprt %PARAM %DESTINATION_DIR %FOREGROUND,
         filetype *.7z {Mount with fuse-7z}
             \ FUSE_MOUNT|fuse-7z %SOURCE_FILE %DESTINATION_DIR,
         fileviewer *.7z 7z l %c
     " #endregion Farch
+    filetype *.ftp {Mount with curlftpfs}
+        \ FUSE_MOUNT2|curlftpfs -o ftp_port=-,,disable_eprt %PARAM %DESTINATION_DIR %FOREGROUND,
+    filetype *.ssh {Mount with sshfs}
+        \ FUSE_MOUNT2|sshfs %PARAM %DESTINATION_DIR %FOREGROUND,
+    
+    if has('win')
+        " filetype * start, explorer
+        filetype *
+            \ {File Explorer}
+                \ explorer %"c:p &,
+            \ {Total Commander}
+                \ "C:\Program Files (x86)\totalcmd\TOTALCMD.EXE" /O %"c:p &,
+            \ {Notepad++}
+                \ "C:\Program Files\Notepad++\notepad++.exe" %"c:p &
+        filextype *.txt {Open with Notepad} start notepad.exe %f
+    else
+        filetype * {Native Open} xdg-open > /dev/null 2>&1 &
+    endif
     " #region Futils – Utils (eg. hashs checks)
         filetype *.torrent ktorrent %f &
         fileviewer *.torrent dumptorrent -v %c
@@ -254,9 +256,14 @@
             "    \ powershell New-Object System.IO.FileInfo(\"%c:p\")
                 \ forfiles /M %"c /C "cmd /c (echo @path && echo . . . && echo Last modification: @fdate @ftime)" && echo . . . && type %"c
         else
-            fileviewer 
+            fileviewer
                 \*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm,
-                \*.exe,*.epub,*.doc,*.docx
+                \ env -u COLORTERM viu-image-viewer.viu %"c -w %pw -t &&
+                \ echo $(file -b %f)
+                \ %pc
+            fileviewer 
+                \*.exe,*.epub,*.doc,*.docx,
+                \*.svg,
                 \*.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus,
                 \*.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
                 \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
@@ -336,3 +343,6 @@ command! README :!vim ~/Dokumenty/GitHub/dotfiles/vifm/README.md
     "
     " let $VIFM_SERVER_NAME = v:servername
 " #endregion N
+
+" vim: set filetype=vifm tabstop=4 shiftwidth=4 textwidth=250 expandtab :
+" vim>60: set foldmethod=marker foldmarker=#region,#endregion :

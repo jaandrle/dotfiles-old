@@ -32,6 +32,29 @@
     nmap <leader>gt <c-]>
     nmap <leader>gT <c-T>
     command! README :e ~/Dokumenty/GitHub/dotfiles/vim/README.md
+    
+    set modeline
+    function! s:AppendModeline(additional)
+        let l:modeline= printf(" vim: set tabstop=%d shiftwidth=%d textwidth=%d %sexpandtab :",
+            \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+        let l:modeline= substitute(&commentstring, "%s", l:modeline, "")
+        call append(line("$"), l:modeline)
+        
+        if !a:additional | return 0 | endif
+        if &foldmethod=="marker"
+            let l:modeline= printf(" vim>60: set foldmethod=marker foldmarker=%s :",
+                \ &foldmarker)
+        elseif &foldmethod=="indent"
+            let l:modeline= printf(" vim>60: set foldmethod=indent foldlevel=%d foldnestmax=%d:",
+                \ &foldlevel, &foldnestmax)
+        else
+            return 0
+        endif
+        let l:modeline= substitute(&commentstring, "%s", l:modeline, "")
+        call append(line("$"), l:modeline)
+    endfunction
+    command! CLmodelineBasic :call s:AppendModeline(0)
+    command! CLmodeline :call s:AppendModeline(1)
 "" #endregion B
 "" #region S – Remap 'sS' (primary s<tab>)
                                                                                                             " use cl/cc
@@ -303,7 +326,7 @@
     set hlsearch                                                                                " Highlight search results
     set ignorecase smartcase                                                        " Search queries intelligently set case
     set incsearch                                                                        " Show search results as you type
-    nmap <silent>ú :nohlsearch<cr>
+    nmap <silent>ú :nohlsearch<bar>diffupdate<cr>
 
     function! VisualSelection(direction) range
         let l:saved_reg = @"
@@ -395,6 +418,7 @@
         \ })
 "" #endregion EN
 "" #region EA – Editing adjustment
+    let g:highlightedyank_highlight_duration= 250
     set showmatch                                               " Quick highlight oppening bracket/… for currently writted
     nmap TP :call rainbow_parentheses#toggle()<cr>
     let g:rainbow#pairs = [['(', ')'], ['[', ']'], [ '{', '}' ]]
@@ -425,13 +449,13 @@
     nnoremap <leader><s-o> <s-o><space><bs><esc>
     nmap <s-k> a<cr><esc>
 
-    inoremap <> <><Left>
-    inoremap () ()<Left>
-    inoremap {} {}<Left>
-    inoremap [] []<Left>
-    inoremap "" ""<Left>
-    inoremap '' ''<Left>
-    inoremap `` ``<Left>
+    inoremap <> <C-G>u<><Left>
+    inoremap () <C-G>u()<Left>
+    inoremap {} <C-G>u{}<Left>
+    inoremap [] <C-G>u[]<Left>
+    inoremap "" <C-G>u""<Left>
+    inoremap '' <C-G>u''<Left>
+    inoremap `` <C-G>u``<Left>
 
     command ReformatDosToUnix update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
@@ -540,3 +564,6 @@
         endif
     endfunction
 "" #endregion K+COC – COC
+
+" vim: set tabstop=4 shiftwidth=4 textwidth=250 expandtab :
+" vim>60: set foldmethod=marker foldmarker=#region,#endregion :
