@@ -36,3 +36,13 @@ fi
 
 export GTK_MODULES
 export UBUNTU_MENUPROXY
+
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/"
+
+# Ubuntu make installation of Ubuntu Make binary symlink
+PATH=/home/jaandrle/.local/share/umake/bin:$PATH
+
+# Ubuntu make installation of Android Studio
+export ANDROID_HOME=/home/jaandrle/.local/share/umake/android/android-studio
+
+[ -f /home/jaandrle/.bash/.profile_androidsdk ] && . /home/jaandrle/.bash/.profile_androidsdk

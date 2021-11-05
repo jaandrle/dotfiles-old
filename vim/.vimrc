@@ -31,6 +31,7 @@
     set runtimepath^=~/.vim/bundle/*
     nmap <leader>gt <c-]>
     nmap <leader>gT <c-T>
+    nmap <leader>ga <c-^>
     command! README :e ~/Dokumenty/GitHub/dotfiles/vim/README.md
     
     set modeline
@@ -314,6 +315,7 @@
     nmap se :call feedkeys(':Vifm<tab>', 'tn')<cr>
 "" #endregion FOS
 "" #region EN – Editor navigation + search
+    " maybe `:help keymap`?
     nmap ž ^
     nmap č $
     nmap <c-down> gj
@@ -405,6 +407,29 @@
         else
             execute "normal " . j . b:key_shotcuts[1]
         endif
+    endfunction
+
+    nmap <leader>[I     :call <sid>GotoJumpListDI("[", "I")<cr>
+    nmap <leader>]I     :call <sid>GotoJumpListDI("]", "I")<cr>
+    nmap <leader>[D     :call <sid>GotoJumpListDI("[", "D")<cr>
+    nmap <leader>]D     :call <sid>GotoJumpListDI("]", "D")<cr>
+    function! s:GotoJumpListDI(move, key)
+        execute "normal ".a:move.a:key
+        let c= "<c-".a:key.">"
+        let j = input("[see help for ':".tolower(a:key)."list']\nselect '".a:move.c."': ")
+        if j == '' | return 0 | endif
+        call feedkeys(":call feedkeys(\"".j.a:move."\\".c."\", 'tm')\<cr>")
+    endfunction
+
+    command CLjumpListC     call s:GotoJumpListCL('c')
+    abbreviate CLJC CLjumpListC
+    command CLjumpListL     call s:GotoJumpListCL('l')
+    abbreviate CLJL CLjumpListL
+    function! s:GotoJumpListCL(name)
+        execute a:name."list"
+        let j = input("[see help for ':".a:name."list']\nselect '".a:name.a:name."': ")
+        if j == '' | return 0 | endif
+        execute a:name.a:name." ".j
     endfunction
 
     nmap sj <Plug>(JumpMotion)

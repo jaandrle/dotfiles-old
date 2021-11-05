@@ -1,0 +1,5 @@
+function jaaENV {
+    . ./.jaaENV
+    if [ ! -z ${nodejs+x} ]; then nvm use $nodejs; fi
+    if [ ! -z ${gradle+x} ]; then sdk use gradle $gradle; fi
+}

@@ -3,12 +3,11 @@
 ## Info:
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc) for examples
-[ -f ~/.bash_aliases ] && . ~/.bash_aliases
+BASH_DOTFILES=$HOME/.bash
+[ -f $BASH_DOTFILES/.bash_aliases ] && . $BASH_DOTFILES/.bash_aliases
 shopt -s expand_aliases
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -f $BASH_DOTFILES/.bash_nvm ] && . $BASH_DOTFILES/.bash_nvm
 
 [[ $- != *i* ]] && return                   # If not running interactively, don't do anything
 
@@ -35,60 +34,7 @@ export LS_COLORS=$LS_COLORS:'tw=01;04;34:ow=01;04;34:'
 [[ $TERM == "xterm-color" ]] || [[ $TERM == *-256color ]] && color_prompt=yes
 [ ! -x /usr/bin/tput ] || ! tput setaf 1 >&/dev/null && color_prompt=
 
-function setPromt {
-    if [ "$color_prompt" != yes ]; then
-        PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-        return
-    fi
-    case "$TERM" in
-    xterm*|rxvt*)
-        ;;
-    *)
-        PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-        return
-        ;;
-    esac
-    PROMPT_COMMAND=updatePromt
-    PS2="|"
-}
-function updatePromt {
-    local prev_exit="$?"
-    # color_helper_>>color<< (Note: \[\]= escaping)
-    local chR="\[\e[1;91m\]"      #red
-    local chW="\[\033[00m\]"      #white
-    local chG="\[\033[01;32m\]"   #green
-    local chB="\[\033[0;34m\]"    #blue
-    local chP="\[\033[0;35m\]"    #purple
-    local chY="\[\033[0;33m\]"    #yellow
-    PS1=""
-    if [ $prev_exit == 0 ]; then
-        PS1+="$chG✓ $chW"
-    else
-        PS1+="$chR✗ $chW"
-    fi
-    PS1+="${debian_chroot:+($debian_chroot)}"
-    PS1+=" At ${chG}\A${chW}"
-    PS1+=" by ${chP}\u${chW}"
-    if sudo -n true 2>/dev/null; then
-        PS1+="${chR} (sudo)${chW}"
-    fi
-    PS1+=" in "
-    if \git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-        local branch="$(\git symbolic-ref -q HEAD)"
-        PS1+="[${branch#refs/heads/}"
-        local status="$(git for-each-ref --format='%(upstream:trackshort)' refs/heads | awk '!seen[$1]++ {printf $1}')"
-        status+="$(git status --porcelain | awk '!seen[$1]++ {printf $1}')"
-        if [ "$statua"s ]; then
-            PS1+="|$chY$status$chW"
-        fi
-        PS1+="] "
-    fi
-    PS1+="${chB}\w${chW}"
-    PS1+="\n:"
-}
-setPromt
-unset color_prompt
-unset -f setPromt
+[ -f $BASH_DOTFILES/.bash_promt ] && . $BASH_DOTFILES/.bash_promt
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -104,3 +50,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+[ -f $BASH_DOTFILES/.bash_sdkman ] && . $BASH_DOTFILES/.bash_sdkman
+[ -f $BASH_DOTFILES/.bash_jaaENV ] && . $BASH_DOTFILES/.bash_jaaENV
