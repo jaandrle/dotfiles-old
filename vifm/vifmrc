@@ -4,9 +4,10 @@
         :bmark! "~/" home
         :bmark! "~/Stažené/" downloads
         :bmark! "~/Dokumenty/" documents
-        :bmark! "~/Dokumenty/GitHub/" projects git github
-        :bmark! "~/Dokumenty/ftp/" ftp
-        :bmark! "~/OneDrive" onedrive
+        :bmark! "~/Dokumenty/Projekty/" projects
+        :bmark! "~/Vzdálené/GitHub/" git github
+        :bmark! "~/Vzdálené/ftp/" ftp
+        :bmark! "~/Vzdálené/OneDrive" onedrive
         :bmark! "~/.config/vifm/" vifm
         :bmark! "/media/jaandrle/" volumes
     else
@@ -44,13 +45,13 @@
     
     nmap ; :
     nnoremap <c-h> :history<cr>
-    nnoremap <c-s> :filter !{}<left><left>
+    nnoremap \= :filter !{}<left><left>
     " Open console in current directory
     if !has('win')
-        nnoremap ,t :!(exo-open --launch TerminalEmulator --working-directory %d > /dev/null 2>&1) &<cr>
-        nnoremap ,v :!(exo-open --launch TerminalEmulator --working-directory %d -- -e "vifm ." > /dev/null 2>&1) &<cr>
+        nnoremap Ot :!(exo-open --launch TerminalEmulator --working-directory %d > /dev/null 2>&1) &<cr>
+        nnoremap Ov :!(exo-open --launch TerminalEmulator --working-directory %d -- -e "vifm ." > /dev/null 2>&1) &<cr>
     else
-        nnoremap ,t :!start "[Vifm] PowerShell %d" powershell.exe -c "powershell.exe -NoExit -Command Set-Location -LiteralPath '%d'"<cr>
+        nnoremap Ot :!start "[Vifm] PowerShell %d" powershell.exe -c "powershell.exe -NoExit -Command Set-Location -LiteralPath '%d'"<cr>
     endif
 "" #endregion G
 "" #region AD – Apperance/Default
@@ -110,6 +111,7 @@
             \ |    set sort=+iname
             \ |    echo 'Sorted by name'
             \ |endif
+    set number
     command! SetNumber
             \ :if &relativenumber
             \ |    set norelativenumber

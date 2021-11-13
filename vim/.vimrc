@@ -56,6 +56,8 @@
     endfunction
     command! CLmodelineBasic :call s:AppendModeline(0)
     command! CLmodeline :call s:AppendModeline(1)
+    
+    nnoremap <leader>t :silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &<cr>
 "" #endregion B
 "" #region S – Remap 'sS' (primary s<tab>)
                                                                                                             " use cl/cc
@@ -67,10 +69,11 @@
                                                             " name your command starting with 'CL'
     nmap s<tab> :call feedkeys(':CL<tab>', 'tn')<cr>
     vmap s<tab> :<c-u>call feedkeys(':CL<tab>', 'tn')<cr>
-    nmap s<s-tab> q:?^CL<cr><cr>
-    vmap s<s-tab> q:?^CL<cr><cr>
+    nmap S<tab> q:?^CL<cr><cr>
+    vmap S<tab> q:?^CL<cr><cr>
     " …folow the same logic for similar behaviour
     nmap sS :call feedkeys(':Set<tab>', 'tn')<cr>
+    nmap SS q:?^Set<cr><cr>
 "" #endregion S
 "" #region H – Helpers
     function s:MapSetToggle(key, opt)
@@ -255,18 +258,20 @@
     nnoremap <silent> <leader>" :call <sid>CopyRegister()<cr>
     "see https://vi.stackexchange.com/a/180
     function! s:CopyRegister()
+        echo "Copy content of the register: "
         let sourceReg = nr2char(getchar())
         if sourceReg !~# '\v^[a-z0-9"]'
-            echo "Invalid register given: " . sourceReg
+            echon sourceReg." – invalid register"
             return
         endif
+        echon sourceReg."\ninto the register: "
         let destinationReg = nr2char(getchar())
         if destinationReg !~# '\v^[a-z0-9]'
-            echo "Invalid register given: " . destinationReg
+            echon destinationReg." – invalid register"
             return
         endif
         call setreg(destinationReg, getreg(sourceReg, 1))
-        echo "Replaced register '". destinationReg ."' with contents of register '". sourceReg ."'"
+        echon destinationReg
     endfunction
 "" #endregion C
 "" #region N – Navigation throught Buffers + Windows + … (CtrlP)
@@ -275,7 +280,7 @@
     command! BDOthers execute '%bdelete|edit #|normal `"'
     let g:ctrlp_clear_cache_on_exit = 0
     nmap sp :call feedkeys(':CtrlP<tab>', 'tn')<cr>
-    nmap sP q:?^CtrlP<cr><cr>
+    nmap Sp q:?^CtrlP<cr><cr>
 "" #endregion BW
 "" #region FOS – File(s) + Openning + Saving
     set autowrite autoread
@@ -461,6 +466,7 @@
     set expandtab smarttab                                                        " Use spaces instead of tabs and be smart
     set shiftwidth=4 tabstop=4 softtabstop=4                                      " Set spaces for tabs everywhere
     command! -nargs=1 SetTab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
+    command! SetSpellToggle set spell!
     set shiftround                                                          " round diff shifts to the base of n*shiftwidth
     set autoindent                                                              " https://stackoverflow.com/a/18415867
     filetype plugin indent on
@@ -482,7 +488,7 @@
     inoremap '' <C-G>u''<Left>
     inoremap `` <C-G>u``<Left>
 
-    command ReformatDosToUnix update | edit ++ff=dos | setlocal ff=unix
+    command SetFFDosToUnix update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
 "" #region COC – COC, code linting and so on
     function! s:JSHintOnWriteToggle()
@@ -570,7 +576,7 @@
     nnoremap <F8>      :<C-u>CocNext<CR>
     nnoremap [19;2~  :<C-u>CocPrev<CR>
     
-    nmap S<tab> :call feedkeys(':Coc<tab>', 'tn')<cr>
+    nmap s<s-tab> :call feedkeys(':Coc<tab>', 'tn')<cr>
     nmap S<s-tab> :CocListResume<cr>
     nmap <leader>/ :CocSearch 
     nmap <leader>? <leader>/
