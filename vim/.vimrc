@@ -32,7 +32,6 @@
     nmap <leader>gt <c-]>
     nmap <leader>gT <c-T>
     nmap <leader>ga <c-^>
-    command! README :e ~/Dokumenty/GitHub/dotfiles/vim/README.md
     
     set modeline
     function! s:AppendModeline(additional)
@@ -59,12 +58,67 @@
     
     nnoremap <leader>t :silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &<cr>
 "" #endregion B
+"" #region I – Intro
+    function! CustomIntroPage()
+        " Don't run if:
+        " - there are commandline arguments;
+        " - the buffer isn't empty (e.g. cmd | vi -);
+        " - we're not invoked as vim or gvim;
+        " - we're starting in insert mode.
+        if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode | return | endif
+        enew
+        setlocal
+            \ bufhidden=wipe
+            \ buftype=nofile
+            \ nobuflisted
+            \ nocursorcolumn
+            \ nocursorline
+            \ nolist
+            \ nonumber
+            \ noswapfile
+            \ norelativenumber
+            \ filetype=markdown
+            \ foldmethod=marker
+            \ foldmarker=<!--region,<!--endregion-->
+        0read ~/.vim/intro-template.md
+        /%%VERSION%%
+        normal dgn
+        call append('.',system('vim --version | head -n 1'))
+        normal J$x
+        if executable('fortune')
+            /%%FORTUNE%%
+            normal dgn
+            call append('.', map(systemlist('fortune'), '"> " . v:val'))
+            normal J
+        endif
+        :1
+        redraw!
+        echo "Intro"
+        setlocal nomodifiable nomodified
+        nnoremap <buffer><silent> e :bd<cr>
+        nnoremap <buffer><silent> p :bd<bar>normal "+p<cr>
+        nnoremap <buffer><silent> o :browse oldfiles<cr>
+        nnoremap <buffer><silent> w :CLsessionLoad<cr>
+        nnoremap <buffer><silent> m :marks<cr>
+        nnoremap <buffer><silent> y ?## Citát<cr>:nohl<cr>0+ll<c-v>G-$"+ygg
+        nnoremap <buffer> P :call <sid>NextFoldClosed('j')<cr>zo
+        nnoremap <buffer><silent> c :IntroEdit<cr>
+    endfunction
+    autocmd VimEnter * call CustomIntroPage()
+    command! Intro call CustomIntroPage()
+    command! IntroEdit :e ~/.vim/intro-template.md
+"" #endregion I
 "" #region S – Remap 'sS' (primary s<tab>)
                                                                                                             " use cl/cc
     nmap s <nop>
     vmap s <nop>
     nmap S <nop>
     vmap S <nop>
+
+    nmap sh<leader> :map <leader><cr>
+    nmap shs        :map s<cr>
+    nmap shT        :map T<cr>
+    nmap shh        :call feedkeys(":map! \<c-u\> \| map \<c-up\> \| map \<c-down\>")<cr>
                                                             " s<tab>:   for leverage native Vim command tab competition
                                                             " name your command starting with 'CL'
     nmap s<tab> :call feedkeys(':CL<tab>', 'tn')<cr>
@@ -505,16 +559,17 @@
     endfunction
 
     let g:coc_global_extensions= [
-        \ 'coc-marketplace',
-        \ 'coc-snippets',
-        \ 'coc-tsserver',
-        \ 'coc-docthis',
-        \ 'coc-json',
         \ 'coc-css',
-        \ 'coc-scssmodules',
-        \ 'coc-html',
+        \ 'coc-docthis',
         \ 'coc-emmet',
-        \ 'coc-emoji'
+        \ 'coc-emoji',
+        \ 'coc-html',
+        \ 'coc-json',
+        \ 'coc-marketplace',
+        \ 'coc-phpls',
+        \ 'coc-scssmodules',
+        \ 'coc-snippets',
+        \ 'coc-tsserver'
     \]
 
     inoremap <silent><expr> <TAB>

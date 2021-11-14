@@ -1,7 +1,7 @@
 ## Vim
-My cross-platform (Ubuntu/Windows) config file. Vim isn't my main editor, so I use only Vanilla Vim mainly.
+My cross-platform config file. Now primarly **Ubuntu**, in the past also Windows (I don't use them so much now → not tested!).
 
-To navigate my primary editor use [../vscode](../vscode).
+To navigate my secondary editor use [../vscode](../vscode).
 
 ### Mnemo
 1. __"*y__, __"*p__, __"+y__, __"+p__
