@@ -1,5 +1,5 @@
 ```
-                 %%VERSION%%
+                  %%VERSION%%
                                     
                                     Autor: Bram Moolenaar a další
                                Modified by team+vim@tracker.debian.org
