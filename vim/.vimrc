@@ -24,7 +24,6 @@
             call rainbow_parentheses#toggle()
         catch
         endtry
-        call s:JSHintOnWriteToggle()
     endfunction
     autocmd VimEnter * :call OnVimEnter()
 
@@ -125,9 +124,12 @@
     vmap s<tab> :<c-u>call feedkeys(':CL<tab>', 'tn')<cr>
     nmap S<tab> q:?^CL<cr><cr>
     vmap S<tab> q:?^CL<cr><cr>
-    " …folow the same logic for similar behaviour
+    " Set commands …folow the same logic for similar behaviour
     nmap sS :call feedkeys(':Set<tab>', 'tn')<cr>
     nmap SS q:?^Set<cr><cr>
+    " NATive commands alterbative …folow the same logic for similar behaviour
+    nmap sn :call feedkeys(':NAT<tab>', 'tn')<cr>
+    nmap Sn q:?^NAT<cr><cr>
 "" #endregion S
 "" #region H – Helpers
     function s:MapSetToggle(key, opt)
@@ -156,7 +158,17 @@
         if line('$')==1 && col('$')==1 | silent! execute 'q' | endif
         echomsg 'Shell command ' . command . ' executed.'
     endfunction
-    command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
+    command! -complete=shellcmd -nargs=+ NATshell call s:ExecuteInShell(<q-args>)
+    function! Grep(...)
+        return system(join([substitute(&grepprg, ' /dev/null', '', '')] + [expandcmd(join(a:000, ' '))], ' '))
+    endfunction
+    command! -nargs=+ -complete=file_in_path -bar NATgrep  cgetexpr Grep(<f-args>)
+    command! -nargs=+ -complete=file_in_path -bar NATlgrep lgetexpr Grep(<f-args>)
+    augroup quickfix
+    autocmd!
+        autocmd QuickFixCmdPost cgetexpr cwindow
+        autocmd QuickFixCmdPost lgetexpr lwindow
+    augroup END
 "" #endregion H
 "" #region SL – Status Line + Command Line + …
     set showcmd                                                                             " Show size of visual selection
@@ -348,7 +360,7 @@
 
     command! W w !sudo tee > /dev/null %
                                                                                             " Save a file as root (:W)
-    set path+=**                                                                            " File matching for `:find`
+    set path+=src/**,app/**,build/**                                                        " File matching for `:find`
     for ignore in [ '.git', '.npm', 'node_modules' ]
         exec ':set wildignore+=**'.ignore.'**'
         exec ':set wildignore+=**/'.ignore.'/**'
@@ -545,18 +557,12 @@
     command SetFFDosToUnix update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
 "" #region COC – COC, code linting and so on
-    function! s:JSHintOnWriteToggle()
-        if !exists('#JSHint#BufWritePost')
-            augroup JSHint
-                autocmd!
-                autocmd BufWritePost *.js call SLE("JSHint") | execute "silent Shell jshint %:p" | sleep 1 | call SLE("")
-            augroup END
-        else
-            augroup JSHint
-                autocmd!
-            augroup END
-        endif
-    endfunction
+    augroup JSLinting
+        autocmd!
+        autocmd FileType javascript compiler jshint
+        autocmd QuickFixCmdPost [^l]* cwindow
+    augroup END
+    command NATmake silent make | checktime | silent redraw!
 
     let g:coc_global_extensions= [
         \ 'coc-css',
@@ -618,7 +624,6 @@
     command CLcmdCoc                exec 'CocList commands'
     command CLrename                call CocActionAsync('rename')
     command CLrenameFile            exec 'CocCommand workspace.renameCurrentFile'
-    command CLjshintToggle          call s:JSHintOnWriteToggle()
     command CLjsdoc                 exec 'CocCommand docthis.documentThis'
     command CLcodeactionCursor      call CocActionAsync('codeAction', 'cursor')
     command CLfixCodeQuick          call CocActionAsync('doQuickfix')
@@ -650,6 +655,10 @@
         endif
     endfunction
 "" #endregion K+COC – COC
+
+" #region T – TODO
+" [iloginow/vim-stylus: A better vim plugin for stylus, including proper and up-to-date syntax highligting, indentation and autocomplete](https://github.com/iloginow/vim-stylus)
+" #endregion T
 
 " vim: set tabstop=4 shiftwidth=4 textwidth=250 expandtab :
 " vim>60: set foldmethod=marker foldmarker=#region,#endregion :
