@@ -160,14 +160,17 @@
     endfunction
     command! -complete=shellcmd -nargs=+ NATshell call s:ExecuteInShell(<q-args>)
     function! Grep(...)
-        return system(join([substitute(&grepprg, ' /dev/null', '', '')] + [expandcmd(join(a:000, ' '))], ' '))
+        let s:command= join([substitute(&grepprg, ' /dev/null', '', '')] + [expandcmd(join(a:000, ' '))], ' ')
+        return system(s:command)
     endfunction
     command! -nargs=+ -complete=file_in_path -bar NATgrep  cgetexpr Grep(<f-args>)
     command! -nargs=+ -complete=file_in_path -bar NATlgrep lgetexpr Grep(<f-args>)
     augroup quickfix
-    autocmd!
+        autocmd!
         autocmd QuickFixCmdPost cgetexpr cwindow
+                    \| call setqflist([], 'a', {'title': ':' . s:command})
         autocmd QuickFixCmdPost lgetexpr lwindow
+                    \| call setloclist(0, [], 'a', {'title': ':' . s:command})
     augroup END
 "" #endregion H
 "" #region SL – Status Line + Command Line + …
