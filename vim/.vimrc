@@ -127,9 +127,9 @@
     " Set commands …folow the same logic for similar behaviour
     nmap sS :call feedkeys(':Set<tab>', 'tn')<cr>
     nmap SS q:?^Set<cr><cr>
-    " NATive commands alterbative …folow the same logic for similar behaviour
-    nmap sn :call feedkeys(':NAT<tab>', 'tn')<cr>
-    nmap Sn q:?^NAT<cr><cr>
+    " ALTernative commands alterbative …folow the same logic for similar behaviour
+    nmap sa :call feedkeys(':ALT<tab>', 'tn')<cr>
+    nmap Sa q:?^ALT<cr><cr>
 "" #endregion S
 "" #region H – Helpers
     function s:MapSetToggle(key, opt)
@@ -158,13 +158,13 @@
         if line('$')==1 && col('$')==1 | silent! execute 'q' | endif
         echomsg 'Shell command ' . command . ' executed.'
     endfunction
-    command! -complete=shellcmd -nargs=+ NATshell call s:ExecuteInShell(<q-args>)
+    command! -complete=shellcmd -nargs=+ ALTshell call s:ExecuteInShell(<q-args>)
     function! Grep(...)
         let s:command= join([substitute(&grepprg, ' /dev/null', '', '')] + [expandcmd(join(a:000, ' '))], ' ')
         return system(s:command)
     endfunction
-    command! -nargs=+ -complete=file_in_path -bar NATgrep  cgetexpr Grep(<f-args>)
-    command! -nargs=+ -complete=file_in_path -bar NATlgrep lgetexpr Grep(<f-args>)
+    command! -nargs=+ -complete=file_in_path -bar ALTgrep  cgetexpr Grep(<f-args>)
+    command! -nargs=+ -complete=file_in_path -bar ALTlgrep lgetexpr Grep(<f-args>)
     augroup quickfix
         autocmd!
         autocmd QuickFixCmdPost cgetexpr cwindow
@@ -177,7 +177,7 @@
     set showcmd                                                                             " Show size of visual selection
     set cmdheight=2                                                             " Give more space for displaying messages.
     set wildmenu                                                                  " Tab autocomplete in command mode
-    set wildmode=list:longest,list:full
+    set wildmode=list:lastused,list:full
     set showmode
     set laststatus=2                                                                           " Show status line on startup
     let g:statusline_echo= ''
@@ -400,7 +400,7 @@
     vnoremap <silent> # :<C-u>call VisualSelection('')<CR>?<C-R>=@/<CR><CR>
 
     set hlsearch                                                                                " Highlight search results
-    set ignorecase smartcase                                                        " Search queries intelligently set case
+    set ignorecase smartcase infercase                                             " Search queries intelligently set case
     set incsearch                                                                        " Show search results as you type
     nmap <silent>ú :nohlsearch<bar>diffupdate<cr>
 
@@ -556,8 +556,21 @@
     inoremap "" <C-G>u""<Left>
     inoremap '' <C-G>u''<Left>
     inoremap `` <C-G>u``<Left>
+    
+    cnoremap <> <><Left>
+    cnoremap () ()<Left>
+    cnoremap {} {}<Left>
+    cnoremap [] []<Left>
+    cnoremap "" ""<Left>
+    cnoremap '' ''<Left>
+    cnoremap `` ``<Left>
 
     command SetFFDosToUnix update | edit ++ff=dos | setlocal ff=unix
+    
+    augroup syntaxSyncMinLines
+        autocmd!
+        autocmd Syntax * syn sync minlines=2000
+    augroup END
 "" #endregion EA
 "" #region COC – COC, code linting and so on
     augroup JSLinting
@@ -565,7 +578,7 @@
         autocmd FileType javascript compiler jshint
         autocmd QuickFixCmdPost [^l]* cwindow
     augroup END
-    command NATmake silent make | checktime | silent redraw!
+    command ALTmake silent make | checktime | silent redraw!
 
     let g:coc_global_extensions= [
         \ 'coc-css',
