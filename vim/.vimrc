@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-10-11 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-11-23 (VIM >=8.1)
 "" #region B – Base
     let $BASH_ENV = "~/.bashrc"
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
@@ -108,26 +108,24 @@
     command! IntroEdit :e ~/.vim/intro-template.md
 "" #endregion I
 "" #region S – Remap 'sS' (primary s<tab>)
-                                                                                                            " use cl/cc
+    " Idea for grouping commands by prefix CL*/Set*/… and levearge Vim command tab competition. E.g. `s<tab>` shows all `CL*` commands …see `set wildmode`.
+    " Native 's' or 'S' keys can be replaced by cl/cc.
+    " Current groups are `CL*` (general commands), `Set*` (`set *` helpers), `ALT*` (alternatives to native ones, e.g. `ALTgrep`).
+    " Current maps are (S* repeat last one): `sh*`…help echos, `s<tab>`…`:CL*`, `sS`…`:Set*`, `sa`…`:ALT*`
     nmap s <nop>
     vmap s <nop>
     nmap S <nop>
     vmap S <nop>
-
     nmap sh<leader> :map <leader><cr>
     nmap shs        :map s<cr>
     nmap shT        :map T<cr>
     nmap shh        :call feedkeys(":map! \<c-u\> \| map \<c-up\> \| map \<c-down\>")<cr>
-                                                            " s<tab>:   for leverage native Vim command tab competition
-                                                            " name your command starting with 'CL'
     nmap s<tab> :call feedkeys(':CL<tab>', 'tn')<cr>
     vmap s<tab> :<c-u>call feedkeys(':CL<tab>', 'tn')<cr>
     nmap S<tab> q:?^CL<cr><cr>
     vmap S<tab> q:?^CL<cr><cr>
-    " Set commands …folow the same logic for similar behaviour
     nmap sS :call feedkeys(':Set<tab>', 'tn')<cr>
     nmap SS q:?^Set<cr><cr>
-    " ALTernative commands alterbative …folow the same logic for similar behaviour
     nmap sa :call feedkeys(':ALT<tab>', 'tn')<cr>
     nmap Sa q:?^ALT<cr><cr>
 "" #endregion S
