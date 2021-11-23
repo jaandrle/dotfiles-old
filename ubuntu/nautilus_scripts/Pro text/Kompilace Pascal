@@ -1,3 +1,0 @@
-#!/bin/bash
-
-gnome-terminal --command "fpc -vv $NAUTILUS_SCRIPT_SELECTED_FILE_PATHS"

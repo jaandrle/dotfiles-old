@@ -1,9 +1,0 @@
-#!/bin/sh
-# [Gedit Tool]
-# Applicability=all
-# Input=line
-# Save-files=nothing
-# Output=replace-selection
-# Name=Přeformátovat na jeden řádek
-
-echo $GEDIT_SELECTED_TEXT | tr -s "\r\n" ' '

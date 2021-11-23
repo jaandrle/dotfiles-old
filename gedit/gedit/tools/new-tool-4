@@ -1,9 +1,0 @@
-#!/bin/sh
-# [Gedit Tool]
-# Name=tabbar
-# Input=nothing
-# Output=nothing
-# Save-files=nothing
-# Applicability=all
-
-gsettings set org.gnome.gedit.preferences.ui show-tabs-mode never

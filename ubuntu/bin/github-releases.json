@@ -6,26 +6,35 @@
             "group": "dev",
             "file_name": "github-desktop",
             "exec": "yes",
-            "downloads": "/home/jaandrle/bin/github-desktop",
-            "version": "release-2.9.2-linux1",
-            "last_update": "2021-08-24T20:33:30Z",
-            "description": "Fork of GitHub Desktop to support various Linux distributions"
+            "description": "Fork of GitHub Desktop to support various Linux distributions",
+            "last_update": ""
         },
         {
-            "repository": "AppImage/AppImageKit",
-            "name": "AppImageKit",
-            "group": "skip",
-            "file_name": "appimagekit",
+            "repository": "jaandrle/jaaCSS-cli",
+            "name": "jaaCSS",
+            "description": "EXPERIMENT – Helper for managing functional CSS classes",
+            "group": "dev",
+            "file_name": "jaaCSS.js",
             "exec": "yes",
-            "description": "Package desktop applications as AppImages that run on common Linux-based operating systems, such as RHEL, CentOS, openSUSE, SLED, Ubuntu, Fedora, debian and derivatives. Join #AppImage on irc.freenode.net"
+            "last_update": ""
         },
         {
-            "repository": "Inventitech/strans",
-            "name": "strans",
-            "description": "ls | strans -b Document.pdf -a pdf | sort -u",
-            "group": "skip",
-            "file_name": "strans",
-            "exec": "yes"
+            "repository": "th-ch/youtube-music",
+            "name": "youtube-music",
+            "description": "YouTube Music Desktop App bundled with custom plugins (and built-in ad blocker / downloader)",
+            "group": "nondev",
+            "file_name": "youtube-music",
+            "exec": "yes",
+            "last_update": ""
+        },
+        {
+            "repository": "Kong/insomnia",
+            "name": "insomnia",
+            "description": "The open-source, cross-platform API client for GraphQL, REST, and gRPC.",
+            "group": "dev",
+            "file_name": "insomnia",
+            "exec": "yes",
+            "last_update": ""
         },
         {
             "repository": "rvpanoz/luna",
@@ -44,17 +53,6 @@
             "description": "Monitor channel usage of neighboring routers & get an alert if your active channel is not optimal.  Troubleshoot wifi without lifting a finger!"
         },
         {
-            "repository": "jaandrle/jaaCSS-cli",
-            "name": "jaaCSS",
-            "description": "EXPERIMENT – Helper for managing functional CSS classes",
-            "group": "dev",
-            "file_name": "jaaCSS.js",
-            "exec": "yes",
-            "last_update": "2021-07-01T10:37:21Z",
-            "downloads": "/home/jaandrle/bin/jaaCSS.js",
-            "version": "v1.3.1"
-        },
-        {
             "repository": "vinceliuice/Tela-circle-icon-theme",
             "name": "Tela-circle-icon-theme",
             "description": "Tela-circle-icon-theme",
@@ -62,6 +60,14 @@
             "file_name": "tela-circle-icon-theme.zip",
             "last_update": "2021-07-19T14:12:05Z",
             "exec": "no"
+        },
+        {
+            "repository": "AppImage/AppImageKit",
+            "name": "AppImageKit",
+            "group": "skip",
+            "file_name": "appimagekit",
+            "exec": "yes",
+            "description": "Package desktop applications as AppImages that run on common Linux-based operating systems, such as RHEL, CentOS, openSUSE, SLED, Ubuntu, Fedora, debian and derivatives. Join #AppImage on irc.freenode.net"
         }
     ]
 }

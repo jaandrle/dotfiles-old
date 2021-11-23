@@ -132,7 +132,7 @@ async function update_(config){
     let updates= [];
     log(1, "Collecting packages to download:");
     for(const [
-        i, { repository, version, last_update, group, file_name, exec, downloaded }
+        i, { repository, last_update, group, file_name, exec, downloaded }
     ] of Object.entries(config.packages)){
         if(group==="skip") continue;
         if(!is_all&&group&&filter!==group) continue;
