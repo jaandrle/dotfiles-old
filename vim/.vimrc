@@ -177,7 +177,7 @@
     set showcmd                                                                             " Show size of visual selection
     set cmdheight=2                                                             " Give more space for displaying messages.
     set wildmenu                                                                  " Tab autocomplete in command mode
-    set wildmode=list:lastused,list:full
+    set wildmode=list:longest,list:lastused,list:full
     set showmode
     set laststatus=2                                                                           " Show status line on startup
     let g:statusline_echo= ''
