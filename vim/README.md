@@ -23,5 +23,6 @@ git clone --branch release https://github.com/neoclide/coc.nvim.git --depth=1
 ```
 
 #### Native plugins
-- [ctrlp.vim ÷ home](http://ctrlpvim.github.io/ctrlp.vim/#installation).
+- [ctrlp.vim ÷ home](http://ctrlpvim.github.io/ctrlp.vim/#installation)
 - [vim-highlightedyank: Make the yanked region apparent!](https://github.com/machakann/vim-highlightedyank)
+- [jreybert/vimagit: Ease your git workflow within Vim](https://github.com/jreybert/vimagit#mappings)

@@ -571,6 +571,7 @@
     augroup END
 "" #endregion EA
 "" #region COC – COC, code linting and so on
+    nmap <silent> <leader>m :MagitOnly<cr>
     augroup JSLinting
         autocmd!
         autocmd FileType javascript compiler jshint

@@ -4,5 +4,6 @@
     "diagnostic.errorSign": "✘",
     "diagnostic.infoSign": "ℹ",
     "diagnostic.hintSign": "➤",
-    "javascript.showUnused": true
+    "javascript.showUnused": true,
+    "coc.source.emoji.filetypes": [ "markdown", "magit" ]
 }
