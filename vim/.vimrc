@@ -547,7 +547,7 @@
     nnoremap <leader>*o o * <space><bs>
     nnoremap <leader>o o<space><bs><esc>
     nnoremap <leader><s-o> <s-o><space><bs><esc>
-    nmap <s-k> a<cr><esc>
+    nnoremap <s-k> a<cr><esc>
 
     inoremap <> <C-G>u<><Left>
     inoremap () <C-G>u()<Left>
@@ -572,10 +572,15 @@
         autocmd Syntax * syn sync minlines=2000
     augroup END
 "" #endregion EA
-"" #region COC – COC, code linting and so on
+"" #region COC – COC, code linting, git and so on
     command GITstatus !git status
     command GITadd !git add -i
     command GITcommit !git commit -v
+    command GITlog silent! execute 'e git-log'
+        \| setlocal buftype=nowrite noswapfile nowrap number filetype=git
+        \| silent! execute 'silent %!git log'
+        \| silent! redraw
+    command GITlogList !git log-list
     command -nargs=? GITfetch !git fetch <args>
     command -nargs=? GITpull !git pull <args>
     command -nargs=? GITpush !git push <args>
@@ -670,10 +675,10 @@
     function! s:show_documentation()
         if (index(['vim','help'], &filetype) >= 0)
             execute 'h '.expand('<cword>')
-        elseif (coc#rpc#ready())
-            call CocActionAsync('doHover')
-        else
+        elseif (index(['git'], &filetype) >= 0 || !coc#rpc#ready())
             execute '!' . &keywordprg . " " . expand('<cword>')
+        else
+            call CocActionAsync('doHover')
         endif
     endfunction
 "" #endregion K+COC – COC
