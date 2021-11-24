@@ -128,6 +128,8 @@
     nmap SS q:?^Set<cr><cr>
     nmap sa :call feedkeys(':ALT<tab>', 'tn')<cr>
     nmap Sa q:?^ALT<cr><cr>
+    nmap sg :call feedkeys(':GIT<tab>', 'tn')<cr>
+    nmap Sg q:?^GIT<cr><cr>
 "" #endregion S
 "" #region H – Helpers
     function s:MapSetToggle(key, opt)
@@ -571,7 +573,12 @@
     augroup END
 "" #endregion EA
 "" #region COC – COC, code linting and so on
-    nmap <silent> <leader>m :MagitOnly<cr>
+    command GITstatus !git status
+    command GITadd !git add -i
+    command GITcommit !git commit -v
+    command -nargs=? GITfetch !git fetch <args>
+    command -nargs=? GITpull !git pull <args>
+    command -nargs=? GITpush !git push <args>
     augroup JSLinting
         autocmd!
         autocmd FileType javascript compiler jshint

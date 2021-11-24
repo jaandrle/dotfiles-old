@@ -3,6 +3,7 @@
 ## Info:
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc) for examples
+export EDITOR='vim'
 BASH_DOTFILES=$HOME/.bash
 [ -f $BASH_DOTFILES/.bash_aliases ] && . $BASH_DOTFILES/.bash_aliases
 shopt -s expand_aliases

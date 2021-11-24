@@ -5,5 +5,5 @@
     "diagnostic.infoSign": "ℹ",
     "diagnostic.hintSign": "➤",
     "javascript.showUnused": true,
-    "coc.source.emoji.filetypes": [ "markdown", "magit" ]
+    "coc.source.emoji.filetypes": [ "markdown", "magit", "gitcommit" ]
 }
