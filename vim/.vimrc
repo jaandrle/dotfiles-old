@@ -588,7 +588,7 @@
     command GITcommit !git commit -v
     command GITadd !git status & git add -i
     command GITrestoreThis !git status %:p -s & git restore %:p --patch
-    command GITlog silent! execute 'ALTshellKeep git log' | setlocal filetype=git
+    command GITlog silent! execute 'ALTshellKeep git log --date=iso' | setlocal filetype=git
     command GITlogList !git log-list
     command -nargs=? GITfetch ALTshell git fetch <args>
     command -nargs=? GITpull ALTshell git pull <args>
