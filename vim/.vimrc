@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-11-23 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-11-25 (VIM >=8.1)
 "" #region B – Base
     let $BASH_ENV = "~/.bashrc"
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
@@ -207,7 +207,6 @@
     set statusline+=·%{&filetype}\ 
 "" #endregion SL
 "" #region HS – History (general) + Sessions + File Update
-    imap <c-u> <c-g>u
     nmap <s-u> <c-r>
     set nobackup nowritebackup                                      " Some servers have issues with backup files, see #649.
                                                                     " Return to last edit position when opening files (You want this!)
@@ -254,10 +253,10 @@
         let g:this_session_saving=0
     endfunction
     autocmd VimLeave,BufWritePost * :call <sid>SessionAutosave()
-    command! -nargs=1 SessionCreate :call <sid>SessionCreate(<f-args>)
-    command! SessionLoad :call feedkeys(":so ".g:sessions_dir.'<tab>', 'tn')
+    command! -nargs=1 CLsessionCreate :call <sid>SessionCreate(<f-args>)
     command CLsessionLoad :call feedkeys(":so ".g:sessions_dir.'<tab>', 'tn')
     abbreviate CLSL CLsessionLoad
+    command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
 "" #endregion HS
 "" #region LLW – Left Column + Line + Wrap
     if has("nvim-0.5.0") || has("patch-8.1.1564")           " Recently vim can merge signcolumn and number column into one
@@ -560,13 +559,18 @@
     nnoremap <leader><s-o> <s-o><space><bs><esc>
     nnoremap <s-k> a<cr><esc>
 
-    inoremap <> <C-G>u<><Left>
-    inoremap () <C-G>u()<Left>
-    inoremap {} <C-G>u{}<Left>
-    inoremap [] <C-G>u[]<Left>
-    inoremap "" <C-G>u""<Left>
-    inoremap '' <C-G>u''<Left>
-    inoremap `` <C-G>u``<Left>
+    inoremap <c-u> <c-g>u<c-u>
+    inoremap <c-w> <c-g>u<c-w>
+    inoremap . <c-g>u.
+    inoremap , <c-g>u,
+    inoremap ; <c-g>u;
+    inoremap <> <c-g>u<><Left>
+    inoremap () <c-g>u()<Left>
+    inoremap {} <c-g>u{}<Left>
+    inoremap [] <c-g>u[]<Left>
+    inoremap "" <c-g>u""<Left>
+    inoremap '' <c-g>u''<Left>
+    inoremap `` <c-g>u``<Left>
     
     cnoremap <> <><Left>
     cnoremap () ()<Left>
