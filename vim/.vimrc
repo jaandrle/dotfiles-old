@@ -149,16 +149,27 @@
         let winnr_id = bufwinnr('^' . command . '$')
         silent! execute  winnr_id < 0 ? 'botright new ' . fnameescape(command) : winnr_id . 'wincmd w'
         setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap number
-        echo 'Execute ' . command . '...'
+        echo 'Execute "' . command . '"...'
         silent! execute 'silent %!'. command
         silent! execute 'resize ' . line('$')
         silent! redraw
         silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
         silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
+        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>q :q<CR>'
         if line('$')==1 && col('$')==1 | silent! execute 'q' | endif
-        echomsg 'Shell command ' . command . ' executed.'
+        echomsg 'Shell command "' . command . '" executed.'
     endfunction
     command! -complete=shellcmd -nargs=+ ALTshell call s:ExecuteInShell(<q-args>)
+    function! s:ExecuteInShellKeep(command)
+        let command = join(map(split(a:command), 'expand(v:val)'))
+        silent! execute 'e '.command
+        setlocal buftype=nowrite noswapfile nowrap number
+        silent! execute 'silent %!'. command
+        silent! redraw
+        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShellKeep(''' . command . ''')<CR>'
+        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>q :bd<CR>'
+    endfunction
+    command! -complete=shellcmd -nargs=+ ALTshellKeep call s:ExecuteInShellKeep(<q-args>)
     function! Grep(...)
         let s:command= join([substitute(&grepprg, ' /dev/null', '', '')] + [expandcmd(join(a:000, ' '))], ' ')
         return system(s:command)
@@ -573,17 +584,15 @@
     augroup END
 "" #endregion EA
 "" #region COC – COC, code linting, git and so on
-    command GITstatus !git status
-    command GITadd !git add -i
+    command GITstatus silent! execute 'ALTshellKeep git status' | $normal oTips: You can use `gf` to navigate into files. Also `\r` for reload or `\q` for `:bd`.
     command GITcommit !git commit -v
-    command GITlog silent! execute 'e git-log'
-        \| setlocal buftype=nowrite noswapfile nowrap number filetype=git
-        \| silent! execute 'silent %!git log'
-        \| silent! redraw
+    command GITadd !git status & git add -i
+    command GITrestoreThis !git status %:p -s & git restore %:p --patch
+    command GITlog silent! execute 'ALTshellKeep git log' | setlocal filetype=git
     command GITlogList !git log-list
-    command -nargs=? GITfetch !git fetch <args>
-    command -nargs=? GITpull !git pull <args>
-    command -nargs=? GITpush !git push <args>
+    command -nargs=? GITfetch ALTshell git fetch <args>
+    command -nargs=? GITpull ALTshell git pull <args>
+    command -nargs=? GITpush ALTshell git push <args>
     augroup JSLinting
         autocmd!
         autocmd FileType javascript compiler jshint
