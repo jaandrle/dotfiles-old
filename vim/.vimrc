@@ -183,7 +183,7 @@
         silent! execute 'nnoremap <silent> <buffer> <LocalLeader>q :'.exit.'<CR>'
         if line('$')==1 && col('$')==1
             silent! execute exit
-            echomsg 'Command "' . command . '" executed and empty.'
+            echomsg 'Command "' . command . '" executed and nothing to redirect.'
         endif
     endfunction
     command! -complete=command -bar -range -nargs=+ ALTredir call s:Redir(0, <q-args>, <range>, <line1>, <line2>)
