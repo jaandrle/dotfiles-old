@@ -607,7 +607,7 @@
 "" #endregion EA
 "" #region COC – COC, code linting, git and so on
     command GITstatus silent! execute 'ALTredirKeep !git status' | $normal oTips: You can use `gf` to navigate into files. Also `\r` for reload or `\q` for `:bd`.
-    command GITcommit !git commit -v
+    command -nargs=? GITcommit !git commit -v <args>
     command GITadd !git status & git add -i
     command GITrestoreThis !git status %:p -s & git restore %:p --patch
     command GITlog silent! execute 'ALTredirKeep !git log --date=iso' | setlocal filetype=git
