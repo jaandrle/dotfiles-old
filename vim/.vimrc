@@ -144,32 +144,50 @@
         exec 'imap <silent><'.a:key_name.'> <C-r>='.cmd.'("i")<CR>'
         exec 'vmap <silent><'.a:key_name.'> <Esc>:call '.cmd.'("v")<CR>'
     endfunction
-    function! s:ExecuteInShell(command)
-        let command = join(map(split(a:command), 'expand(v:val)'))
-        let winnr_id = bufwinnr('^' . command . '$')
-        silent! execute  winnr_id < 0 ? 'botright new ' . fnameescape(command) : winnr_id . 'wincmd w'
-        setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap number
+    function! s:Redir(is_keep, command, range, line_start, line_end)
+        let exit= a:is_keep==1 ? 'bd' : 'q'
+        let pre_command = join(map(split(a:command), 'expand(v:val)'))
+        if pre_command=~ '^!' && a:range!=0
+            let joined_lines = join(getline(a:line_start, a:line_end), '\n')
+            let cleaned_lines = substitute(shellescape(joined_lines), "'\\\\''", "\\\\'", 'g')
+            let command= pre_command . " <<< $" . cleaned_lines
+        else
+            let command= pre_command
+        endif
+        let w:scratch = 1
+        if a:is_keep==1
+            silent! execute 'e '.fnameescape(command)
+            setlocal buftype=nofile noswapfile nowrap number
+        else
+            let winnr_id = bufwinnr('^' . command . '$')
+            silent! execute  winnr_id < 0 ? 'botright new ' . fnameescape(command) : winnr_id . 'wincmd w'
+            setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap number
+        endif
         echo 'Execute "' . command . '"...'
-        silent! execute 'silent %!'. command
-        silent! execute 'resize ' . line('$')
-        silent! redraw
+        if command=~ '^!'
+            silent! execute 'silent %'. command
+        else
+            redir => output
+            silent execute command
+            redir END
+            call setline(1, split(output, "\n"))
+        endif
+        if a:is_keep==0
+            execute 'wincmd ='
+            let max_height= float2nr(round(winheight('0') / 2))
+            execute 'resize ' . min([ max_height, line('$') ])
+        endif
+        silent! redraw!
         silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
-        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
-        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>q :q<CR>'
-        if line('$')==1 && col('$')==1 | silent! execute 'q' | endif
-        echomsg 'Shell command "' . command . '" executed.'
+        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <sid>Redir('.a:is_keep.', '''.a:command.''', '.a:range.', '.a:line_start.', '.a:line_end.')<cr>'
+        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>q :'.exit.'<CR>'
+        if line('$')==1 && col('$')==1
+            silent! execute exit
+            echomsg 'Command "' . command . '" executed and empty.'
+        endif
     endfunction
-    command! -complete=shellcmd -nargs=+ ALTshell call s:ExecuteInShell(<q-args>)
-    function! s:ExecuteInShellKeep(command)
-        let command = join(map(split(a:command), 'expand(v:val)'))
-        silent! execute 'e '.command
-        setlocal buftype=nowrite noswapfile nowrap number
-        silent! execute 'silent %!'. command
-        silent! redraw
-        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShellKeep(''' . command . ''')<CR>'
-        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>q :bd<CR>'
-    endfunction
-    command! -complete=shellcmd -nargs=+ ALTshellKeep call s:ExecuteInShellKeep(<q-args>)
+    command! -complete=command -bar -range -nargs=+ ALTredir call s:Redir(0, <q-args>, <range>, <line1>, <line2>)
+    command! -complete=command -bar -range -nargs=+ ALTredirKeep call s:Redir(1, <q-args>, <range>, <line1>, <line2>)
     function! Grep(...)
         let s:command= join([substitute(&grepprg, ' /dev/null', '', '')] + [expandcmd(join(a:000, ' '))], ' ')
         return system(s:command)
@@ -588,15 +606,15 @@
     augroup END
 "" #endregion EA
 "" #region COC – COC, code linting, git and so on
-    command GITstatus silent! execute 'ALTshellKeep git status' | $normal oTips: You can use `gf` to navigate into files. Also `\r` for reload or `\q` for `:bd`.
+    command GITstatus silent! execute 'ALTredirKeep !git status' | $normal oTips: You can use `gf` to navigate into files. Also `\r` for reload or `\q` for `:bd`.
     command GITcommit !git commit -v
     command GITadd !git status & git add -i
     command GITrestoreThis !git status %:p -s & git restore %:p --patch
-    command GITlog silent! execute 'ALTshellKeep git log --date=iso' | setlocal filetype=git
+    command GITlog silent! execute 'ALTredirKeep !git log --date=iso' | setlocal filetype=git
     command GITlogList !git log-list
-    command -nargs=? GITfetch ALTshell git fetch <args>
-    command -nargs=? GITpull ALTshell git pull <args>
-    command -nargs=? GITpush ALTshell git push <args>
+    command -nargs=? GITfetch ALTredir !git fetch <args>
+    command -nargs=? GITpull ALTredir !git pull <args>
+    command -nargs=? GITpush ALTredir !git push <args>
     augroup JSLinting
         autocmd!
         autocmd FileType javascript compiler jshint
