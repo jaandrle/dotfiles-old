@@ -32,4 +32,4 @@ alias _pscpu='_pscpu_all | head -n 10'
 
 alias _='clear'
 
-alias _dotfiles='~/.run/syncDotfiles.sh'
+alias _dotfiles='cd ~/Vzdálené/GitHub/dotfiles && git status'
