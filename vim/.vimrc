@@ -589,6 +589,10 @@
         autocmd!
         autocmd Syntax * syn sync minlines=2000
     augroup END
+    if !has("gui_running")
+        hi clear SpellBad
+        hi SpellBad cterm=underline,italic
+    endif
 "" #endregion EA
 "" #region COC – COC, code linting, git and so on
     command GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
