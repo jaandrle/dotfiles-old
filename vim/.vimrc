@@ -77,7 +77,7 @@
         normal J$x
         /%%VIMRC%%
         normal dgn
-        call append('.', systemlist('tail -n+$((1 + RANDOM % `wc -l $MYVIMRC | _awk 1`)) .vimrc | head -n10'))
+        call append('.', systemlist('tail -n+$((1 + RANDOM % `wc -l $MYVIMRC | _awk 1`)) $MYVIMRC | head -n10'))
         :1
         redraw!
         echo "Intro"
@@ -592,7 +592,7 @@
     augroup END
 "" #endregion EA
 "" #region COC – COC, code linting, git and so on
-    command GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log origin/master..HEAD && echo'
+    command GITstatus silent! execute 'ALTredirKeep !git status -v'
         \| setlocal filetype=git
         \| $normal oTips: You can use `gf` to navigate into files. Also `;e` for reload or `;q` for `:bd`.
     command -nargs=? GITcommit !clear && git status & git commit --interactive -v <args>
