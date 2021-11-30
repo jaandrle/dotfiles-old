@@ -127,6 +127,7 @@
     nmap sS :call feedkeys(':Set<tab>', 'tn')<cr>
     nmap SS q:?^Set<cr><cr>
     nmap sa :call feedkeys(':ALT<tab>', 'tn')<cr>
+    vmap sa :call feedkeys('gv:ALT<tab>', 'tn')<cr>
     nmap Sa q:?^ALT<cr><cr>
     nmap sg :call feedkeys(':GIT<tab>', 'tn')<cr>
     nmap Sg q:?^GIT<cr><cr>
