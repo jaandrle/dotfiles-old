@@ -166,8 +166,8 @@
         endif
         silent! redraw!
         silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
-        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <sid>Redir('.a:is_keep.', '''.a:command.''', '.a:range.', '.a:line_start.', '.a:line_end.')<cr>'
-        silent! execute 'nnoremap <silent> <buffer> <LocalLeader>q :'.exit.'<CR>'
+        silent! execute 'nnoremap <silent> <buffer> ;e :call <sid>Redir('.a:is_keep.', '''.a:command.''', '.a:range.', '.a:line_start.', '.a:line_end.')<cr>'
+        silent! execute 'nnoremap <silent> <buffer> ;q :'.exit.'<CR>'
         if line('$')==1 && col('$')==1
             silent! execute exit
             echomsg 'Command "' . command . '" executed and nothing to redirect.'
@@ -594,7 +594,7 @@
 "" #region COC – COC, code linting, git and so on
     command GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log origin/master..HEAD && echo'
         \| setlocal filetype=git
-        \| $normal oTips: You can use `gf` to navigate into files. Also `\r` for reload or `\q` for `:bd`.
+        \| $normal oTips: You can use `gf` to navigate into files. Also `;e` for reload or `;q` for `:bd`.
     command -nargs=? GITcommit !clear && git status & git commit --interactive -v <args>
     command GITrestoreThis !git status %:p -s & git restore %:p --patch
     command GITlog silent! execute 'ALTredirKeep !git log --date=iso' | setlocal filetype=git
