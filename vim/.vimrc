@@ -562,9 +562,10 @@
       set formatoptions+=j " Delete comment character when joining commented lines
     endif
     set expandtab smarttab                                                        " Use spaces instead of tabs and be smart
-    set shiftwidth=4 tabstop=4 softtabstop=4                                      " Set spaces for tabs everywhere
+    command! SetTabExpand set expandtab! | if !&expandtab | echo 'noexpandtab' | endif
     command! -nargs=1 SetTab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
-    command! SetSpellToggle set spell!
+    SetTab 4
+    command! SetSpellToggle set spell! | if &spell | set spelllang | endif
     set shiftround                                                          " round diff shifts to the base of n*shiftwidth
     set autoindent                                                              " https://stackoverflow.com/a/18415867
     filetype plugin indent on
@@ -714,7 +715,7 @@
             call CocActionAsync('doHover')
         endif
     endfunction
-"" #endregion K+COC – COC
+"" #endregion COC
 
 " #region T – TODO
 " [iloginow/vim-stylus: A better vim plugin for stylus, including proper and up-to-date syntax highligting, indentation and autocomplete](https://github.com/iloginow/vim-stylus)
