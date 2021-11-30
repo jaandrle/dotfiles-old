@@ -67,29 +67,17 @@
         if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode | return | endif
         enew
         setlocal
-            \ bufhidden=wipe
-            \ buftype=nofile
-            \ nobuflisted
-            \ nocursorcolumn
-            \ nocursorline
-            \ nolist
-            \ nonumber
-            \ noswapfile
-            \ norelativenumber
-            \ filetype=markdown
-            \ foldmethod=marker
-            \ foldmarker=<!--region,<!--endregion-->
+            \ bufhidden=wipe buftype=nofile nobuflisted noswapfile
+            \ nocursorcolumn nocursorline nolist nonumber norelativenumber
+            \ filetype=markdown foldmethod=marker foldmarker=<!--region,<!--endregion-->
         0read ~/.vim/intro-template.md
         /%%VERSION%%
         normal dgn
         call append('.',system('vim --version | head -n 1'))
         normal J$x
-        if executable('fortune')
-            /%%FORTUNE%%
-            normal dgn
-            call append('.', map(systemlist('fortune'), '"> " . v:val'))
-            normal J
-        endif
+        /%%VIMRC%%
+        normal dgn
+        call append('.', systemlist('tail -n+$((1 + RANDOM % `wc -l $MYVIMRC | _awk 1`)) .vimrc | head -n10'))
         :1
         redraw!
         echo "Intro"
@@ -251,8 +239,8 @@
         let b:path= g:sessions_dir.a:name.".vim"
         exe "mksession! ".b:path
         silent execute 'split' b:path
+        setlocal bufhidden=delete nobuflisted
         call append(line('$')-3, "let this_session_name='".a:name."'")
-        setlocal bufhidden=delete
         silent update
         silent hide
     endfunction

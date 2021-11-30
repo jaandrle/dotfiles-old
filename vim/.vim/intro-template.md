@@ -35,5 +35,6 @@
 ## Poznámky
 <!--endregion-->
 
-## Citát `fortune`
-%%FORTUNE%%
+## Náhodná část z konfiguračního souboru `.vimrc`
+``` %%VIMRC%%
+```
