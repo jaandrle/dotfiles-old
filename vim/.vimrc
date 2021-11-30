@@ -96,24 +96,24 @@
     command! IntroEdit :e ~/.vim/intro-template.md
 "" #endregion I
 "" #region S – Remap 'sS' (primary s<tab>)
-    " Idea for grouping commands by prefix CL*/Set*/… and levearge Vim command tab competition. E.g. `s<tab>` shows all `CL*` commands …see `set wildmode`.
+    " Idea for grouping commands by prefix CL*/SET*/… and leverage Vim command tab competition. E.g. `s<tab>` shows all `CL*` commands …see `set wildmode`.
     " Native 's' or 'S' keys can be replaced by cl/cc.
-    " Current groups are `CL*` (general commands), `Set*` (`set *` helpers), `ALT*` (alternatives to native ones, e.g. `ALTgrep`).
-    " Current maps are (S* repeat last one): `sh*`…help echos, `s<tab>`…`:CL*`, `sS`…`:Set*`, `sa`…`:ALT*`
+    " Current groups are `CL*` (general commands), `SET*` (`set *` helpers), `ALT*` (alternatives to native ones, e.g. `ALTgrep`).
+    " Current maps are (S* repeat last one): `sh*`…help echos, `s<tab>`…`:CL*`, `sS`…`:SET*`, `sa`…`:ALT*`
     nmap s <nop>
     vmap s <nop>
     nmap S <nop>
     vmap S <nop>
     nmap sh<leader> :map <leader><cr>
     nmap shs        :map s<cr>
-    nmap shT        :map T<cr>
     nmap shh        :call feedkeys(":map! \<c-u\> \| map \<c-up\> \| map \<c-down\>")<cr>
     nmap s<tab> :call feedkeys(':CL<tab>', 'tn')<cr>
     vmap s<tab> :<c-u>call feedkeys(':CL<tab>', 'tn')<cr>
     nmap S<tab> q:?^CL<cr><cr>
     vmap S<tab> q:?^CL<cr><cr>
-    nmap sS :call feedkeys(':Set<tab>', 'tn')<cr>
-    nmap SS q:?^Set<cr><cr>
+    nmap sS :call feedkeys(':SET<tab>', 'tn')<cr>
+    vmap sS :call feedkeys(':SET<tab>', 'tn')<cr>
+    nmap SS q:?^SET<cr><cr>
     nmap sa :call feedkeys(':ALT<tab>', 'tn')<cr>
     vmap sa :call feedkeys('gv:ALT<tab>', 'tn')<cr>
     nmap Sa q:?^ALT<cr><cr>
@@ -121,11 +121,9 @@
     nmap Sg q:?^GIT<cr><cr>
 "" #endregion S
 "" #region H – Helpers
-    function s:MapSetToggle(key, opt)
-        let cmd = ':set '.a:opt.'! \| set '.a:opt."?\<CR>"
-        exec 'nnoremap '.a:key.' '.cmd
-        exec 'vnoremap <silent>'.a:key.' <Esc>'.cmd." gv"
-        "exec 'inoremap '.a:key." \<C-O>".cmd
+    function s:SetToggle(option)
+        let cmd= ' set '.a:option.'! | set '.a:option.'?'
+        execute 'command! SETTOGGLE'.a:option.cmd
     endfunction
     function s:MapSmartKey(key_name)
         let cmd = '<sid>Smart'.a:key_name
@@ -275,13 +273,13 @@
     set ruler
     set colorcolumn=+1                                                                                  " …marker visual
     set number                                                                                        " Enable line numbers
-    call <sid>MapSetToggle("TN", "relativenumber")
+    call <sid>SetToggle('relativenumber')
     set foldcolumn=2                                                                   " Add a bit extra margin to the left
     set textwidth=250                                                                                   " Line width marker
     set nowrap                                                                                      " Don't wrap long lines
     set colorcolumn=120,240
-    command -nargs=? SetTextWidth if <q-args> | let &textwidth=<q-args> | let &colorcolumn='<args>,120,240' | else | let &textwidth=250 | let &colorcolumn='120,240' | endif
-    call <sid>MapSetToggle("TW", "wrap")
+    command -nargs=? SETtextwidth if <q-args> | let &textwidth=<q-args> | let &colorcolumn='<args>,120,240' | else | let &textwidth=250 | let &colorcolumn='120,240' | endif
+    call <sid>SetToggle('wrap')
     set breakindent
     set breakindentopt=shift:2
     set showbreak=↳ 
@@ -294,7 +292,7 @@
     endfor
     set list                                                            " Highlight spec. chars / Display extra whitespace
     set listchars=tab:»·,trail:·,extends:#,nbsp:~,space:·
-    call <sid>MapSetToggle("TL", "list")
+    call <sid>SetToggle('list')
 "" #endregion S
 "" #region F – Folds
     set foldmarker=#region,#endregion
@@ -536,7 +534,7 @@
 "" #region EA – Editing adjustment
     let g:highlightedyank_highlight_duration= 250
     set showmatch                                               " Quick highlight oppening bracket/… for currently writted
-    nmap TP :call rainbow_parentheses#toggle()<cr>
+    command! SETTOGGLErainbowParentheses call rainbow_parentheses#toggle()
     let g:rainbow#pairs = [['(', ')'], ['[', ']'], [ '{', '}' ]]
     set timeoutlen=1000 ttimeoutlen=0                                                  " Remove timeout when hitting escape
     set completeopt=menuone,preview,noinsert,noselect
@@ -550,10 +548,10 @@
       set formatoptions+=j " Delete comment character when joining commented lines
     endif
     set expandtab smarttab                                                        " Use spaces instead of tabs and be smart
-    command! SetTabExpand set expandtab! | if !&expandtab | echo 'noexpandtab' | endif
-    command! -nargs=1 SetTab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
-    SetTab 4
-    command! SetSpellToggle set spell! | if &spell | set spelllang | endif
+    call <sid>SetToggle('expandtab')
+    command! -nargs=1 SETtab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
+    SETtab 4
+    command! SETTOGGLEspell set spell! | if &spell | set spelllang | endif
     set shiftround                                                          " round diff shifts to the base of n*shiftwidth
     set autoindent                                                              " https://stackoverflow.com/a/18415867
     filetype plugin indent on
@@ -588,7 +586,7 @@
     cnoremap '' ''<Left>
     cnoremap `` ``<Left>
 
-    command SetFFDosToUnix update | edit ++ff=dos | setlocal ff=unix
+    command SETFFdos2unix update | edit ++ff=dos | setlocal ff=unix
     
     augroup syntaxSyncMinLines
         autocmd!
