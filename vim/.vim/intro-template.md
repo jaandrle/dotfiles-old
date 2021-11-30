@@ -27,7 +27,6 @@
     - `e`: *prázdný*
     - `p`: *prázdný a vložit text ze systémové schránky*
 - `m`: Seznam záložek (viz `:help mark-motions<Enter>`)
-- `y`: Zkopírovat citát do schránky
 - `c`: Upravit tento soubor
 - `P`: Rozbalit poznámky níže
 

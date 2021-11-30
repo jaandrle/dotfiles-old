@@ -87,7 +87,6 @@
         nnoremap <buffer><silent> o :browse oldfiles<cr>
         nnoremap <buffer><silent> w :CLsessionLoad<cr>
         nnoremap <buffer><silent> m :marks<cr>
-        nnoremap <buffer><silent> y ?## Citát<cr>:nohl<cr>0+ll<c-v>G-$"+ygg
         nnoremap <buffer> P :call <sid>NextFoldClosed('j')<cr>zo
         nnoremap <buffer><silent> c :IntroEdit<cr>
     endfunction
