@@ -132,7 +132,7 @@
         exec 'vmap <silent><'.a:key_name.'> <Esc>:call '.cmd.'("v")<CR>'
     endfunction
     function! s:Redir(is_keep, command, range, line_start, line_end)
-        let exit= a:is_keep==1 ? 'bd' : 'q'
+        let exit= a:is_keep==1 ? 'bw' : 'q'
         let pre_command = join(map(split(a:command), 'expand(v:val)'))
         if pre_command=~ '^!' && a:range!=0
             let joined_lines = join(getline(a:line_start, a:line_end), '\n')
@@ -236,7 +236,7 @@
     function! s:SessionSave(name)
         let b:path= g:sessions_dir.a:name.".vim"
         exe "mksession! ".b:path
-        silent execute 'split' b:path
+        silent execute 'keepalt split' b:path
         setlocal bufhidden=delete nobuflisted
         call append(line('$')-3, "let this_session_name='".a:name."'")
         silent update
