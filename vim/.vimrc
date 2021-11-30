@@ -608,7 +608,9 @@
     augroup END
 "" #endregion EA
 "" #region COC – COC, code linting, git and so on
-    command GITstatus silent! execute 'ALTredirKeep !git status' | $normal oTips: You can use `gf` to navigate into files. Also `\r` for reload or `\q` for `:bd`.
+    command GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log origin/master..HEAD && echo'
+        \| setlocal filetype=git
+        \| $normal oTips: You can use `gf` to navigate into files. Also `\r` for reload or `\q` for `:bd`.
     command -nargs=? GITcommit !clear && git status & git commit --interactive -v <args>
     command GITrestoreThis !git status %:p -s & git restore %:p --patch
     command GITlog silent! execute 'ALTredirKeep !git log --date=iso' | setlocal filetype=git
