@@ -37,3 +37,13 @@
 ## Náhodná část z konfiguračního souboru `.vimrc`
 ``` %%VIMRC%%
 ```
+
+<!--region Mapování -->
+nnoremap <buffer><silent> e :bd<cr>
+nnoremap <buffer><silent> p :bd<bar>normal "+p<cr>
+nnoremap <buffer><silent> o :browse oldfiles<cr>
+nnoremap <buffer><silent> w :CLsessionLoad<cr>
+nnoremap <buffer><silent> m :marks<cr>
+nnoremap <buffer> P :call <sid>NextFoldClosed('j')<cr>zo
+nnoremap <buffer><silent> c :IntroEdit<cr>
+<!--endregion-->

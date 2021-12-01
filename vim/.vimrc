@@ -65,12 +65,15 @@
         " - we're not invoked as vim or gvim;
         " - we're starting in insert mode.
         if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode | return | endif
-        enew
-        setlocal
-            \ bufhidden=wipe buftype=nofile nobuflisted noswapfile
+        e ':: Intro Page ::'
+        for line in readfile(expand('~').'/.vim/intro-template.md')
+            call append('$', line)
+            if line =~ '^nnoremap' | execute line | endif
+        endfor
+        let w:scratch = 1
+        setlocal bufhidden=wipe buftype=nofile nobuflisted noswapfile
             \ nocursorcolumn nocursorline nolist nonumber norelativenumber
             \ filetype=markdown foldmethod=marker foldmarker=<!--region,<!--endregion-->
-        0read ~/.vim/intro-template.md
         /%%VERSION%%
         normal dgn
         call append('.',system('vim --version | head -n 1'))
@@ -79,16 +82,10 @@
         normal dgn
         call append('.', systemlist('tail -n+$((1 + RANDOM % `wc -l $MYVIMRC | _awk 1`)) $MYVIMRC | head -n10'))
         :1
+        normal dd
+        setlocal nomodifiable nomodified
         redraw!
         echo "Intro"
-        setlocal nomodifiable nomodified
-        nnoremap <buffer><silent> e :bd<cr>
-        nnoremap <buffer><silent> p :bd<bar>normal "+p<cr>
-        nnoremap <buffer><silent> o :browse oldfiles<cr>
-        nnoremap <buffer><silent> w :CLsessionLoad<cr>
-        nnoremap <buffer><silent> m :marks<cr>
-        nnoremap <buffer> P :call <sid>NextFoldClosed('j')<cr>zo
-        nnoremap <buffer><silent> c :IntroEdit<cr>
     endfunction
     autocmd VimEnter * call CustomIntroPage()
     command! Intro call CustomIntroPage()
