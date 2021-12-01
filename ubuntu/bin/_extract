@@ -50,5 +50,8 @@ case "$ARC" in
     *.zip)       unzip "$ARC"       ;;
     *.Z)         uncompress "$ARC"  ;;
     *.7z)        7z x "$ARC"        ;;
+    *.eml)       munpack -t "$ARC"  ;;
     *)           err $"'$ARC' cannot be extracted by $this" ;;
 esac
+
+# sudo apt install mpack

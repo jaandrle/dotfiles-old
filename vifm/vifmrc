@@ -173,39 +173,42 @@
     
     " #region Farch – Archives
         if has('win')
-            filetype *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg
-                \ {Mount with fuse-zip}
-                \ FUSE_MOUNT|fuse-zip %SOURCE_FILE %DESTINATION_DIR,
-                \ {View contents}
-                \ zip -sf %c | less,
-                \ {Extract here}
-                \ mkdir %"c:r & tar -xf %c -C %"c:r,
             fileviewer *.zip,*.jar,*.war,*.ear,*.oxt tar -tf %c
         else
-            filetype *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg
+            fileviewer *.zip,*.jar,*.war,*.ear,*.oxt zip -sf %c
+        endif
+        filetype *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg
             \ {Mount with fuse-zip}
             \ FUSE_MOUNT|fuse-zip %SOURCE_FILE %DESTINATION_DIR,
             \ {View contents}
             \ zip -sf %c | less,
             \ {Extract here}
-            \ mkdir %"c:r & unzip %c -d %"c:r,
-            fileviewer *.zip,*.jar,*.war,*.ear,*.oxt zip -sf %c
-        endif
+            \ _extract %"f
         filetype *.tar,*.tar.bz2,*.tbz2,*.tgz,*.tar.gz,*.tar.xz,*.txz
             \ {Mount with archivemount}
             \ FUSE_MOUNT|archivemount %SOURCE_FILE %DESTINATION_DIR,
+            \ {Extract here}
+            \ _extract %"f
         fileviewer *.tgz,*.tar.gz tar -tzf %c
         fileviewer *.tar.bz2,*.tbz2 tar -tjf %c
         fileviewer *.tar.txz,*.txz xz --list %c
         fileviewer *.tar tar -tf %c
         filetype *.rar {Mount with rar2fs}
             \ FUSE_MOUNT|rar2fs %SOURCE_FILE %DESTINATION_DIR,
+            \ {Extract here}
+            \ _extract %"f
         fileviewer *.rar unrar v %c
         filetype *.iso {Mount with fuseiso}
             \ FUSE_MOUNT|fuseiso %SOURCE_FILE %DESTINATION_DIR,
+            \ {Extract here}
+            \ _extract %"f
         filetype *.7z {Mount with fuse-7z}
             \ FUSE_MOUNT|fuse-7z %SOURCE_FILE %DESTINATION_DIR,
+            \ {Extract here}
+            \ _extract %"f
         fileviewer *.7z 7z l %c
+        filetype *.eml {Extract here}
+            \ _extract %"f
     " #endregion Farch
     filetype *.ftp {Mount with curlftpfs}
         \ FUSE_MOUNT2|curlftpfs -o ftp_port=-,,disable_eprt %PARAM %DESTINATION_DIR %FOREGROUND,
