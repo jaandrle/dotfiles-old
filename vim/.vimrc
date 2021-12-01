@@ -74,18 +74,28 @@
         setlocal bufhidden=wipe buftype=nofile nobuflisted noswapfile
             \ nocursorcolumn nocursorline nolist nonumber norelativenumber
             \ filetype=markdown foldmethod=marker foldmarker=<!--region,<!--endregion-->
-        /%%VERSION%%
-        normal dgn
-        call append('.',system('vim --version | head -n 1'))
-        normal J$x
-        /%%VIMRC%%
-        normal dgn
-        call append('.', systemlist('tail -n+$((1 + RANDOM % `wc -l $MYVIMRC | _awk 1`)) $MYVIMRC | head -n10'))
+        :1
+        silent! /%%VERSION%%
+        if line2byte('.') != 1
+            normal dgn
+            call append('.',system('vim --version | head -n 1'))
+            normal J$x
+        endif
+        :1
+        silent! /%%VIMRC%%
+        if line2byte('.') != 1
+            normal dgn
+            let vimrc= readfile(expand('$MYVIMRC'))
+            let rand= str2nr(matchstr(reltimestr(reltime()), '\v\.\zs\d+')) % ( len(vimrc) - 2 ) + 1
+            let rand_line= min([ len(vimrc)-10, rand ])
+            for line in vimrc[rand_line:rand_line+10]
+                call append('.', line)
+            endfor
+        endif
         :1
         normal dd
         setlocal nomodifiable nomodified
         redraw!
-        echo "Intro"
     endfunction
     autocmd VimEnter * call CustomIntroPage()
     command! Intro call CustomIntroPage()
