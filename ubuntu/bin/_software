@@ -1,0 +1,71 @@
+#!/bin/bash
+this="${0##*/}"
+this_version="2021-12-01"
+err() { printf >&2 "Error: $*\n"; exit 1; }
+log() { printf ":: $* ::\n"; }
+
+if [ ! -t 0 ]; then
+    exo-open --launch TerminalEmulator -- -e "$this $*"
+    exit
+fi
+action="${1:---help}"
+if [[ "$action" = "--help" ]]; then
+    while read; do printf '%s\n' "$REPLY"
+    done <<-EOF
+$this ($this_version) <andrle.jan@centrum.cz>
+Utility for updating my packages managers such as \`npm\`, \`apt\`, \`github-releases\` …
+
+Usage: $this --[help|check|update] [basic|advanced]
+  [default] --help: show this text
+           --check: check updates
+          --update: update all
+            --list: list of packages managers
+
+  modificators:
+  [default]    basic: checks/updates regular packages managers
+            advanced: ↘+also \`pip\`
+EOF
+    exit 0
+fi
+
+if [[ "$action" = "--list" ]]; then
+    echo npm
+    echo github-releases.js
+    echo _vim_plugins – updates only
+    echo snap – updates only
+    echo flatpak – updates only
+    echo pip [advanced]
+    exit 0
+fi
+modificator="${2:-basic}"
+if [[ "$action" = "--check" ]]; then
+    log "npm outdated --global (for update use: \`npm update --global\`)"
+    npm outdated --global
+    [[ "${?}" = "0" ]] && echo "> all up-to.date"
+    log "github-releases.js --check (for update use for example: \`github-releases.js --update all\`)"
+    github-releases.js --check
+    if [[ ! "$modificator" = "basic" ]]; then
+        log "pip list --outdated"
+        pip list --outdated
+    fi
+    exit 0
+fi
+if [[ "$action" = "--update" ]]; then
+    log "npm update --global"
+    npm update --global
+    log "github-releases.js --update all"
+    github-releases.js --update all
+    log "_vim_plugins --update"
+    _vim_plugins --update
+    log "snap refresh --list"
+    snap refresh --list
+    log "flatpak update"
+    flatpak update
+    if [[ ! "$modificator" = "basic" ]]; then
+        log "pip list --outdated --format=freeze | grep -v '^\\-e' | cut -d = -f 1  | xargs -n1 pip install -U --user"
+        pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U --user
+    fi
+    exit 0
+fi
+
+err "Wrong arguments (use \`--help\`)"
