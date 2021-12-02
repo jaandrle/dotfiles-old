@@ -183,7 +183,7 @@
     let g:loaded_netrw       = 1
     let g:loaded_netrwPlugin = 1
     nmap <leader>e :Vifm<cr>
-    call scommands#map('e', 'Vifm', 'n')
+    call scommands#map('e', 'Vifm', "n")
 "" #endregion FOS
 "" #region EN – Editor navigation + search
     " maybe `:help keymap`?
