@@ -65,7 +65,7 @@ if [[ "$action" = "--add" ]]; then
     err $"Unknown argument for '--add': $2"
 fi
 if [[ "$action" = "--update" ]]; then
-    git submodule update --remote --merge
+    git submodule foreach git pull --all
     [[ -f "$file_log" ]] && grep -q '[^[:space:]]' < "$file_log" && xargs -a $file_log -I{} curl -# -O {}
     git commit -m "Update" 2> /dev/null
     exit 0

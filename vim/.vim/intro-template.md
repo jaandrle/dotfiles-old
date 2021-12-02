@@ -42,8 +42,8 @@
 nnoremap <buffer><silent> e :bd<cr>
 nnoremap <buffer><silent> p :bd<bar>normal "+p<cr>
 nnoremap <buffer><silent> o :browse oldfiles<cr>
-nnoremap <buffer><silent> w :CLsessionLoad<cr>
+nnoremap <buffer><silent> w :CLSESSIONload<cr>
 nnoremap <buffer><silent> m :marks<cr>
-nnoremap <buffer> P :call <sid>NextFoldClosed('j')<cr>zo
-nnoremap <buffer><silent> c :IntroEdit<cr>
+nnoremap <buffer> P /region<cr>za
+nnoremap <buffer><silent> c :e ~/.vim/intro-template.md<cr>
 <!--endregion-->

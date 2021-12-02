@@ -28,79 +28,17 @@
     autocmd VimEnter * :call OnVimEnter()
 
     set runtimepath^=~/.vim/bundle/*
+    source ~/.vim/plugin/vim-jaandrle_utils/jaandrle_utils.vim
     nmap <leader>gt <c-]>
     nmap <leader>gT <c-T>
     nmap <leader>ga <c-^>
     
     set modeline
-    function! s:AppendModeline(additional)
-        let l:modeline= printf(" vim: set tabstop=%d shiftwidth=%d textwidth=%d %sexpandtab :",
-            \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
-        let l:modeline= substitute(&commentstring, "%s", l:modeline, "")
-        call append(line("$"), l:modeline)
-        
-        if !a:additional | return 0 | endif
-        if &foldmethod=="marker"
-            let l:modeline= printf(" vim>60: set foldmethod=marker foldmarker=%s :",
-                \ &foldmarker)
-        elseif &foldmethod=="indent"
-            let l:modeline= printf(" vim>60: set foldmethod=indent foldlevel=%d foldnestmax=%d:",
-                \ &foldlevel, &foldnestmax)
-        else
-            return 0
-        endif
-        let l:modeline= substitute(&commentstring, "%s", l:modeline, "")
-        call append(line("$"), l:modeline)
-    endfunction
-    command! CLmodelineBasic :call s:AppendModeline(0)
-    command! CLmodeline :call s:AppendModeline(1)
+    command! CLmodelineBasic :call jaandrle_utils#AppendModeline(0)
+    command! CLmodeline :call jaandrle_utils#AppendModeline(1)
     
     nnoremap <leader>t :silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &<cr>
 "" #endregion B
-"" #region I – Intro
-    function! CustomIntroPage()
-        " Don't run if:
-        " - there are commandline arguments;
-        " - the buffer isn't empty (e.g. cmd | vi -);
-        " - we're not invoked as vim or gvim;
-        " - we're starting in insert mode.
-        if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode | return | endif
-        e ':: Intro Page ::'
-        for line in readfile(expand('~').'/.vim/intro-template.md')
-            call append('$', line)
-            if line =~ '^nnoremap' | execute line | endif
-        endfor
-        let w:scratch = 1
-        setlocal bufhidden=wipe buftype=nofile nobuflisted noswapfile
-            \ nocursorcolumn nocursorline nolist nonumber norelativenumber
-            \ filetype=markdown foldmethod=marker foldmarker=<!--region,<!--endregion-->
-        :1
-        silent! /%%VERSION%%
-        if line2byte('.') != 1
-            normal dgn
-            call append('.',system('vim --version | head -n 1'))
-            normal J$x
-        endif
-        :1
-        silent! /%%VIMRC%%
-        if line2byte('.') != 1
-            normal dgn
-            let vimrc= readfile(expand('$MYVIMRC'))
-            let rand= str2nr(matchstr(reltimestr(reltime()), '\v\.\zs\d+')) % ( len(vimrc) - 2 ) + 1
-            let rand_line= min([ len(vimrc)-10, rand ])
-            for line in vimrc[rand_line:rand_line+10]
-                call append('.', line)
-            endfor
-        endif
-        :1
-        normal dd
-        setlocal nomodifiable nomodified
-        redraw!
-    endfunction
-    autocmd VimEnter * call CustomIntroPage()
-    command! Intro call CustomIntroPage()
-    command! IntroEdit :e ~/.vim/intro-template.md
-"" #endregion I
 "" #region S – Remap 'sS' (primary s<tab>)
     " Idea for grouping commands by prefix CL*/SET*/… and leverage Vim command tab competition. E.g. `s<tab>` shows all `CL*` commands …see `set wildmode`.
     " Native 's' or 'S' keys can be replaced by cl/cc.
@@ -125,74 +63,24 @@
     nmap Sa q:?^ALT<cr><cr>
     nmap sg :call feedkeys(':GIT<tab>', 'tn')<cr>
     nmap Sg q:?^GIT<cr><cr>
+    nmap sn :call feedkeys(':JUMP<tab>', 'tn')<cr>
+    nmap Sn q:?^JUMP<cr><cr>
 "" #endregion S
 "" #region H – Helpers
     function s:SetToggle(option)
         let cmd= ' set '.a:option.'! | set '.a:option.'?'
         execute 'command! SETTOGGLE'.a:option.cmd
     endfunction
-    function s:MapSmartKey(key_name)
-        let cmd = '<sid>Smart'.a:key_name
-        exec 'nmap <silent><'.a:key_name.'> :call '.cmd.'("n")<CR>'
-        exec 'imap <silent><'.a:key_name.'> <C-r>='.cmd.'("i")<CR>'
-        exec 'vmap <silent><'.a:key_name.'> <Esc>:call '.cmd.'("v")<CR>'
-    endfunction
-    function! s:Redir(is_keep, command, range, line_start, line_end)
-        let exit= a:is_keep==1 ? 'bw' : 'q'
-        let pre_command = join(map(split(a:command), 'expand(v:val)'))
-        if pre_command=~ '^!' && a:range!=0
-            let joined_lines = join(getline(a:line_start, a:line_end), '\n')
-            let cleaned_lines = substitute(shellescape(joined_lines), "'\\\\''", "\\\\'", 'g')
-            let command= pre_command . " <<< $" . cleaned_lines
-        else
-            let command= pre_command
-        endif
-        let w:scratch = 1
-        if a:is_keep==1
-            silent! execute 'e '.fnameescape(command)
-            setlocal buftype=nofile noswapfile nowrap number
-        else
-            let winnr_id = bufwinnr('^' . command . '$')
-            silent! execute  winnr_id < 0 ? 'botright new ' . fnameescape(command) : winnr_id . 'wincmd w'
-            setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap number
-        endif
-        echo 'Execute "' . command . '"...'
-        if command=~ '^!'
-            silent! execute 'silent %'. command
-        else
-            redir => output
-            silent execute command
-            redir END
-            call setline(1, split(output, "\n"))
-        endif
-        if a:is_keep==0
-            execute 'wincmd ='
-            let max_height= float2nr(round(winheight('0') / 2))
-            execute 'resize ' . min([ max_height, line('$') ])
-        endif
-        silent! redraw!
-        silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
-        silent! execute 'nnoremap <silent> <buffer> ;e :call <sid>Redir('.a:is_keep.', '''.a:command.''', '.a:range.', '.a:line_start.', '.a:line_end.')<cr>'
-        silent! execute 'nnoremap <silent> <buffer> ;q :'.exit.'<CR>'
-        if line('$')==1 && col('$')==1
-            silent! execute exit
-            echomsg 'Command "' . command . '" executed and nothing to redirect.'
-        endif
-    endfunction
-    command! -complete=command -bar -range -nargs=+ ALTredir call s:Redir(0, <q-args>, <range>, <line1>, <line2>)
-    command! -complete=command -bar -range -nargs=+ ALTredirKeep call s:Redir(1, <q-args>, <range>, <line1>, <line2>)
-    function! Grep(...)
-        let s:command= join([substitute(&grepprg, ' /dev/null', '', '')] + [expandcmd(join(a:000, ' '))], ' ')
-        return system(s:command)
-    endfunction
-    command! -nargs=+ -complete=file_in_path -bar ALTgrep  cgetexpr Grep(<f-args>)
-    command! -nargs=+ -complete=file_in_path -bar ALTlgrep lgetexpr Grep(<f-args>)
+    command! -complete=command -bar -range -nargs=+ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
+    command! -complete=command -bar -range -nargs=+ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
+    command! -nargs=+ -complete=file_in_path -bar ALTgrep  cgetexpr jaandrle_utils#grep(<f-args>)
+    command! -nargs=+ -complete=file_in_path -bar ALTlgrep lgetexpr jaandrle_utils#grep(<f-args>)
     augroup quickfix
         autocmd!
         autocmd QuickFixCmdPost cgetexpr cwindow
-                    \| call setqflist([], 'a', {'title': ':' . s:command})
+                    \| call setqflist([], 'a', {'title': ':' . g:jaandrle_utils#last_command})
         autocmd QuickFixCmdPost lgetexpr lwindow
-                    \| call setloclist(0, [], 'a', {'title': ':' . s:command})
+                    \| call setloclist(0, [], 'a', {'title': ':' . g:jaandrle_utils#last_command})
     augroup END
 "" #endregion H
 "" #region SL – Status Line + Command Line + …
@@ -230,43 +118,9 @@
         set undofile
     catch
     endtry
-    set sessionoptions-=options
-    let this_session_name="—"
-    let this_session_saving=0
     set statusline+=:%{get(g:,'this_session_name','')}\ 
-    let sessions_dir= $HOME."/.vim/sessions/"
-    if(filewritable(g:sessions_dir) != 2)
-        exe 'silent !mkdir -p ' g:sessions_dir
-        redraw!
-    endif
-    function! s:SessionSave(name)
-        let b:path= g:sessions_dir.a:name.".vim"
-        exe "mksession! ".b:path
-        silent execute 'keepalt split' b:path
-        setlocal bufhidden=delete nobuflisted
-        call append(line('$')-3, "let this_session_name='".a:name."'")
-        silent update
-        silent hide
-    endfunction
-    function! s:SessionCreate(name)
-        let b:swd= input("Session working directory:\n", system('echo $(pwd)'), "file")
-        exe "cd ".b:swd
-        exe "lcd ".b:swd
-        call <sid>SessionSave(a:name)
-        echo "\nSession '".a:name."' successfully created."
-    endfunction
-    function! s:SessionAutosave()
-        if g:this_session_name == "—" || g:this_session_saving
-            return 0
-        endif
-        let g:this_session_saving=1
-        call <sid>SessionSave(g:this_session_name)
-        let g:this_session_saving=0
-    endfunction
-    autocmd VimLeave,BufWritePost * :call <sid>SessionAutosave()
-    command! -nargs=1 CLsessionCreate :call <sid>SessionCreate(<f-args>)
-    command CLsessionLoad :call feedkeys(":so ".g:sessions_dir.'<tab>', 'tn')
-    abbreviate CLSL CLsessionLoad
+    command! -nargs=1 CLSESSIONCreate :call mini_sessions#create(<f-args>)
+    command CLSESSIONload :call mini_sessions#open()
     command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
 "" #endregion HS
 "" #region LLW – Left Column + Line + Wrap
@@ -311,56 +165,17 @@
     command! -nargs=1   SETFOLDindent set foldmethod=indent | let &foldlevel=<q-args> | let &foldnestmax=<q-args>+1
     command! -nargs=*   SETFOLDindents set foldmethod=indent | let &foldlevel=split(<q-args>, ' ')[0] | let &foldnestmax=split(<q-args>, ' ')[1]
 
-    nnoremap <silent> <leader>zJ :call <sid>NextFoldOpen('j')<cr>
-    nnoremap <silent> <leader>zj :call <sid>NextFoldClosed('j')<cr>
-    nnoremap <silent> <leader>zK :call <sid>NextFoldOpen('k')<cr>
-    nnoremap <silent> <leader>zk :call <sid>NextFoldClosed('k')<cr>
-    nnoremap <silent> <leader>zn zc:call <sid>NextFoldOpen('j')<cr>
-    nnoremap <silent> <leader>zN zc:call <sid>NextFoldOpen('k')<cr>
-    function! s:NextFoldClosed(dir)
-        let cmd = 'norm!z' . a:dir
-        let view = winsaveview()
-        let [l0, l, open] = [0, view.lnum, 1]
-        while l != l0 && open
-            exe cmd
-            let [l0, l] = [l, line('.')]
-            let open = foldclosed(l) < 0
-        endwhile
-        if open
-            call winrestview(view)
-        endif
-    endfunction
-    function! s:NextFoldOpen(dir)
-        let b:step= a:dir=="j" ? 1 : -1
-        let b:start = line('.')
-        while (foldclosed(b:start) != -1)
-            let b:start = b:start + b:step
-        endwhile
-        call cursor(b:start, 0)
-    endfunction
+    nnoremap <silent> <leader>zJ :call jaandrle_utils#fold_nextOpen('j')<cr>
+    nnoremap <silent> <leader>zj :call jaandrle_utils#fold_nextClosed('j')<cr>
+    nnoremap <silent> <leader>zK :call jaandrle_utils#fold_nextOpen('k')<cr>
+    nnoremap <silent> <leader>zk :call jaandrle_utils#fold_nextClosed('k')<cr>
+    nnoremap <silent> <leader>zn zc:call jaandrle_utils#fold_nextOpen('j')<cr>
+    nnoremap <silent> <leader>zN zc:call jaandrle_utils#fold_nextOpen('k')<cr>
 "" #endregion F
 "" #region C – Clipboard
     nnoremap <F2> :set invpaste paste?<CR>
     set pastetoggle=<F2>
-    nnoremap Y y$
-    nnoremap <silent> <leader>" :call <sid>CopyRegister()<cr>
-    "see https://vi.stackexchange.com/a/180
-    function! s:CopyRegister()
-        echo "Copy content of the register: "
-        let sourceReg = nr2char(getchar())
-        if sourceReg !~# '\v^[a-z0-9"]'
-            echon sourceReg." – invalid register"
-            return
-        endif
-        echon sourceReg."\ninto the register: "
-        let destinationReg = nr2char(getchar())
-        if destinationReg !~# '\v^[a-z0-9]'
-            echon destinationReg." – invalid register"
-            return
-        endif
-        call setreg(destinationReg, getreg(sourceReg, 1))
-        echon destinationReg
-    endfunction
+    nnoremap <silent> <leader>" :call jaandrle_utils#copyRegister()<cr>
 "" #endregion C
 "" #region N – Navigation throught Buffers + Windows + … (CtrlP)
     nmap sB :buffers<CR>:b<Space>
@@ -373,12 +188,7 @@
 "" #region FOS – File(s) + Openning + Saving
     set autowrite autoread
     autocmd FocusGained,BufEnter *.* checktime                                                          " …still autoread
-    function s:TrimEndLineSpaces(line_start, line_end)
-        let b:pos= getpos(".") | let b:s= @/
-        execute a:line_start.','.a:line_end.'s/\s\+$//e' | nohl
-        let @/= b:s | call setpos('.', b:pos)
-    endfunction
-    command -bar -nargs=0 -range=% TrimEndLineSpaces call s:TrimEndLineSpaces(<line1>,<line2>)
+    command -bar -nargs=0 -range=% CLtrimEndLineSpaces call jaandrle_utils#trimEndLineSpaces(<line1>,<line2>)
 
     command! W w !sudo tee > /dev/null %
                                                                                             " Save a file as root (:W)
@@ -389,17 +199,6 @@
     endfor
     set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
     set wildignore+=*.pdf,*.psd
-
-    function! RenameFile()
-        let old_name = expand('%')
-        let new_name = input('New file name: ', expand('%'), 'file')
-        if new_name != '' && new_name != old_name
-            exec ':saveas ' . new_name
-            exec ':silent !rm ' . old_name
-            exec ':silent bd ' . old_file
-            redraw!
-        endif
-    endfunction
 
     let g:vifm_replace_netrw = 1
     let g:loaded_netrw       = 1
@@ -413,121 +212,27 @@
     nmap č $
     nmap <c-down> gj
     nmap <c-up> gk
-    call <sid>MapSmartKey("Home")
-    call <sid>MapSmartKey("End")
-    vnoremap <silent> * :<C-u>call VisualSelection('')<CR>/<C-R>=@/<CR><CR>
-    vnoremap <silent> # :<C-u>call VisualSelection('')<CR>?<C-R>=@/<CR><CR>
+    call jaandrle_utils#MapSmartKey('Home')
+    call jaandrle_utils#MapSmartKey('End')
 
     set hlsearch                                                                                " Highlight search results
     set ignorecase smartcase infercase                                             " Search queries intelligently set case
     set incsearch                                                                        " Show search results as you type
     nmap <silent>ú :nohlsearch<bar>diffupdate<cr>
 
-    function! VisualSelection(direction) range
-        let l:saved_reg = @"
-        execute "normal! vgvy"
-        let l:pattern = escape(@", "\\/.*'$^~[]")
-        let @/ = substitute(l:pattern, "\n$", "", "")
-        let @" = l:saved_reg
-    endfunction
-    function s:SmartHome(mode)
-        let curcol = col(".")
-        "gravitate towards beginning for wrapped lines
-        if curcol > indent(".") + 2
-            call cursor(0, curcol - 1)
-        endif
-        if curcol == 1 || curcol > indent(".") + 1
-            if &wrap
-                normal g^
-            else
-                normal ^
-            endif
-        else
-            if &wrap
-                normal g0
-            else
-                normal 0
-            endif
-        endif
-        if a:mode == "v"
-            normal msgv`s
-        endif
-        return ""
-    endfunction
-    function s:SmartEnd(mode)
-        let curcol = col(".")
-        let lastcol = a:mode == "i" ? col("$") : col("$") - 1
-        "gravitate towards ending for wrapped lines
-        if curcol < lastcol - 1
-            call cursor(0, curcol + 1)
-        endif
-        if curcol < lastcol
-            if &wrap
-                normal g$
-            else
-                normal $
-            endif
-        else
-            normal g_
-        endif
-        "correct edit mode cursor position, put after current character
-        if a:mode == "i"
-            call cursor(0, col(".") + 1)
-        endif
-        if a:mode == "v"
-            normal msgv`s
-        endif
-        return ""
-    endfunction
+    command JUMPmotion            call jaandrle_utils#gotoJumpChange('jump')
+    command JUMPchanges           call jaandrle_utils#gotoJumpChange('change')
+    command JUMPlistC     call jaandrle_utils#gotoJumpListCL('c')
+    command JUMPlistL     call jaandrle_utils#gotoJumpListCL('l')
 
-    command CLjumpMotion            call s:GotoJumpChange('jump')
-    abbreviate CLJJ CLjumpMotion
-    abbreviate CLJM CLjumpMotion
-    command CLjumpChanges           call s:GotoJumpChange('change')
-    abbreviate CLJC CLjumpChanges
-    function! s:GotoJumpChange(cmd)
-        let b:key_shotcuts= a:cmd=="jump" ? [ "\<c-i>", "\<c-o>" ] : [ "g,", "g;" ]
-        set nomore
-        execute a:cmd."s"
-        set more
-        let j = input("[see help for ':".a:cmd."(s).' | -/+ for up/down]\nselect ".a:cmd.": ")
-        if j == '' | return 0 | endif
-
-        let pattern = '\v\c^\+'
-        if j =~ pattern
-            let j = substitute(j, pattern, '', 'g')
-            execute "normal " . j . b:key_shotcuts[0]
-        else
-            execute "normal " . j . b:key_shotcuts[1]
-        endif
-    endfunction
-
-    nmap <leader>[I     :call <sid>GotoJumpListDI("[", "I")<cr>
-    nmap <leader>]I     :call <sid>GotoJumpListDI("]", "I")<cr>
-    nmap <leader>[D     :call <sid>GotoJumpListDI("[", "D")<cr>
-    nmap <leader>]D     :call <sid>GotoJumpListDI("]", "D")<cr>
-    function! s:GotoJumpListDI(move, key)
-        execute "normal ".a:move.a:key
-        let c= "<c-".a:key.">"
-        let j = input("[see help for ':".tolower(a:key)."list']\nselect '".a:move.c."': ")
-        if j == '' | return 0 | endif
-        call feedkeys(":call feedkeys(\"".j.a:move."\\".c."\", 'tm')\<cr>")
-    endfunction
-
-    command CLjumpListC     call s:GotoJumpListCL('c')
-    abbreviate CLJC CLjumpListC
-    command CLjumpListL     call s:GotoJumpListCL('l')
-    abbreviate CLJL CLjumpListL
-    function! s:GotoJumpListCL(name)
-        execute a:name."list"
-        let j = input("[see help for ':".a:name."list']\nselect '".a:name.a:name."': ")
-        if j == '' | return 0 | endif
-        execute a:name.a:name." ".j
-    endfunction
+    nmap <leader>[I     :call jaandrle_utils#gotoJumpListDI("[", "I")<cr>
+    nmap <leader>]I     :call jaandrle_utils#gotoJumpListDI("]", "I")<cr>
+    nmap <leader>[D     :call jaandrle_utils#gotoJumpListDI("[", "D")<cr>
+    nmap <leader>]D     :call jaandrle_utils#gotoJumpListDI("]", "D")<cr>
 
     nmap sj <Plug>(JumpMotion)
     " https://gist.github.com/romainl/f7e2e506dc4d7827004e4994f1be2df6
-    command! -bang -nargs=1 CLjumpSearch call setloclist(0, [], ' ',
+    command! -bang -nargs=1 JUMPsearch call setloclist(0, [], ' ',
         \ {'title': 'Global ' .. <q-args>,
         \  'efm':   '%f:%l\ %m,%f:%l',
         \  'lines': execute('g<bang>/' .. <q-args> .. '/#')
@@ -560,6 +265,7 @@
     set autoindent                                                              " https://stackoverflow.com/a/18415867
     filetype plugin indent on
 
+    nnoremap <s-k> a<cr><esc>
     nnoremap <leader>cw *``cgn
     nnoremap <leader>cb #``cgN
     nnoremap <leader>,o <s-a>,<cr><space><bs>
@@ -567,31 +273,6 @@
     nnoremap <leader>*o o * <space><bs>
     nnoremap <leader>o o<space><bs><esc>
     nnoremap <leader><s-o> <s-o><space><bs><esc>
-    nnoremap <s-k> a<cr><esc>
-
-    inoremap <c-u> <c-g>u<c-u>
-    inoremap <c-w> <c-g>u<c-w>
-    inoremap . <c-g>u.
-    inoremap , <c-g>u,
-    inoremap ; <c-g>u;
-    inoremap <> <c-g>u<><Left>
-    inoremap () <c-g>u()<Left>
-    inoremap {} <c-g>u{}<Left>
-    inoremap [] <c-g>u[]<Left>
-    inoremap "" <c-g>u""<Left>
-    inoremap '' <c-g>u''<Left>
-    inoremap `` <c-g>u``<Left>
-    
-    cnoremap <> <><Left>
-    cnoremap () ()<Left>
-    cnoremap {} {}<Left>
-    cnoremap [] []<Left>
-    cnoremap "" ""<Left>
-    cnoremap '' ''<Left>
-    cnoremap `` ``<Left>
-
-    command SETfileformatDOS2UNIX update | edit ++ff=dos | setlocal ff=unix
-    
     augroup syntaxSyncMinLines
         autocmd!
         autocmd Syntax * syn sync minlines=2000
@@ -600,6 +281,7 @@
         hi clear SpellBad
         hi SpellBad cterm=underline,italic
     endif
+    command SETfileformatDOS2UNIX update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
 "" #region COC – COC, code linting, git and so on
     command GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
@@ -684,12 +366,12 @@
     command CLjsdoc                 exec 'CocCommand docthis.documentThis'
     command CLcodeactionCursor      call CocActionAsync('codeAction', 'cursor')
     command CLfixCodeQuick          call CocActionAsync('doQuickfix')
-    command CLjumpDefinition        call CocActionAsync('jumpDefinition')
-    command CLjumpType              call CocActionAsync('jumpTypeDefinition')
-    command CLjumpImplementation    call CocActionAsync('jumpImplementation')
-    command CLjumpReferences        call CocActionAsync('jumpReferences')
     command CLextensions            exec 'CocList extensions'
     command CLextensionsMarket      exec 'CocList marketplace'
+    command JUMPdefinition        call CocActionAsync('jumpDefinition')
+    command JUMPtype              call CocActionAsync('jumpTypeDefinition')
+    command JUMPimplementation    call CocActionAsync('jumpImplementation')
+    command JUMPreferences        call CocActionAsync('jumpReferences')
     nnoremap <F8>      :<C-u>CocNext<CR>
     nnoremap [19;2~  :<C-u>CocPrev<CR>
     

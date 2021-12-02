@@ -16,6 +16,10 @@ _vim_plugins --add junegunn/rainbow_parentheses.vim
 _vim_plugins --add https://gist.githubusercontent.com/jaandrle/9356d737ef5dfda2efbe50248d32cb78/raw/7f73e223b93d9cb889eecc77850604ebe7e102a3/cwordhi.vim
 _vim_plugins --add https://gist.githubusercontent.com/jaandrle/d0ce92e67d03dd8da4b7b932b379b879/raw/b47b1260759d32823890c39df31909f386cc3f6c/vifm.vim
 _vim_plugins --add zsugabubus/vim-jumpmotion
+_vim_plugins --add jaandrle/vim-mini_intro
+_vim_plugins --add jaandrle/vim-mini_sessions
+_vim_plugins --add jaandrle/vim-jaandrle_utils
+_vim_plugins --add jaandrle/vim-mini_enhancement
 
 mkdir -p ~/.vim/pack/coc/start
 cd ~/.vim/pack/coc/start
