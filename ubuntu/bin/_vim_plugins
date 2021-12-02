@@ -1,7 +1,8 @@
 #!/bin/bash
 this="${0##*/}"
 this_version="2021-08-28"
-plugin_path="$HOME/.vim/plugin/"
+plugin_path="$HOME/.vim/bundle/"
+plugin_path_onefile="${plugin_path}__one_files/plugin/"
 plugin_path_native="$HOME/.vim/pack/$this/start/"
 err() { printf >&2 "Error: $*\n"; exit 1; }
 
@@ -30,6 +31,8 @@ fi
 
 if [[ "$action" = "--init" ]]; then
     mkdir -p $plugin_path
+    mkdir -p ${plugin_path}__one_files
+    mkdir -p $plugin_path_onefile
     cd "$plugin_path"
     [[ -d "$plugin_path.git" ]] || git init
     echo $plugin_path
@@ -44,7 +47,9 @@ fi
 file_log="$plugin_path.one_file"
 if [[ "$action" = "--add" ]]; then
     if [[ $2 =~ ^(http|ftp)s?:.*\.vim ]]; then
+        cd $plugin_path_onefile
         wget $2 || err $"Wrong url adress: $2"
+        cd $plugin_path
         echo $2 >> $file_log
         echo >> $file_log
         git add .
@@ -66,7 +71,9 @@ if [[ "$action" = "--add" ]]; then
 fi
 if [[ "$action" = "--update" ]]; then
     git submodule foreach git pull --all
+    cd $plugin_path_onefile
     [[ -f "$file_log" ]] && grep -q '[^[:space:]]' < "$file_log" && xargs -a $file_log -I{} curl -# -O {}
+    cd $plugin_path
     git commit -m "Update" 2> /dev/null
     exit 0
 fi
@@ -80,7 +87,7 @@ if [[ "$action" = "--remove" ]]; then
     fi
     if [[ -f "$2" ]]; then
         sed -i "/$2/d" $file_log
-        rm -f $2
+        rm -f ${plugin_path_onefile}$2
         removed=1
     fi
     if [ $removed = 1 ]; then

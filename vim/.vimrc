@@ -28,7 +28,6 @@
     autocmd VimEnter * :call OnVimEnter()
 
     set runtimepath^=~/.vim/bundle/*
-    source ~/.vim/plugin/vim-jaandrle_utils/jaandrle_utils.vim
     nmap <leader>gt <c-]>
     nmap <leader>gT <c-T>
     nmap <leader>ga <c-^>
@@ -40,31 +39,12 @@
     nnoremap <leader>t :silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &<cr>
 "" #endregion B
 "" #region S – Remap 'sS' (primary s<tab>)
-    " Idea for grouping commands by prefix CL*/SET*/… and leverage Vim command tab competition. E.g. `s<tab>` shows all `CL*` commands …see `set wildmode`.
-    " Native 's' or 'S' keys can be replaced by cl/cc.
-    " Current groups are `CL*` (general commands), `SET*` (`set *` helpers), `ALT*` (alternatives to native ones, e.g. `ALTgrep`).
-    " Current maps are (S* repeat last one): `sh*`…help echos, `s<tab>`…`:CL*`, `sS`…`:SET*`, `sa`…`:ALT*`
-    nmap s <nop>
-    vmap s <nop>
-    nmap S <nop>
-    vmap S <nop>
     nmap sh<leader> :map <leader><cr>
-    nmap shs        :map s<cr>
     nmap shh        :call feedkeys(":map! \<c-u\> \| map \<c-up\> \| map \<c-down\>")<cr>
-    nmap s<tab> :call feedkeys(':CL<tab>', 'tn')<cr>
-    vmap s<tab> :<c-u>call feedkeys(':CL<tab>', 'tn')<cr>
-    nmap S<tab> q:?^CL<cr><cr>
-    vmap S<tab> q:?^CL<cr><cr>
-    nmap sS :call feedkeys(':SET<tab>', 'tn')<cr>
-    vmap sS :call feedkeys(':SET<tab>', 'tn')<cr>
-    nmap SS q:?^SET<cr><cr>
-    nmap sa :call feedkeys(':ALT<tab>', 'tn')<cr>
-    vmap sa :call feedkeys('gv:ALT<tab>', 'tn')<cr>
-    nmap Sa q:?^ALT<cr><cr>
-    nmap sg :call feedkeys(':GIT<tab>', 'tn')<cr>
-    nmap Sg q:?^GIT<cr><cr>
-    nmap sn :call feedkeys(':JUMP<tab>', 'tn')<cr>
-    nmap Sn q:?^JUMP<cr><cr>
+    call scommands#map('<tab>', 'CL', 'n,v')
+    call scommands#map('S', 'SET', 'n,v')
+    call scommands#map('a', 'ALT', 'n,v')
+    call scommands#map('n', 'JUMP', 'n')
 "" #endregion S
 "" #region H – Helpers
     function s:SetToggle(option)
@@ -179,11 +159,10 @@
 "" #endregion C
 "" #region N – Navigation throught Buffers + Windows + … (CtrlP)
     nmap sB :buffers<CR>:b<Space>
-    nmap sb :CtrlPBuffer<cr>
+    call scommands#map('b', 'CtrlPBuffer', 'n')
     command! BDOthers execute '%bdelete|edit #|normal `"'
     let g:ctrlp_clear_cache_on_exit = 0
-    nmap sp :call feedkeys(':CtrlP<tab>', 'tn')<cr>
-    nmap Sp q:?^CtrlP<cr><cr>
+    call scommands#map('p', 'CtrlP', 'n')
 "" #endregion BW
 "" #region FOS – File(s) + Openning + Saving
     set autowrite autoread
@@ -204,7 +183,7 @@
     let g:loaded_netrw       = 1
     let g:loaded_netrwPlugin = 1
     nmap <leader>e :Vifm<cr>
-    nmap se :call feedkeys(':Vifm<tab>', 'tn')<cr>
+    call scommands#map('e', 'Vifm', 'n')
 "" #endregion FOS
 "" #region EN – Editor navigation + search
     " maybe `:help keymap`?
@@ -284,6 +263,7 @@
     command SETfileformatDOS2UNIX update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
 "" #region COC – COC, code linting, git and so on
+    call scommands#map('g', 'GIT', 'n')
     command GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
         \| setlocal filetype=git
         \| $normal oTips: You can use `gf` to navigate into files. Also `;e` for reload or `;q` for `:bd`.
