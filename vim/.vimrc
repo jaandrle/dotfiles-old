@@ -41,10 +41,10 @@
 "" #region S – Remap 'sS' (primary s<tab>)
     nmap sh<leader> :map <leader><cr>
     nmap shh        :call feedkeys(":map! \<c-u\> \| map \<c-up\> \| map \<c-down\>")<cr>
-    call scommands#map('<tab>', 'CL', 'n,v')
-    call scommands#map('S', 'SET', 'n,v')
-    call scommands#map('a', 'ALT', 'n,v')
-    call scommands#map('n', 'JUMP', 'n')
+    call scommands#map('<tab>', 'CL', "n,v")
+    call scommands#map('S', 'SET', "n,v")
+    call scommands#map('a', 'ALT', "n,V")
+    call scommands#map('n', 'JUMP', "n")
 "" #endregion S
 "" #region H – Helpers
     function s:SetToggle(option)
@@ -159,10 +159,10 @@
 "" #endregion C
 "" #region N – Navigation throught Buffers + Windows + … (CtrlP)
     nmap sB :buffers<CR>:b<Space>
-    call scommands#map('b', 'CtrlPBuffer', 'n')
+    call scommands#map('b', 'CtrlPBuffer', "n")
     command! BDOthers execute '%bdelete|edit #|normal `"'
     let g:ctrlp_clear_cache_on_exit = 0
-    call scommands#map('p', 'CtrlP', 'n')
+    call scommands#map('p', 'CtrlP', "n")
 "" #endregion BW
 "" #region FOS – File(s) + Openning + Saving
     set autowrite autoread
@@ -263,7 +263,7 @@
     command SETfileformatDOS2UNIX update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
 "" #region COC – COC, code linting, git and so on
-    call scommands#map('g', 'GIT', 'n')
+    call scommands#map('g', 'GIT', "n")
     command GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
         \| setlocal filetype=git
         \| $normal oTips: You can use `gf` to navigate into files. Also `;e` for reload or `;q` for `:bd`.
@@ -336,18 +336,15 @@
     command! -nargs=0 Format :call CocAction('format')
     command! -nargs=? SETFOLDcoc :call CocAction('fold', <f-args>)
 
+    call scommands#map('<s-tab>', 'Coc', "n,v")
+    nmap sc :CocList lists<cr>
+    nmap Sc :CocListResume<cr>
     command CLdocumentation         call <sid>show_documentation()
-    command CLoutline               exec 'CocList outline'
-    command CLsymbols               exec 'CocList -I symbols'
-    command CLdiagnostics           exec 'CocList diagnostics'
-    command CLcmdCoc                exec 'CocList commands'
     command CLrename                call CocActionAsync('rename')
     command CLrenameFile            exec 'CocCommand workspace.renameCurrentFile'
     command CLjsdoc                 exec 'CocCommand docthis.documentThis'
     command CLcodeactionCursor      call CocActionAsync('codeAction', 'cursor')
     command CLfixCodeQuick          call CocActionAsync('doQuickfix')
-    command CLextensions            exec 'CocList extensions'
-    command CLextensionsMarket      exec 'CocList marketplace'
     command JUMPdefinition        call CocActionAsync('jumpDefinition')
     command JUMPtype              call CocActionAsync('jumpTypeDefinition')
     command JUMPimplementation    call CocActionAsync('jumpImplementation')
@@ -355,8 +352,6 @@
     nnoremap <F8>      :<C-u>CocNext<CR>
     nnoremap [19;2~  :<C-u>CocPrev<CR>
     
-    nmap s<s-tab> :call feedkeys(':Coc<tab>', 'tn')<cr>
-    nmap S<s-tab> :CocListResume<cr>
     nmap <leader>/ :CocSearch 
     nmap <leader>? <leader>/
     
