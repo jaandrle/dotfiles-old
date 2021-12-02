@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-11-25 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-12-02 (VIM >=8.1)
 "" #region B – Base
     let $BASH_ENV = "~/.bashrc"
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
