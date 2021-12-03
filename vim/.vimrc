@@ -160,7 +160,7 @@
 "" #region N – Navigation throught Buffers + Windows + … (CtrlP)
     nmap sB :buffers<CR>:b<Space>
     call scommands#map('b', 'CtrlPBuffer', "n")
-    command! BDOthers execute '%bdelete|edit #|normal `"'
+    command! CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
     let g:ctrlp_clear_cache_on_exit = 0
     call scommands#map('p', 'CtrlP', "n")
 "" #endregion BW
@@ -314,6 +314,10 @@
                                 \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
                                                     " Make <CR> auto-select the first completion item and notify coc.nvim to
                                                     " format on enter, <cr> could be remapped by other vim plugin
+    xmap <leader>if <Plug>(coc-funcobj-i)
+    omap <leader>if <Plug>(coc-funcobj-i)
+    xmap <leader>af <Plug>(coc-funcobj-a)
+    omap <leader>af <Plug>(coc-funcobj-a)
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> <leader>gd <Plug>(coc-diagnostic-next)
     nmap <silent> <leader>gD <Plug>(coc-diagnostic-prev)
@@ -329,28 +333,23 @@
         vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
         vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
     endif
-    " Use CTRL-S for selections ranges.
-    " Requires 'textDocument/selectionRange' support of language server.
-    nmap <silent> <C-s> <Plug>(coc-range-select)
-    xmap <silent> <C-s> <Plug>(coc-range-select)
-    command! -nargs=0 Format :call CocAction('format')
     command! -nargs=? SETFOLDcoc :call CocAction('fold', <f-args>)
 
-    call scommands#map('<s-tab>', 'Coc', "n,v")
+    call scommands#map('C', 'Coc', "n,v")
     nmap sc :CocList lists<cr>
     nmap Sc :CocListResume<cr>
-    command CLdocumentation         call <sid>show_documentation()
-    command CLrename                call CocActionAsync('rename')
-    command CLrenameFile            exec 'CocCommand workspace.renameCurrentFile'
-    command CLjsdoc                 exec 'CocCommand docthis.documentThis'
-    command CLcodeactionCursor      call CocActionAsync('codeAction', 'cursor')
-    command CLfixCodeQuick          call CocActionAsync('doQuickfix')
+    command CLhelpCocPlug         call feedkeys(':<c-u>help <Plug>(coc	', 'tn')
+    command CLhelpCocAction       call feedkeys(':<c-u>help CocAction(''	', 'tn')
+    command CLdocumentation       call <sid>show_documentation()
+    command CLrename              call CocActionAsync('rename')
+    command CLrenameFile          exec 'CocCommand workspace.renameCurrentFile'
+    command CLjsdoc               exec 'CocCommand docthis.documentThis'
+    command CLcodeactionCursor    call CocActionAsync('codeAction', 'cursor')
+    command CLfixCodeQuick        call CocActionAsync('doQuickfix')
     command JUMPdefinition        call CocActionAsync('jumpDefinition')
     command JUMPtype              call CocActionAsync('jumpTypeDefinition')
     command JUMPimplementation    call CocActionAsync('jumpImplementation')
     command JUMPreferences        call CocActionAsync('jumpReferences')
-    nnoremap <F8>      :<C-u>CocNext<CR>
-    nnoremap [19;2~  :<C-u>CocPrev<CR>
     
     nmap <leader>/ :CocSearch 
     nmap <leader>? <leader>/
@@ -372,6 +371,7 @@
 
 " #region T – TODO
 " [iloginow/vim-stylus: A better vim plugin for stylus, including proper and up-to-date syntax highligting, indentation and autocomplete](https://github.com/iloginow/vim-stylus)
+" [Create custom source · neoclide/coc.nvim Wiki](https://github.com/neoclide/coc.nvim/wiki/Create-custom-source)
 " #endregion T
 
 " vim: set tabstop=4 shiftwidth=4 textwidth=250 expandtab :
