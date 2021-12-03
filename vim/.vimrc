@@ -67,7 +67,7 @@
     set showcmd                                                                             " Show size of visual selection
     set cmdheight=2                                                             " Give more space for displaying messages.
     set wildmenu                                                                  " Tab autocomplete in command mode
-    set wildmode=list:longest,list:lastused,list:full
+    set wildmode=list:longest,list:full
     set showmode
     set laststatus=2                                                                           " Show status line on startup
     let g:statusline_echo= ''
@@ -98,8 +98,9 @@
         set undofile
     catch
     endtry
-    set statusline+=:%{get(g:,'this_session_name','')}\ 
-    command! -nargs=1 CLSESSIONCreate :call mini_sessions#create(<f-args>)
+    set sessionoptions-=options
+    set statusline+=:%{mini_sessions#name('–')}\ 
+    command! -nargs=1 CLSESSIONcreate :call mini_sessions#create(<f-args>)
     command CLSESSIONload :call mini_sessions#open()
     command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
 "" #endregion HS
