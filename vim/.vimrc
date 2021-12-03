@@ -158,9 +158,10 @@
     nnoremap <silent> <leader>" :call jaandrle_utils#copyRegister()<cr>
 "" #endregion C
 "" #region N – Navigation throught Buffers + Windows + … (CtrlP)
-    nmap sB :buffers<CR>:b<Space>
-    call scommands#map('b', 'CtrlPBuffer', "n")
+    nmap sB :buffers<cr>:b<space>
+    nmap sb :CtrlPBuffer<cr>
     command! CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
+    command! ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg', 'tn')
     let g:ctrlp_clear_cache_on_exit = 0
     call scommands#map('p', 'CtrlP', "n")
 "" #endregion BW
