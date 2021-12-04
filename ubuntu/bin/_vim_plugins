@@ -29,6 +29,11 @@ EOF
     exit 0
 fi
 
+if [[ "$action" = "--path" ]]; then
+    echo $plugin_path
+    exit 0
+fi
+
 if [[ "$action" = "--init" ]]; then
     mkdir -p $plugin_path
     mkdir -p ${plugin_path}__one_files

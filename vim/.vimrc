@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-12-02 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-12-04 (VIM >=8.1)
 "" #region B – Base
     let $BASH_ENV = "~/.bashrc"
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
@@ -101,7 +101,8 @@
     set sessionoptions-=options
     set statusline+=:%{mini_sessions#name('–')}\ 
     command! -nargs=1 CLSESSIONcreate :call mini_sessions#create(<f-args>)
-    command CLSESSIONload :call mini_sessions#open()
+    command! CLSESSIONconfig :call mini_sessions#sessionConfig()
+    command -nargs=? CLSESSIONload :call mini_sessions#open(<f-args>)
     command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
 "" #endregion HS
 "" #region LLW – Left Column + Line + Wrap

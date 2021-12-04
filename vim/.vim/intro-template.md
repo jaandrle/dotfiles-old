@@ -21,7 +21,7 @@
 
 
 ## Rychlá navigace na této stránce
-- `w`: Otevřít *sezení* (viz `:CLsessionLoad`)
+- `w`: Otevřít *sezení* (viz `:CLsessionLoad`), `W` zkratka pro vyfiltrování jen pracovních
 - Otevřít soubor:
     - `o`: *dříve otevřený* (viz `:help oldfiles<Enter>`)
     - `e`: *prázdný*
@@ -43,6 +43,7 @@ nnoremap <buffer><silent> e :bd<cr>
 nnoremap <buffer><silent> p :bd<bar>normal "+p<cr>
 nnoremap <buffer><silent> o :ALToldfiles<cr>
 nnoremap <buffer><silent> w :CLSESSIONload<cr>
+nnoremap <buffer><silent> W :CLSESSIONload work_<cr>
 nnoremap <buffer><silent> m :marks<cr>
 nnoremap <buffer> P /region<cr>za
 nnoremap <buffer><silent> c :e ~/.vim/intro-template.md<cr>
