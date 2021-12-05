@@ -8,7 +8,6 @@
     set lazyredraw                                                                          " Reduce the redraw frequency
     set ttyfast                                                                 " Send more characters in fast terminals
     set noerrorbells novisualbell
-    set shortmess=
     set title
     colorscheme codedark
     let mapleader = "\\"
@@ -38,23 +37,24 @@
     
     nnoremap <leader>t :silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &<cr>
 "" #endregion B
-"" #region S – Remap 'sS' (primary s<tab>)
+"" #region H – Helpers + remap 'sS' (primary s<tab>, see `vim-scommands`)
     nmap sh<leader> :map <leader><cr>
     nmap shh        :call feedkeys(":map! \<c-u\> \| map \<c-up\> \| map \<c-down\>")<cr>
     call scommands#map('<tab>', 'CL', "n,v")
+    
     call scommands#map('S', 'SET', "n,v")
-    call scommands#map('a', 'ALT', "n,V")
-    call scommands#map('n', 'JUMP', "n")
-"" #endregion S
-"" #region H – Helpers
     function s:SetToggle(option)
         let cmd= ' set '.a:option.'! | set '.a:option.'?'
         execute 'command! SETTOGGLE'.a:option.cmd
     endfunction
+    
+    call scommands#map('a', 'ALT', "n,V")
     command! -complete=command -bar -range -nargs=+ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
     command! -complete=command -bar -range -nargs=+ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
+    " ALTlgrep onchange -r . --include=*.\{js,md\}
     command! -nargs=+ -complete=file_in_path -bar ALTgrep  cgetexpr jaandrle_utils#grep(<f-args>)
     command! -nargs=+ -complete=file_in_path -bar ALTlgrep lgetexpr jaandrle_utils#grep(<f-args>)
+    
     augroup quickfix
         autocmd!
         autocmd QuickFixCmdPost cgetexpr cwindow
@@ -63,20 +63,19 @@
                     \| call setloclist(0, [], 'a', {'title': ':' . g:jaandrle_utils#last_command})
     augroup END
 "" #endregion H
-"" #region SL – Status Line + Command Line + …
+"" #region SLH – Status Line + Command Line + History (general) + Sessions + File Update, …
     set showcmd                                                                             " Show size of visual selection
     set cmdheight=2                                                             " Give more space for displaying messages.
-    set wildmenu                                                                  " Tab autocomplete in command mode
-    set wildmode=list:longest,list:full
+    set wildmenu wildmode=list:longest,list:full                                        " Tab autocomplete in command mode
     set showmode
+    
+    set sessionoptions-=options
+    command! -nargs=1 CLSESSIONcreate :call mini_sessions#create(<f-args>)
+    command! CLSESSIONconfig :call mini_sessions#sessionConfig()
+    command -nargs=? CLSESSIONload :call mini_sessions#open(<f-args>)
+    command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
+    
     set laststatus=2                                                                           " Show status line on startup
-    let g:statusline_echo= ''
-    function! SLE(msg)
-        let g:statusline_echo= a:msg!='' ? ' ' : ''
-        let g:statusline_echo.= a:msg
-    endfunction
-    set statusline+=%{get(g:,'statusline_echo','\ ')}
-    set statusline+=%{coc#status()}\ %{get(b:,'coc_current_function','')}\ 
     set statusline+=\ %c:%l\/%L\ 
     set statusline+=%=
     set statusline+=%<%F
@@ -84,8 +83,8 @@
     set statusline+=%{&fileformat}
     set statusline+=·%{&fileencoding?&fileencoding:&encoding}
     set statusline+=·%{&filetype}\ 
-"" #endregion SL
-"" #region HS – History (general) + Sessions + File Update
+    set statusline+=:%{mini_sessions#name('–')}\ 
+    
     nmap <s-u> <c-r>
     set nobackup nowritebackup                                      " Some servers have issues with backup files, see #649.
                                                                     " Return to last edit position when opening files (You want this!)
@@ -98,44 +97,29 @@
         set undofile
     catch
     endtry
-    set sessionoptions-=options
-    set statusline+=:%{mini_sessions#name('–')}\ 
-    command! -nargs=1 CLSESSIONcreate :call mini_sessions#create(<f-args>)
-    command! CLSESSIONconfig :call mini_sessions#sessionConfig()
-    command -nargs=? CLSESSIONload :call mini_sessions#open(<f-args>)
-    command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
-"" #endregion HS
-"" #region LLW – Left Column + Line + Wrap
+"" #endregion SLH
+"" #region LLW – Left Column + Line + Wrap + Scrolling
     if has("nvim-0.5.0") || has("patch-8.1.1564")           " Recently vim can merge signcolumn and number column into one
-        set signcolumn=number
-    else
-        set signcolumn=yes
+        set signcolumn=number | else | set signcolumn=yes
     endif      " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
     set cursorline                                                                        " Always show current position
     set ruler
-    set colorcolumn=+1                                                                                  " …marker visual
     set number                                                                                        " Enable line numbers
     call <sid>SetToggle('relativenumber')
     set foldcolumn=2                                                                   " Add a bit extra margin to the left
-    set textwidth=250                                                                                   " Line width marker
     set nowrap                                                                                      " Don't wrap long lines
-    set colorcolumn=120,240
+    set colorcolumn=+1                                                                                  " …marker visual
     command -nargs=? SETtextwidth if <q-args> | let &textwidth=<q-args> | let &colorcolumn='<args>,120,240' | else | let &textwidth=250 | let &colorcolumn='120,240' | endif
+    SETtextwidth                                                                    " wraping lines and show two lines
     call <sid>SetToggle('wrap')
-    set breakindent
-    set breakindentopt=shift:2
-    set showbreak=↳ 
-"" #endregion LLW
-"" #region SW – Scrolling + White chars
+    set breakindent breakindentopt=shift:2 showbreak=↳ 
+    
     set scrolloff=5                                                                  " Leave lines of buffer when scrolling
     set sidescrolloff=10                                             " Leave characters of horizontal buffer when scrolling
     for l in [ 'r', 'R', 'l', 'L' ]                " Disable scrollbars (real hackers don't use scrollbars for navigation!)
         exec ':set guioptions-='.l
     endfor
-    set list                                                            " Highlight spec. chars / Display extra whitespace
-    set listchars=tab:»·,trail:·,extends:#,nbsp:~,space:·
-    call <sid>SetToggle('list')
-"" #endregion S
+"" #endregion LLW
 "" #region F – Folds
     set foldmarker=#region,#endregion
     augroup remember_folds
@@ -154,19 +138,18 @@
     nnoremap <silent> <leader>zn zc:call jaandrle_utils#fold_nextOpen('j')<cr>
     nnoremap <silent> <leader>zN zc:call jaandrle_utils#fold_nextOpen('k')<cr>
 "" #endregion F
-"" #region C – Clipboard
+"" #region CN – Clipboard + Navigation throught Buffers + Windows + … (CtrlP)
     nnoremap <F2> :set invpaste paste?<CR>
     set pastetoggle=<F2>
     nnoremap <silent> <leader>" :call jaandrle_utils#copyRegister()<cr>
-"" #endregion C
-"" #region N – Navigation throught Buffers + Windows + … (CtrlP)
+    
     nmap sB :buffers<cr>:b<space>
     nmap sb :CtrlPBuffer<cr>
     command! CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
     command! ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg', 'tn')
     let g:ctrlp_clear_cache_on_exit = 0
     call scommands#map('p', 'CtrlP', "n")
-"" #endregion BW
+"" #endregion CN
 "" #region FOS – File(s) + Openning + Saving
     set autowrite autoread
     autocmd FocusGained,BufEnter *.* checktime                                                          " …still autoread
@@ -197,11 +180,11 @@
     call jaandrle_utils#MapSmartKey('Home')
     call jaandrle_utils#MapSmartKey('End')
 
-    set hlsearch                                                                                " Highlight search results
-    set ignorecase smartcase infercase                                             " Search queries intelligently set case
-    set incsearch                                                                        " Show search results as you type
+    set hlsearch incsearch ignorecase smartcase         " highlight search, start when typing, ignore case unless [A-Z]
+    set infercase
     nmap <silent>ú :nohlsearch<bar>diffupdate<cr>
 
+    call scommands#map('n', 'JUMP', "n")
     command JUMPmotion            call jaandrle_utils#gotoJumpChange('jump')
     command JUMPchanges           call jaandrle_utils#gotoJumpChange('change')
     command JUMPlistC     call jaandrle_utils#gotoJumpListCL('c')
@@ -220,9 +203,9 @@
         \  'lines': execute('g<bang>/' .. <q-args> .. '/#')
         \           ->split('\n')
         \           ->map({_, val -> expand("%") .. ":" .. trim(val, 1)})
-        \ })
+        \ }) | lopen
 "" #endregion EN
-"" #region EA – Editing adjustment
+"" #region EA – Editing adjustment + White chars
     let g:highlightedyank_highlight_duration= 250
     set showmatch                                               " Quick highlight oppening bracket/… for currently writted
     command! SETTOGGLErainbowParentheses call rainbow_parentheses#toggle()
@@ -238,6 +221,9 @@
     if v:version > 703 || v:version == 703 && has("patch541")
       set formatoptions+=j " Delete comment character when joining commented lines
     endif
+    set list                                                            " Highlight spec. chars / Display extra whitespace
+    set listchars=tab:»·,trail:·,extends:#,nbsp:~,space:·
+    call <sid>SetToggle('list')
     set expandtab smarttab                                                        " Use spaces instead of tabs and be smart
     call <sid>SetToggle('expandtab')
     command! -nargs=1 SETtab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
@@ -342,6 +328,7 @@
     call scommands#map('C', 'Coc', "n,v")
     nmap sc :CocList lists<cr>
     nmap Sc :CocListResume<cr>
+    command CLcurrentCoc echomsg coc#status() CocAction("getCurrentFunctionSymbol")
     command CLhelpCocPlug         call feedkeys(':<c-u>help <Plug>(coc	', 'tn')
     command CLhelpCocAction       call feedkeys(':<c-u>help CocAction(''	', 'tn')
     command CLdocumentation       call <sid>show_documentation()
