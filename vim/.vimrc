@@ -51,16 +51,21 @@
     call scommands#map('a', 'ALT', "n,V")
     command! -complete=command -bar -range -nargs=+ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
     command! -complete=command -bar -range -nargs=+ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
-    " ALTlgrep onchange -r . --include=*.\{js,md\}
+    " ALTlgrep onchange -r . --include=*.\{js,md\}          …or https://gist.github.com/romainl/f7e2e506dc4d7827004e4994f1be2df6
+    set grepprg=grep\ -Hn\ $*\ /dev/null
     command! -nargs=+ -complete=file_in_path -bar ALTgrep  cgetexpr jaandrle_utils#grep(<f-args>)
+        \| call setqflist([], 'a', {'title': ':' . g:jaandrle_utils#last_command})
     command! -nargs=+ -complete=file_in_path -bar ALTlgrep lgetexpr jaandrle_utils#grep(<f-args>)
+        \| call setloclist(0, [], 'a', {'title': ':' . g:jaandrle_utils#last_command})
     
     augroup quickfix
         autocmd!
         autocmd QuickFixCmdPost cgetexpr cwindow
-                    \| call setqflist([], 'a', {'title': ':' . g:jaandrle_utils#last_command})
         autocmd QuickFixCmdPost lgetexpr lwindow
-                    \| call setloclist(0, [], 'a', {'title': ':' . g:jaandrle_utils#last_command})
+        autocmd filetype qf
+            \  nnoremap <buffer> ;q :cclose<cr>
+            \| nnoremap <buffer> ;w :cgetbuffer<CR>:cclose<CR>:copen<CR>
+            \| nnoremap <buffer> ;s :cdo s/// \| update<C-Left><C-Left><Left><Left><Left>
     augroup END
 "" #endregion H
 "" #region SLH – Status Line + Command Line + History (general) + Sessions + File Update, …
@@ -196,14 +201,6 @@
     nmap <leader>]D     :call jaandrle_utils#gotoJumpListDI("]", "D")<cr>
 
     nmap sj <Plug>(JumpMotion)
-    " https://gist.github.com/romainl/f7e2e506dc4d7827004e4994f1be2df6
-    command! -bang -nargs=1 JUMPsearch call setloclist(0, [], ' ',
-        \ {'title': 'Global ' .. <q-args>,
-        \  'efm':   '%f:%l\ %m,%f:%l',
-        \  'lines': execute('g<bang>/' .. <q-args> .. '/#')
-        \           ->split('\n')
-        \           ->map({_, val -> expand("%") .. ":" .. trim(val, 1)})
-        \ }) | lopen
 "" #endregion EN
 "" #region EA – Editing adjustment + White chars
     let g:highlightedyank_highlight_duration= 250
