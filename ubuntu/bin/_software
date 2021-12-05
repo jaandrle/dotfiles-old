@@ -15,7 +15,7 @@ if [[ "$action" = "--help" ]]; then
 $this ($this_version) <andrle.jan@centrum.cz>
 Utility for updating my packages managers such as \`npm\`, \`apt\`, \`github-releases\` …
 
-Usage: $this --[help|check|update] [basic|advanced]
+Usage: $this --[help|check|update] [basic|dangerous]
   [default] --help: show this text
            --check: check updates
           --update: update all
@@ -23,7 +23,7 @@ Usage: $this --[help|check|update] [basic|advanced]
 
   modificators:
   [default]    basic: checks/updates regular packages managers
-            advanced: ↘+also \`pip\`
+           dangerous: ↘+also \`pip\`
 EOF
     exit 0
 fi
@@ -34,7 +34,7 @@ if [[ "$action" = "--list" ]]; then
     echo _vim_plugins – updates only
     echo snap – updates only
     echo flatpak – updates only
-    echo pip [advanced]
+    echo pip [dangerous]
     exit 0
 fi
 modificator="${2:-basic}"

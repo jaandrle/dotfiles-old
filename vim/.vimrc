@@ -299,6 +299,7 @@
         \ 'coc-snippets',
         \ 'coc-tsserver'
     \]
+    autocmd FileType scss setl iskeyword+=@-@
 
     inoremap <silent><expr> <TAB>
         \ pumvisible() ? "\<C-n>" :
@@ -373,8 +374,11 @@
 "" #endregion COC
 
 " #region T – TODO
-" [iloginow/vim-stylus: A better vim plugin for stylus, including proper and up-to-date syntax highligting, indentation and autocomplete](https://github.com/iloginow/vim-stylus)
-" [Create custom source · neoclide/coc.nvim Wiki](https://github.com/neoclide/coc.nvim/wiki/Create-custom-source)
+" 1) Stylus
+"     - [iloginow/vim-stylus: A better vim plugin for stylus, including proper and up-to-date syntax highligting, indentation and autocomplete](https://github.com/iloginow/vim-stylus)
+"     - [sheerun/vim-polyglot: A solid language pack for Vim.](https://github.com/sheerun/vim-polyglot)
+" 1) [Create custom source · neoclide/coc.nvim Wiki](https://github.com/neoclide/coc.nvim/wiki/Create-custom-source)
+" 1) coc-*: viml, svg
 " #endregion T
 
 " vim: set tabstop=4 shiftwidth=4 textwidth=250 expandtab :
