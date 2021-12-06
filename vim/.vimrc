@@ -37,7 +37,7 @@
     
     nnoremap <leader>t :silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &<cr>
 "" #endregion B
-"" #region H – Helpers + remap 'sS' (primary s<tab>, see `vim-scommands`), compilers
+"" #region H – Helpers + remap 'sS' (primary s<tab>, see `vim-scommands`)
     nmap sh<leader> :map <leader><cr>
     nmap shh        :call feedkeys(":map! \<c-u\> \| map \<c-up\> \| map \<c-down\>")<cr>
     call scommands#map('<tab>', 'CL', "n,v")
@@ -49,22 +49,36 @@
     endfunction
     
     call scommands#map('a', 'ALT', "n,V")
-    command -nargs=? ALTmake
-        \  if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
-        \| if <q-args>!='' | silent make <args> | else | silent make % | endif | checktime | silent redraw! | JUMPlistC        " …prev line, hotfix (filetype detection does’t works)
     command! -complete=command -bar -range -nargs=+ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
     command! -complete=command -bar -range -nargs=+ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
     " ALTlgrep onchange -r . --include=*.\{js,md\}          …or https://gist.github.com/romainl/f7e2e506dc4d7827004e4994f1be2df6
     set grepprg=grep\ -Hn\ $*\ /dev/null
     command! -nargs=+ -complete=file_in_path -bar ALTgrep  cgetexpr jaandrle_utils#grep(<f-args>)
         \| call setqflist([], 'a', {'title': ':' . g:jaandrle_utils#last_command})
-        \| JUMPlistC
     command! -nargs=+ -complete=file_in_path -bar ALTlgrep lgetexpr jaandrle_utils#grep(<f-args>)
         \| call setloclist(0, [], 'a', {'title': ':' . g:jaandrle_utils#last_command})
-        \| JUMPlistL
     
+    let g:quickfix_len= 0
+    function! QuickFixStatus() abort
+        hi link User1 None
+        if !g:quickfix_len  | return 'Ø' | endif
+        if g:quickfix_len>0 | return g:quickfix_len | endif
+        hi link User1 WarningMsg
+        return -g:quickfix_len
+    endfunction
+    function! s:QuickFixCmdPost() abort
+        let q_len= len(getqflist())
+        let g:quickfix_len= q_len ? -q_len : len(getloclist(0))
+        let letter= q_len ? 'c' : 'l'
+        if g:quickfix_len
+            execute 'command! ALTopenLastCL '.letter.'open'
+        else
+            execute letter.'close'
+        endif
+    endfunction
     augroup quickfix
         autocmd!
+        autocmd QuickFixCmdPost * call <sid>QuickFixCmdPost()
         autocmd filetype qf
             \  if filter(getwininfo(), {i,v -> v.winnr == winnr()})[0].loclist
             \|      nnoremap <buffer> ;q :lclose<cr>
@@ -90,14 +104,15 @@
     command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
     
     set laststatus=2                                                                           " Show status line on startup
-    set statusline+=\ %c:%l\/%L\ 
+    set statusline+=\ %1*Ξ%{QuickFixStatus()}%*
+    set statusline+=\ ∷%c:%l\/%L\ 
     set statusline+=%=
     set statusline+=%<%F
     set statusline+=%R\%M\ 
-    set statusline+=%{&fileformat}
+    set statusline+=▶%{&fileformat}
     set statusline+=·%{&fileencoding?&fileencoding:&encoding}
     set statusline+=·%{&filetype}\ 
-    set statusline+=:%{mini_sessions#name('–')}\ 
+    set statusline+=≡%{mini_sessions#name('–')}\ 
     
     nmap <s-u> <c-r>
     set nobackup nowritebackup                                      " Some servers have issues with backup files, see #649.
@@ -257,7 +272,7 @@
     endif
     command SETfileformatDOS2UNIX update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
-"" #region COC – COC, git and so on
+"" #region COC – COC, git and so on, compilers
     call scommands#map('g', 'GIT', "n")
     command GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
         \| setlocal filetype=git
@@ -286,6 +301,10 @@
         \ 'coc-tsserver'
     \]
     autocmd FileType scss setl iskeyword+=@-@
+    command -nargs=? ALTmake
+        \  if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
+        \| if <q-args>!='' | silent make <args> | else | silent make % | endif | checktime | silent redraw!        " …prev line, hotfix (filetype detection does’t works)
+    autocmd BufWritePost *.{php,js} execute 'ALTmake' | call <sid>QuickFixCmdPost()
 
     inoremap <silent><expr> <TAB>
         \ pumvisible() ? "\<C-n>" :
