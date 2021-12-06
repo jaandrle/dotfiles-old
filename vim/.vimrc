@@ -65,7 +65,7 @@
         autocmd filetype qf
             \  nnoremap <buffer> ;q :cclose<cr>
             \| nnoremap <buffer> ;w :cgetbuffer<CR>:cclose<CR>:copen<CR>
-            \| nnoremap <buffer> ;s :cdo s/// \| update<C-Left><C-Left><Left><Left><Left>
+            \| nnoremap <buffer> ;s :cdo s///gc \| update<c-left><c-left><c-left><right><right>
     augroup END
 "" #endregion H
 "" #region SLH – Status Line + Command Line + History (general) + Sessions + File Update, …
@@ -185,8 +185,7 @@
     call jaandrle_utils#MapSmartKey('Home')
     call jaandrle_utils#MapSmartKey('End')
 
-    set hlsearch incsearch ignorecase smartcase         " highlight search, start when typing, ignore case unless [A-Z]
-    set infercase
+    set hlsearch incsearch                                                        " highlight search, start when typing
     nmap <silent>ú :nohlsearch<bar>diffupdate<cr>
 
     call scommands#map('n', 'JUMP', "n")
@@ -262,9 +261,10 @@
     command -nargs=? GITpush ALTredir !git push <args>
     command -nargs=? GITonlyCommit !git commit -v <args>
     command -nargs=? GITonlyAdd !git status & git add -i <args>
-    augroup JSLinting
+    augroup Linting
         autocmd!
         autocmd FileType javascript compiler jshint
+        autocmd FileType php compiler php-simple
         autocmd QuickFixCmdPost [^l]* cwindow
     augroup END
     command ALTmake silent make | checktime | silent redraw!

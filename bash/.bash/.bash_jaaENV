@@ -1,5 +1,15 @@
 function jaaENV {
+    if [ "$1" = "--ls" ]; then
+        echo ":: nvm ls ::\n"
+        nvm ls
+        echo ":: find /usr/bin/ -name php* ::\n"
+        find /usr/bin/ -name php*
+        echo ":: sdk ls gradle | cat :: "
+        sdk ls gradle | cat
+        return 0
+    fi
     . ./.jaaENV
     if [ ! -z ${nodejs+x} ]; then nvm use $nodejs; fi
     if [ ! -z ${gradle+x} ]; then sdk use gradle $gradle; fi
+    if [ ! -z ${php+x} ];    then sudo update-alternatives --set php /usr/bin/php$php; fi
 }
