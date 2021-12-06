@@ -209,6 +209,7 @@
     set showmatch                                               " Quick highlight oppening bracket/… for currently writted
     command! SETTOGGLErainbowParentheses call rainbow_parentheses#toggle()
     let g:rainbow#pairs = [['(', ')'], ['[', ']'], [ '{', '}' ]]
+    let g:rainbow#blacklist = [203]
     set timeoutlen=1000 ttimeoutlen=0                                                  " Remove timeout when hitting escape
     set completeopt=menuone,preview,noinsert,noselect
     set backspace=indent,eol,start                  " Allow cursor keys in insert mode:  http://vi.stackexchange.com/a/2163
