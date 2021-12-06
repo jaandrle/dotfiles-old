@@ -37,7 +37,7 @@
     
     nnoremap <leader>t :silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &<cr>
 "" #endregion B
-"" #region H – Helpers + remap 'sS' (primary s<tab>, see `vim-scommands`)
+"" #region H – Helpers + remap 'sS' (primary s<tab>, see `vim-scommands`), compilers
     nmap sh<leader> :map <leader><cr>
     nmap shh        :call feedkeys(":map! \<c-u\> \| map \<c-up\> \| map \<c-down\>")<cr>
     call scommands#map('<tab>', 'CL', "n,v")
@@ -49,19 +49,22 @@
     endfunction
     
     call scommands#map('a', 'ALT', "n,V")
+    command -nargs=? ALTmake
+        \  if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif        " hotfix (filetype detection does’t works)
+        \| if <q-args>!='' | silent make <args> | else | silent make % | endif | checktime | silent redraw! | copen
     command! -complete=command -bar -range -nargs=+ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
     command! -complete=command -bar -range -nargs=+ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
     " ALTlgrep onchange -r . --include=*.\{js,md\}          …or https://gist.github.com/romainl/f7e2e506dc4d7827004e4994f1be2df6
     set grepprg=grep\ -Hn\ $*\ /dev/null
     command! -nargs=+ -complete=file_in_path -bar ALTgrep  cgetexpr jaandrle_utils#grep(<f-args>)
         \| call setqflist([], 'a', {'title': ':' . g:jaandrle_utils#last_command})
+        \| copen
     command! -nargs=+ -complete=file_in_path -bar ALTlgrep lgetexpr jaandrle_utils#grep(<f-args>)
         \| call setloclist(0, [], 'a', {'title': ':' . g:jaandrle_utils#last_command})
+        \| lopen
     
     augroup quickfix
         autocmd!
-        autocmd QuickFixCmdPost cgetexpr cwindow
-        autocmd QuickFixCmdPost lgetexpr lwindow
         autocmd filetype qf
             \  nnoremap <buffer> ;q :cclose<cr>
             \| nnoremap <buffer> ;w :cgetbuffer<CR>:cclose<CR>:copen<CR>
@@ -247,7 +250,7 @@
     endif
     command SETfileformatDOS2UNIX update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
-"" #region COC – COC, code linting, git and so on
+"" #region COC – COC, git and so on
     call scommands#map('g', 'GIT', "n")
     command GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
         \| setlocal filetype=git
@@ -261,13 +264,6 @@
     command -nargs=? GITpush ALTredir !git push <args>
     command -nargs=? GITonlyCommit !git commit -v <args>
     command -nargs=? GITonlyAdd !git status & git add -i <args>
-    augroup Linting
-        autocmd!
-        autocmd FileType javascript compiler jshint
-        autocmd FileType php compiler php-simple
-        autocmd QuickFixCmdPost [^l]* cwindow
-    augroup END
-    command ALTmake silent make | checktime | silent redraw!
 
     let g:coc_global_extensions= [
         \ 'coc-css',
