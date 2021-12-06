@@ -50,25 +50,31 @@
     
     call scommands#map('a', 'ALT', "n,V")
     command -nargs=? ALTmake
-        \  if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif        " hotfix (filetype detection does’t works)
-        \| if <q-args>!='' | silent make <args> | else | silent make % | endif | checktime | silent redraw! | copen
+        \  if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
+        \| if <q-args>!='' | silent make <args> | else | silent make % | endif | checktime | silent redraw! | JUMPlistC        " …prev line, hotfix (filetype detection does’t works)
     command! -complete=command -bar -range -nargs=+ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
     command! -complete=command -bar -range -nargs=+ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
     " ALTlgrep onchange -r . --include=*.\{js,md\}          …or https://gist.github.com/romainl/f7e2e506dc4d7827004e4994f1be2df6
     set grepprg=grep\ -Hn\ $*\ /dev/null
     command! -nargs=+ -complete=file_in_path -bar ALTgrep  cgetexpr jaandrle_utils#grep(<f-args>)
         \| call setqflist([], 'a', {'title': ':' . g:jaandrle_utils#last_command})
-        \| copen
+        \| JUMPlistC
     command! -nargs=+ -complete=file_in_path -bar ALTlgrep lgetexpr jaandrle_utils#grep(<f-args>)
         \| call setloclist(0, [], 'a', {'title': ':' . g:jaandrle_utils#last_command})
-        \| lopen
+        \| JUMPlistL
     
     augroup quickfix
         autocmd!
         autocmd filetype qf
-            \  nnoremap <buffer> ;q :cclose<cr>
-            \| nnoremap <buffer> ;w :cgetbuffer<CR>:cclose<CR>:copen<CR>
-            \| nnoremap <buffer> ;s :cdo s///gc \| update<c-left><c-left><c-left><right><right>
+            \  if filter(getwininfo(), {i,v -> v.winnr == winnr()})[0].loclist
+            \|      nnoremap <buffer> ;q :lclose<cr>
+            \|      nnoremap <buffer> ;w :lgetbuffer<CR>:lclose<CR>:lopen<CR>
+            \|      nnoremap <buffer> ;s :ldo s///gc \| update<c-left><c-left><c-left><right><right>
+            \| else
+            \|      nnoremap <buffer> ;q :cclose<cr>
+            \|      nnoremap <buffer> ;w :cgetbuffer<CR>:cclose<CR>:copen<CR>
+            \|      nnoremap <buffer> ;s :cdo s///gc \| update<c-left><c-left><c-left><right><right>
+            \| endif
     augroup END
 "" #endregion H
 "" #region SLH – Status Line + Command Line + History (general) + Sessions + File Update, …
