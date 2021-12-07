@@ -60,10 +60,11 @@
     
     let g:quickfix_len= 0
     function! QuickFixStatus() abort
-        hi link User1 None
+        hi! link User1 StatusLine
         if !g:quickfix_len  | return 'Ø' | endif
         if g:quickfix_len>0 | return g:quickfix_len | endif
-        hi link User1 WarningMsg
+        execute 'hi! User1 ctermbg='.synIDattr(synIDtrans(hlID('StatusLine')), 'bg', 'cterm').
+            \' ctermfg='.synIDattr(synIDtrans(hlID('WarningMsg')), 'fg', 'cterm')
         return -g:quickfix_len
     endfunction
     function! s:QuickFixCmdPost() abort
@@ -104,15 +105,15 @@
     command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
     
     set laststatus=2                                                                           " Show status line on startup
-    set statusline+=\ %1*Ξ%{QuickFixStatus()}%*
-    set statusline+=\ ∷%c:%l\/%L\ 
+    set statusline+=··%1*Ξ·%{QuickFixStatus()}%*
+    set statusline+=··∷·%c:%l\/%L··
     set statusline+=%=
     set statusline+=%<%F
-    set statusline+=%R\%M\ 
-    set statusline+=▶%{&fileformat}
+    set statusline+=%R\%M··
+    set statusline+=▶·%{&fileformat}
     set statusline+=·%{&fileencoding?&fileencoding:&encoding}
-    set statusline+=·%{&filetype}\ 
-    set statusline+=≡%{mini_sessions#name('–')}\ 
+    set statusline+=·%{&filetype}··
+    set statusline+=≡·%{mini_sessions#name('–')}·· 
     
     nmap <s-u> <c-r>
     set nobackup nowritebackup                                      " Some servers have issues with backup files, see #649.
