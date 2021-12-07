@@ -106,7 +106,6 @@
     
     set laststatus=2                                                                           " Show status line on startup
     set statusline+=··%1*Ξ·%{QuickFixStatus()}%*
-    set statusline+=··∷·%c:%l\/%L··
     set statusline+=%=
     set statusline+=%<%F
     set statusline+=%R\%M··
@@ -274,6 +273,7 @@
     command SETfileformatDOS2UNIX update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
 "" #region COC – COC, git and so on, compilers
+    """ #region GIT
     call scommands#map('g', 'GIT', "n")
     command GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
         \| setlocal filetype=git
@@ -288,26 +288,15 @@
     command -nargs=? GITpush ALTredir !git push <args>
     command -nargs=? GITonlyCommit !git commit -v <args>
     command -nargs=? GITonlyAdd !git status & git add -i <args>
-
-    let g:coc_global_extensions= [
-        \ 'coc-css',
-        \ 'coc-docthis',
-        \ 'coc-emmet',
-        \ 'coc-emoji',
-        \ 'coc-html',
-        \ 'coc-json',
-        \ 'coc-marketplace',
-        \ 'coc-phpls',
-        \ 'coc-scssmodules',
-        \ 'coc-snippets',
-        \ 'coc-tsserver'
-    \]
+    """ #endregion GIT
+    let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tsserver' ]
     autocmd FileType scss setl iskeyword+=@-@
     command -nargs=? ALTmake
         \  if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
         \| if <q-args>!='' | silent make <args> | else | silent make % | endif | checktime | silent redraw!        " …prev line, hotfix (filetype detection does’t works)
     autocmd BufWritePost *.{php,js} execute 'ALTmake' | call <sid>QuickFixCmdPost()
 
+    """ #region Coc completion
     inoremap <silent><expr> <TAB>
         \ pumvisible() ? "\<C-n>" :
         \ <SID>check_back_space() ? "\<TAB>" :
@@ -325,6 +314,7 @@
                                 \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
                                                     " Make <CR> auto-select the first completion item and notify coc.nvim to
                                                     " format on enter, <cr> could be remapped by other vim plugin
+    """ #endregion Coc completion
     xmap <leader>if <Plug>(coc-funcobj-i)
     omap <leader>if <Plug>(coc-funcobj-i)
     xmap <leader>af <Plug>(coc-funcobj-a)
@@ -335,6 +325,7 @@
                     " navigate diagnostics, use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
     nnoremap <silent> gh :call <SID>show_documentation()<CR>
     autocmd CursorHold * silent call CocActionAsync('highlight')
+    """ #region Coc popups scroll (not working for me now, newer version if Vim)
                                                         " Highlight the symbol and its references when holding the cursor.
     if has('nvim-0.4.0') || has('patch-8.2.0750')                   " Remap <C-f> and <C-b> for scroll float windows/popups.
         nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
@@ -344,12 +335,17 @@
         vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
         vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
     endif
+    """ #endregion Coc popups scroll (not working for me now, newer version if Vim)
     command! -nargs=? SETFOLDcoc :call CocAction('fold', <f-args>)
 
     call scommands#map('C', 'Coc', "n,v")
     nmap sc :CocList lists<cr>
     nmap Sc :CocListResume<cr>
-    command CLcurrentCoc echomsg coc#status() CocAction("getCurrentFunctionSymbol")
+    command CLwhereami            echo      '▶File:'expand('%:t')
+                                          \ '▶Coc(state/function): 'coc#status()'/'CocAction("getCurrentFunctionSymbol")
+                                          \ '▶Line:'line('.')'/'line('$')
+                                          \ '▶Cursor:'col('.')'/'col('$')
+                                          \ '▶Another info via g<c-g> (also in visual) or <c-g>'
     command CLhelpCocPlug         call feedkeys(':<c-u>help <Plug>(coc	', 'tn')
     command CLhelpCocAction       call feedkeys(':<c-u>help CocAction(''	', 'tn')
     command CLdocumentation       call <sid>show_documentation()

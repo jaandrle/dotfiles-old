@@ -8,6 +8,8 @@ BASH_DOTFILES=$HOME/.bash
 [ -f $BASH_DOTFILES/.bash_aliases ] && . $BASH_DOTFILES/.bash_aliases
 shopt -s expand_aliases
 
+[ -f $BASH_DOTFILES/.bash_jaaENV ] && . $BASH_DOTFILES/.bash_jaaENV
+[ -f $BASH_DOTFILES/.bash_sdkman ] && . $BASH_DOTFILES/.bash_sdkman
 [ -f $BASH_DOTFILES/.bash_nvm ] && . $BASH_DOTFILES/.bash_nvm
 
 [[ $- != *i* ]] && return                   # If not running interactively, don't do anything
@@ -24,7 +26,6 @@ export HISTCONTROL=ignoreboth:erasedups     # No duplicate entries and started w
 shopt -s histappend cmdhist                 # saving multiline + append
 export HISTSIZE=1000                        # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 export HISTFILESIZE=2000
-
 
 ## UI/UX
                                     # clors for .inputrc (set colored-stats On)
@@ -51,6 +52,3 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-
-[ -f $BASH_DOTFILES/.bash_sdkman ] && . $BASH_DOTFILES/.bash_sdkman
-[ -f $BASH_DOTFILES/.bash_jaaENV ] && . $BASH_DOTFILES/.bash_jaaENV
