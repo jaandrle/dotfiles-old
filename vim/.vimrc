@@ -279,7 +279,8 @@
         \| setlocal filetype=git
         \| $normal oTips: You can use `gf` to navigate into files. Also `;e` for reload or `;q` for `:bd`.
     command -nargs=? GITcommit !clear && git status & git commit --interactive -v <args>
-    command GITrestoreThis !git status %:p -s & git restore %:p --patch
+    command GITrestoreThis !clear && git status %:p -s & git restore %:p --patch
+    command -nargs=? GITdiff if <q-args>=='' | silent! execute 'ALTredirKeep !git diff %:p' | else | execute 'ALTredirKeep !git diff <args>' | endif | setlocal filetype=git
     command GITlog silent! execute 'ALTredirKeep !git log --date=iso' | setlocal filetype=git
     command GITlogList !git log-list
     command -nargs=? GITfetch ALTredir !git fetch <args>
