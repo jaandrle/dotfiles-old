@@ -105,14 +105,14 @@
     command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
     
     set laststatus=2                                                                           " Show status line on startup
-    set statusline+=··%1*Ξ·%{QuickFixStatus()}%*
+    set statusline+=··%1*≡·%{QuickFixStatus()}%*··
     set statusline+=%=
     set statusline+=%<%F
     set statusline+=%R\%M··
     set statusline+=▶·%{&fileformat}
     set statusline+=·%{&fileencoding?&fileencoding:&encoding}
     set statusline+=·%{&filetype}··
-    set statusline+=≡·%{mini_sessions#name('–')}·· 
+    set statusline+=∷·%{mini_sessions#name('–')}·· 
     
     nmap <s-u> <c-r>
     set nobackup nowritebackup                                      " Some servers have issues with backup files, see #649.
