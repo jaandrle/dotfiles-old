@@ -21,7 +21,6 @@
     
     nmap <leader>gt <c-]>
     nmap <leader>gT <c-T>
-    nmap <leader>ga <c-^>
     
     set modeline
     command! CLmodelineBasic :call jaandrle_utils#AppendModeline(0)
@@ -163,6 +162,7 @@
     set pastetoggle=<F2>
     nnoremap <silent> <leader>" :call jaandrle_utils#copyRegister()<cr>
     
+    nmap <expr> ¨ buffer_number("#")==-1 ? "sb<cr>" : "\<c-^>"
     nmap sB :buffers<cr>:b<space>
     nmap sb :CtrlPBuffer<cr>
     command! CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
