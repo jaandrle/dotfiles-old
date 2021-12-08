@@ -23,6 +23,7 @@ _vim_plugins --add jaandrle/vim-mini_sessions
 _vim_plugins --add jaandrle/vim-jaandrle_utils
 _vim_plugins --add jaandrle/vim-mini_enhancement
 _vim_plugins --add jaandrle/vim-scommands
+_vim_plugins --add jaandrle/vim-user_tips
 
 mkdir -p ~/.vim/pack/coc/start
 cd ~/.vim/pack/coc/start

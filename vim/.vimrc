@@ -17,16 +17,8 @@
 
     nnoremap ů ;
     nnoremap ; :
-
-    function OnVimEnter()
-        try
-            call rainbow_parentheses#toggle()
-        catch
-        endtry
-    endfunction
-    autocmd VimEnter * :call OnVimEnter()
-
     set runtimepath^=~/.vim/bundle/*
+    
     nmap <leader>gt <c-]>
     nmap <leader>gT <c-T>
     nmap <leader>ga <c-^>
@@ -41,6 +33,9 @@
     nmap sh<leader> :map <leader><cr>
     nmap shh        :call feedkeys(":map! \<c-u\> \| map \<c-up\> \| map \<c-down\>")<cr>
     call scommands#map('<tab>', 'CL', "n,v")
+    command! -nargs=? CLscratch 10split | enew | setlocal buftype=nofile bufhidden=hide noswapfile
+        \| if <q-args>!='' | execute 'normal "'.<q-args>.'p' | endif
+        \| nnoremap <buffer> ;q :q<cr>
     
     call scommands#map('S', 'SET', "n,v")
     function s:SetToggle(option)
@@ -51,7 +46,6 @@
     call scommands#map('a', 'ALT', "n,V")
     command! -complete=command -bar -range -nargs=+ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
     command! -complete=command -bar -range -nargs=+ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
-    " ALTlgrep onchange -r . --include=*.\{js,md\}          …or https://gist.github.com/romainl/f7e2e506dc4d7827004e4994f1be2df6
     set grepprg=grep\ -Hn\ $*\ /dev/null
     command! -nargs=+ -complete=file_in_path -bar ALTgrep  cgetexpr jaandrle_utils#grep(<f-args>)
         \| call setqflist([], 'a', {'title': ':' . g:jaandrle_utils#last_command})
@@ -63,19 +57,13 @@
         hi! link User1 StatusLine
         if !g:quickfix_len  | return 'Ø' | endif
         if g:quickfix_len>0 | return g:quickfix_len | endif
-        execute 'hi! User1 ctermbg='.synIDattr(synIDtrans(hlID('StatusLine')), 'bg', 'cterm').
-            \' ctermfg='.synIDattr(synIDtrans(hlID('WarningMsg')), 'fg', 'cterm')
+        execute 'hi! User1 ctermbg='.synIDattr(synIDtrans(hlID('StatusLine')), 'bg').
+            \' ctermfg='.synIDattr(synIDtrans(hlID('WarningMsg')), 'fg')
         return -g:quickfix_len
     endfunction
     function! s:QuickFixCmdPost() abort
         let q_len= len(getqflist())
         let g:quickfix_len= q_len ? -q_len : len(getloclist(0))
-        let letter= q_len ? 'c' : 'l'
-        if g:quickfix_len
-            execute 'command! ALTopenLastCL '.letter.'open'
-        else
-            execute letter.'close'
-        endif
     endfunction
     augroup quickfix
         autocmd!
@@ -104,10 +92,13 @@
     command -nargs=? CLSESSIONload :call mini_sessions#open(<f-args>)
     command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
     
+    execute 'hi! User2 ctermbg='.synIDattr(synIDtrans(hlID('StatusLine')), 'bg').
+        \' ctermfg=grey'
     set laststatus=2                                                                           " Show status line on startup
     set statusline+=··%1*≡·%{QuickFixStatus()}%*··
+    set statusline+=%2*»·%{user_tips#current()}%*··
     set statusline+=%=
-    set statusline+=%<%F
+    set statusline+=%<%f
     set statusline+=%R\%M··
     set statusline+=▶·%{&fileformat}
     set statusline+=·%{&fileencoding?&fileencoding:&encoding}
@@ -184,8 +175,6 @@
     autocmd FocusGained,BufEnter *.* checktime                                                          " …still autoread
     command -bar -nargs=0 -range=% CLtrimEndLineSpaces call jaandrle_utils#trimEndLineSpaces(<line1>,<line2>)
 
-    command! W w !sudo tee > /dev/null %
-                                                                                            " Save a file as root (:W)
     set path+=src/**,app/**,build/**                                                        " File matching for `:find`
     for ignore in [ '.git', '.npm', 'node_modules' ]
         exec ':set wildignore+=**'.ignore.'**'
@@ -215,17 +204,13 @@
     call scommands#map('n', 'JUMP', "n")
     command JUMPmotion            call jaandrle_utils#gotoJumpChange('jump')
     command JUMPchanges           call jaandrle_utils#gotoJumpChange('change')
-    command JUMPlistC     call jaandrle_utils#gotoJumpListCL('c')
-    command JUMPlistL     call jaandrle_utils#gotoJumpListCL('l')
-
     nmap <leader>[I     :call jaandrle_utils#gotoJumpListDI("[", "I")<cr>
     nmap <leader>]I     :call jaandrle_utils#gotoJumpListDI("]", "I")<cr>
-    nmap <leader>[D     :call jaandrle_utils#gotoJumpListDI("[", "D")<cr>
-    nmap <leader>]D     :call jaandrle_utils#gotoJumpListDI("]", "D")<cr>
 
     nmap sj <Plug>(JumpMotion)
 "" #endregion EN
 "" #region EA – Editing adjustment + White chars
+    autocmd VimEnter * try | call rainbow_parentheses#toggle() | catch | endtry
     let g:highlightedyank_highlight_duration= 250
     set showmatch                                               " Quick highlight oppening bracket/… for currently writted
     command! SETTOGGLErainbowParentheses call rainbow_parentheses#toggle()
@@ -270,7 +255,6 @@
         hi clear SpellBad
         hi SpellBad cterm=underline,italic
     endif
-    command SETfileformatDOS2UNIX update | edit ++ff=dos | setlocal ff=unix
 "" #endregion EA
 "" #region COC – COC, git and so on, compilers
     """ #region GIT
@@ -345,7 +329,6 @@
                                           \ '▶Coc(state/function): 'coc#status()'/'CocAction("getCurrentFunctionSymbol")
                                           \ '▶Line:'line('.')'/'line('$')
                                           \ '▶Cursor:'col('.')'/'col('$')
-                                          \ '▶Another info via g<c-g> (also in visual) or <c-g>'
     command CLhelpCocPlug         call feedkeys(':<c-u>help <Plug>(coc	', 'tn')
     command CLhelpCocAction       call feedkeys(':<c-u>help CocAction(''	', 'tn')
     command CLdocumentation       call <sid>show_documentation()
