@@ -309,6 +309,20 @@
 
 command! README :!vim ~/Dokumenty/GitHub/dotfiles/vifm/README.md
 
+map sg :GIT
+command GITstatus !vim -c 'GITstatus'
+command GITcommit !git status & git commit --interactive -v
+command GITrestoreThis !vim %"f -c '!clear && git status %:p -s & git restore %:p --patch'
+command GITdiff !git diff %"f
+command GITlog !vim -c 'GITlog'
+command GITlogList !git log-list
+command GITfetch !git fetch
+command GITpull !git pull
+command GITpush !git push
+command GITonlyCommit !git commit -v
+command GITonlyAdd !git status & git add -i
+
+
 "" #region N – Notes
     "Filter-out build and temporary files
     "    windo filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/
