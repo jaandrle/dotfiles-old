@@ -1,4 +1,4 @@
-"" VIFM Config file / 21-10-26 / Jan Andrle
+"" VIFM Config file / 2021-12-08 / Jan Andrle
 "" #region B – Bookmarks
     if !has('win')
         :bmark! "~/" home
@@ -50,6 +50,7 @@
     if !has('win')
         nnoremap Ot :!(exo-open --launch TerminalEmulator --working-directory %d > /dev/null 2>&1) &<cr>
         nnoremap Ov :!(exo-open --launch TerminalEmulator --working-directory %d -- -e "vifm ." > /dev/null 2>&1) &<cr>
+        nnoremap OV :!vim<cr>
     else
         nnoremap Ot :!start "[Vifm] PowerShell %d" powershell.exe -c "powershell.exe -NoExit -Command Set-Location -LiteralPath '%d'"<cr>
     endif
@@ -308,20 +309,6 @@
 " #endregion Y
 
 command! README :!vim ~/Dokumenty/GitHub/dotfiles/vifm/README.md
-
-map sg :GIT
-command GITstatus !vim -c 'GITstatus'
-command GITcommit !git status & git commit --interactive -v
-command GITrestoreThis !vim %"f -c '!clear && git status %:p -s & git restore %:p --patch'
-command GITdiff !git diff %"f
-command GITlog !vim -c 'GITlog'
-command GITlogList !git log-list
-command GITfetch !git fetch
-command GITpull !git pull
-command GITpush !git push
-command GITonlyCommit !git commit -v
-command GITonlyAdd !git status & git add -i
-
 
 "" #region N – Notes
     "Filter-out build and temporary files
