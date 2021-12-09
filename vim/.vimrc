@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-12-06 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-12-09 (VIM >=8.1)
 "" #region B – Base
     let $BASH_ENV = "~/.bashrc"
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
@@ -43,6 +43,7 @@
     endfunction
     
     call scommands#map('a', 'ALT', "n,V")
+    command! -nargs=0 ALTredrawSyntax edit | normal `"
     command! -complete=command -bar -range -nargs=+ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
     command! -complete=command -bar -range -nargs=+ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
     set grepprg=grep\ -Hn\ $*\ /dev/null
@@ -201,11 +202,9 @@
     set hlsearch incsearch                                                        " highlight search, start when typing
     nmap <silent>ú :nohlsearch<bar>diffupdate<cr>
 
-    call scommands#map('n', 'JUMP', "n")
-    command JUMPmotion            call jaandrle_utils#gotoJumpChange('jump')
-    command JUMPchanges           call jaandrle_utils#gotoJumpChange('change')
-    nmap <leader>[I     :call jaandrle_utils#gotoJumpListDI("[", "I")<cr>
-    nmap <leader>]I     :call jaandrle_utils#gotoJumpListDI("]", "I")<cr>
+    call scommands#map('n', 'NAV', "n")
+    command NAVjumps             call jaandrle_utils#gotoJumpChange('jump')
+    command NAVchanges           call jaandrle_utils#gotoJumpChange('change')
 
     nmap sj <Plug>(JumpMotion)
 "" #endregion EN
@@ -279,6 +278,17 @@
         \  if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
         \| if <q-args>!='' | silent make <args> | else | silent make % | endif | checktime | silent redraw!        " …prev line, hotfix (filetype detection does’t works)
     autocmd BufWritePost *.{php,js} execute 'ALTmake' | call <sid>QuickFixCmdPost()
+    function! CustomSessionSyntax(type)
+        if(a:type=="gulp_place")
+            highlight link gulp_place ErrorMsg
+            syntax match gulp_place "gulp_place"
+            augroup gulp_place
+                autocmd!
+                autocmd BufEnter *.{js,html} syntax match gulp_place "gulp_place"
+            augroup END
+            return 0
+        endif
+    endfunction
 
     """ #region Coc completion
     inoremap <silent><expr> <TAB>
@@ -337,10 +347,10 @@
     command CLjsdoc               exec 'CocCommand docthis.documentThis'
     command CLcodeactionCursor    call CocActionAsync('codeAction', 'cursor')
     command CLfixCodeQuick        call CocActionAsync('doQuickfix')
-    command JUMPdefinition        call CocActionAsync('jumpDefinition')
-    command JUMPtype              call CocActionAsync('jumpTypeDefinition')
-    command JUMPimplementation    call CocActionAsync('jumpImplementation')
-    command JUMPreferences        call CocActionAsync('jumpReferences')
+    command NAVdefinition        call CocActionAsync('jumpDefinition')
+    command NAVtype              call CocActionAsync('jumpTypeDefinition')
+    command NAVimplementation    call CocActionAsync('jumpImplementation')
+    command NAVreferences        call CocActionAsync('jumpReferences')
     
     nmap <leader>/ :CocSearch 
     nmap <leader>? <leader>/
