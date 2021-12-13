@@ -43,6 +43,8 @@
     set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
         \phistory,fhistory,dirstack,registers,bookmarks,bmarks
     
+    cmap  <c-b>
+    cmap  <c-f>
     nmap ; :
     nnoremap <c-h> :history<cr>
     nnoremap \= :filter !{}<left><left>
@@ -278,14 +280,13 @@
     " #endregion Fimages
 " #endregion F
 " #region S – sS keys
-    nnoremap sj :cd ~/
+    nnoremap sjj :cd ./
+    nnoremap sjh :cd ~/
+    nnoremap sjg :cd ~/Vzdálené/GitHub/
+    nnoremap sjp :cd ~/Dokumenty/Projekty/
+    nnoremap sb :bmg
     nnoremap sS :Set
     nnoremap SS :<up><cr>
-    if has('win')
-        nnoremap ss :!start cmd<cr>
-    else
-        nnoremap ss :shell<cr>
-    endif
 " #endregion S
 " #region Y – Copy files/names/…
     nmap ycc :clone <cr>

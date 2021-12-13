@@ -1,4 +1,14 @@
 function jaaENV {
+    if [ "$1" = "--init" ]; then
+        echo "Install: "
+        echo "    gradle ⇒ https://sdkman.io/"
+        echo "      node ⇒ https://github.com/nvm-sh/nvm"
+        echo "       php ⇒ http://jdem.cz/fgyu56 + https://deb.sury.org/"
+        echo "Usage '.jaaENV' files: "
+        echo "    typical: '\nphp=5.6\nnodejs=16.13.0'"
+        echo "       link: '. ../.jaaENV' … use settings from parent folder"
+        return 0
+    fi
     if [ "$1" = "--ls" ]; then
         echo ":: nvm ls ::\n"
         nvm ls
@@ -10,6 +20,15 @@ function jaaENV {
     fi
     . ./.jaaENV
     if [ ! -z ${nodejs+x} ]; then nvm use $nodejs; fi
-    if [ ! -z ${gradle+x} ]; then sdk use gradle $gradle; fi
-    if [ ! -z ${php+x} ];    then sudo update-alternatives --set php /usr/bin/php$php; fi
+    if [ ! -z ${gradle+x} ]; then sdk use gradle $gradle | tr -d '\n'; echo ; fi
+    if [ ! -z ${php+x} ];    then
+        php_local=`php --version | _awk 2 | head -n 1`
+        if [[ "$php_local" == "$php"* ]]; then
+            echo "php $php"
+        else
+            echo "php $php ← $php_local"
+            sudo update-alternatives --set php /usr/bin/php$php
+            sudo -k
+        fi
+    fi
 }

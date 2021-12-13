@@ -10,3 +10,5 @@ ln -s $this_dir/bin/_vim_plugins ~/bin/_vim_plugins
 ln -s $this_dir/bin/_weather ~/bin/_weather
 cp -i $this_dir/bin/github-releases.js ~/bin/github-releases.js
 cp -i $this_dir/bin/github-releases.json ~/bin/github-releases.json
+mkdir ~/.ssh
+ln -s $this_dir/.ssh/README.md ~/.ssh/README.md

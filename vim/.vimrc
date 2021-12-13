@@ -32,7 +32,7 @@
     nmap sh<leader> :map <leader><cr>
     nmap shh        :call feedkeys(":map! \<c-u\> \| map \<c-up\> \| map \<c-down\>")<cr>
     call scommands#map('<tab>', 'CL', "n,v")
-    command! -nargs=? CLscratch 10split | enew | setlocal buftype=nofile bufhidden=hide noswapfile
+    command! -nargs=? CLscratch 10split | enew | setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted
         \| if <q-args>!='' | execute 'normal "'.<q-args>.'p' | endif
         \| nnoremap <buffer> ;q :q<cr>
     
@@ -184,6 +184,7 @@
     set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
     set wildignore+=*.pdf,*.psd
 
+    " these three lines needs to be commented to let vim dowmload spelllangs!!! … see http://jdem.cz/fgyw25
     let g:vifm_replace_netrw = 1
     let g:loaded_netrw       = 1
     let g:loaded_netrwPlugin = 1
@@ -233,7 +234,7 @@
     call <sid>SetToggle('expandtab')
     command! -nargs=1 SETtab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
     SETtab 4
-    command! SETTOGGLEspell set spell! | if &spell | set spelllang | endif
+    command! -nargs=? SETspell if <q-args>==&spelllang || <q-args>=='' | set spell! | else | set spell | set spelllang=<args> | endif | if &spell | set spelllang | endif
     set shiftround                                                          " round diff shifts to the base of n*shiftwidth
     set autoindent                                                              " https://stackoverflow.com/a/18415867
     filetype plugin indent on
@@ -259,12 +260,11 @@
     """ #region GIT
     call scommands#map('g', 'GIT', "n")
     command GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
-        \| setlocal filetype=git
         \| $normal oTips: You can use `gf` to navigate into files. Also `;e` for reload or `;q` for `:bd`.
     command -nargs=? GITcommit !clear && git status & git commit --interactive -v <args>
     command GITrestoreThis !clear && git status %:p -s & git restore %:p --patch
-    command -nargs=? GITdiff if <q-args>=='' | silent! execute 'ALTredirKeep !git diff %:p' | else | execute 'ALTredirKeep !git diff <args>' | endif | setlocal filetype=git
-    command GITlog silent! execute 'ALTredirKeep !git log --date=iso' | setlocal filetype=git
+    command -nargs=? GITdiff if <q-args>=='' | silent! execute 'ALTredirKeep !git diff %:p' | else | execute 'ALTredirKeep !git diff <args>' | endif
+    command GITlog silent! execute 'ALTredirKeep !git log --date=iso'
     command GITlogList !git log-list
     command -nargs=? GITfetch ALTredir !git fetch <args>
     command -nargs=? GITpull ALTredir !git pull <args>
