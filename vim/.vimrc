@@ -95,7 +95,13 @@
     set sessionoptions-=options
     command! -nargs=1 CLSESSIONcreate :call mini_sessions#create(<f-args>)
     command! CLSESSIONconfig :call mini_sessions#sessionConfig()
-    command -nargs=? CLSESSIONload :call mini_sessions#open(<f-args>)
+    command -nargs=1 -complete=customlist,CompleteSessionLoad CLSESSIONload :execute 'so '.$VIMHOME.'/sessions/'.<q-args>.'.vim'
+    function! CompleteSessionLoad(A,L,P)
+        return filter(map(filter(split(glob($VIMHOME.'/sessions/*.vim'), '\n'),
+                \ { _, v -> v[-5:]!='x.vim' }),
+                \ { _, v -> substitute(v[:-5], $VIMHOME.'/sessions/', '', '') }),
+                \ { _, v -> v=~a:A })
+    endfunction
     command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
     
     execute 'hi! User2 ctermbg='.synIDattr(synIDtrans(hlID('StatusLine')), 'bg').
