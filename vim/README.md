@@ -28,6 +28,10 @@ _vim_plugins --add jaandrle/vim-user_tips
 mkdir -p ~/.vim/pack/coc/start
 cd ~/.vim/pack/coc/start
 git clone --branch release https://github.com/neoclide/coc.nvim.git --depth=1
+
+mkdir -p ~/.vim/pack/coc-custom_elements/start
+cd ~/.vim/pack/coc-custom_elements/start
+git clone https://github.com/jaandrle/coc-custom_elements
 ```
 Also call `:helptags ~/.vim/bundle/`.
 

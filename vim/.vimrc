@@ -239,6 +239,10 @@
     set autoindent                                                              " https://stackoverflow.com/a/18415867
     filetype plugin indent on
 
+    nnoremap <leader>y "+y
+    vnoremap <leader>y "+y
+    noremap <leader>p "+p
+    vnoremap <leader>p "+p
     nnoremap <s-k> a<cr><esc>
     nnoremap <leader>cw *``cgn
     nnoremap <leader>cb #``cgN
