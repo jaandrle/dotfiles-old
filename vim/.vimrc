@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-12-09 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-12-14 (VIM >=8.1)
 "" #region B – Base
     let $BASH_ENV = "~/.bashrc"
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
@@ -18,6 +18,7 @@
     nnoremap ů ;
     nnoremap ; :
     set runtimepath^=~/.vim/bundle/*
+    runtime macros/matchit.vim
     
     nmap <leader>gt <c-]>
     nmap <leader>gT <c-T>
@@ -27,6 +28,11 @@
     command! CLmodeline :call jaandrle_utils#AppendModeline(1)
     
     nnoremap <leader>t :silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &<cr>
+    
+    if has("patch-8.1.0360")
+        set diffopt+=algorithm:patience
+        set diffopt+=indent-heuristic
+    endif
 "" #endregion B
 "" #region H – Helpers + remap 'sS' (primary s<tab>, see `vim-scommands`)
     nmap sh<leader> :map <leader><cr>
@@ -46,7 +52,7 @@
     command! -nargs=0 ALTredrawSyntax edit | normal `"
     command! -complete=command -bar -range -nargs=+ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
     command! -complete=command -bar -range -nargs=+ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
-    set grepprg=grep\ -Hn\ $*\ /dev/null
+    set grepprg=LC_ALL=C\ grep\ -nrsH
     command! -nargs=+ -complete=file_in_path -bar ALTgrep  cgetexpr jaandrle_utils#grep(<f-args>)
         \| call setqflist([], 'a', {'title': ':' . g:jaandrle_utils#last_command})
     command! -nargs=+ -complete=file_in_path -bar ALTlgrep lgetexpr jaandrle_utils#grep(<f-args>)
@@ -260,22 +266,23 @@
         hi SpellBad cterm=underline,italic
     endif
 "" #endregion EA
-"" #region COC – COC, git and so on, compilers
-    """ #region GIT
+""" #region GIT
     call scommands#map('g', 'GIT', "n")
-    command GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
+    command! GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
         \| $normal oTips: You can use `gf` to navigate into files. Also `;e` for reload or `;q` for `:bd`.
-    command -nargs=? GITcommit !clear && git status & git commit --interactive -v <args>
-    command GITrestoreThis !clear && git status %:p -s & git restore %:p --patch
-    command -nargs=? GITdiff if <q-args>=='' | silent! execute 'ALTredirKeep !git diff %:p' | else | execute 'ALTredirKeep !git diff <args>' | endif
-    command GITlog silent! execute 'ALTredirKeep !git log --date=iso'
-    command GITlogList !git log-list
-    command -nargs=? GITfetch ALTredir !git fetch <args>
-    command -nargs=? GITpull ALTredir !git pull <args>
-    command -nargs=? GITpush ALTredir !git push <args>
-    command -nargs=? GITonlyCommit !git commit -v <args>
-    command -nargs=? GITonlyAdd !git status & git add -i <args>
-    """ #endregion GIT
+    command! -nargs=? GITcommit !clear && git status & git commit --interactive -v <args>
+    command! GITrestoreThis !clear && git status %:p -s & git restore %:p --patch
+    command! -nargs=? GITdiff if <q-args>=='' | silent! execute 'ALTredirKeep !git diff %:p' | else | execute 'ALTredirKeep !git diff <args>' | endif
+    command! GITlog silent! execute 'ALTredirKeep !git log --date=iso'
+    command! GITlogList !git log-list
+    command! -nargs=? GITfetch ALTredir !git fetch <args>
+    command! -nargs=? GITpull ALTredir !git pull <args>
+    command! -nargs=? GITpush ALTredir !git push <args>
+    command! -nargs=? GITonlyCommit !git commit -v <args>
+    command! -nargs=? GITonlyAdd !git status & git add -i <args>
+    command! -range GITblame echo join(systemlist("git -C " . shellescape(expand('%:p:h')) . " blame -L <line1>,<line2> " . expand('%:t')), "\n")
+""" #endregion GIT
+"" #region COC – COC and so on, compilers
     let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tsserver' ]
     autocmd FileType scss setl iskeyword+=@-@
     command -nargs=? ALTmake

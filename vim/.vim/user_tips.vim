@@ -28,7 +28,7 @@ let g:user_tips_list= [
     \ ':sort /,/',
     \ 'zz zb zt gm gM',
     \ '<c-a> <c-x> g<c-a>…',
-    \ ':set spell :spell<tab> … z= ]s [s',
+    \ ':set spell :spell<tab> … z= zg zug ]s [s',
     \ ':lhistory :lolder :lnewer',
     \ ':[m]ove :[c]opy (:t) :p :#',
     \ ':help i_CTRL-<tab> … i_CTRL-Y',
