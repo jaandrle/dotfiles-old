@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-12-14 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-12-15 (VIM >=8.1)
 "" #region B – Base
     let $BASH_ENV = "~/.bashrc"
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
@@ -11,9 +11,9 @@
     set title
     colorscheme codedark
     let mapleader = "\\"
-    cabbr <expr> %PWD%  execute('pwd')
-    cabbr <expr> %CD%   fnameescape(expand('%:p:h'))
-    cabbr <expr> %CW%   expand('<cword>')
+    cabbrev <expr> %PWD%  execute('pwd')
+    cabbrev <expr> %CD%   fnameescape(expand('%:p:h'))
+    cabbrev <expr> %CW%   expand('<cword>')
 
     nnoremap ů ;
     nnoremap ; :
@@ -50,6 +50,7 @@
     
     call scommands#map('a', 'ALT', "n,V")
     command! -nargs=0 ALTredrawSyntax edit | normal `"
+    cabbrev ALTR ALTredrawSyntax
     command! -complete=command -bar -range -nargs=+ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
     command! -complete=command -bar -range -nargs=+ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
     set grepprg=LC_ALL=C\ grep\ -nrsH
@@ -267,7 +268,7 @@
         hi SpellBad cterm=underline,italic
     endif
 "" #endregion EA
-""" #region GIT
+"" #region GIT
     call scommands#map('g', 'GIT', "n,V")
     command! GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
         \| $normal oTips: You can use `gf` to navigate into files. Also `;e` for reload or `;q` for `:bd`.
@@ -279,10 +280,11 @@
     command! -nargs=? GITfetch ALTredir !git fetch <args>
     command! -nargs=? GITpull ALTredir !git pull <args>
     command! -nargs=? GITpush ALTredir !git push <args>
+    cabbrev GITP GITpush
     command! -nargs=? GITonlyCommit !git commit -v <args>
     command! -nargs=? GITonlyAdd !git status & git add -i <args>
     command! -range GITblame ALTredir !git -C %:p:h blame -L <line1>,<line2> %:t
-""" #endregion GIT
+"" #endregion GIT
 "" #region COC – COC and so on, compilers
     let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tsserver' ]
     autocmd FileType scss setl iskeyword+=@-@
