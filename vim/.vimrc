@@ -268,7 +268,7 @@
     endif
 "" #endregion EA
 """ #region GIT
-    call scommands#map('g', 'GIT', "n")
+    call scommands#map('g', 'GIT', "n,V")
     command! GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
         \| $normal oTips: You can use `gf` to navigate into files. Also `;e` for reload or `;q` for `:bd`.
     command! -nargs=? GITcommit !clear && git status & git commit --interactive -v <args>
@@ -281,7 +281,7 @@
     command! -nargs=? GITpush ALTredir !git push <args>
     command! -nargs=? GITonlyCommit !git commit -v <args>
     command! -nargs=? GITonlyAdd !git status & git add -i <args>
-    command! -range GITblame echo join(systemlist("git -C " . shellescape(expand('%:p:h')) . " blame -L <line1>,<line2> " . expand('%:t')), "\n")
+    command! -range GITblame ALTredir !git -C %:p:h blame -L <line1>,<line2> %:t
 """ #endregion GIT
 "" #region COC – COC and so on, compilers
     let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tsserver' ]
