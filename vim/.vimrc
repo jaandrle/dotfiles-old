@@ -20,14 +20,14 @@
     set runtimepath^=~/.vim/bundle/*
     runtime macros/matchit.vim
     
-    nmap <leader>gt <c-]>
-    nmap <leader>gT <c-T>
+    nmap )¨ <c-]>
     
     set modeline
     command! CLmodelineBasic :call jaandrle_utils#AppendModeline(0)
     command! CLmodeline :call jaandrle_utils#AppendModeline(1)
     
-    nnoremap <leader>t :silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &<cr>
+    command! -nargs=? CLterminal execute "silent !(exo-open --launch TerminalEmulator ".(<q-args>=='' ? '' : "-e '<args>'")." > /dev/null 2>&1) &"
+    nnoremap <leader>t :CLterminal<cr>
     
     if has("patch-8.1.0360")
         set diffopt+=algorithm:patience
