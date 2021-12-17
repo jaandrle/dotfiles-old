@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-12-15 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-12-17 (VIM >=8.1)
 "" #region B – Base
     let $BASH_ENV = "~/.bashrc"
     :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
@@ -15,28 +15,36 @@
     cabbrev <expr> %CD%   fnameescape(expand('%:p:h'))
     cabbrev <expr> %CW%   expand('<cword>')
 
-    nnoremap ů ;
-    nnoremap ; :
     set runtimepath^=~/.vim/bundle/*
     runtime macros/matchit.vim
     
-    nmap )¨ <c-]>
+    " better for my keyboard, but maybe use `:help keymap`?
+    nnoremap ů ;
+    nnoremap ; :
+    nnoremap ž <c-]>
+    nnoremap ř <c-r>
     
     set modeline
     command! CLmodelineBasic :call jaandrle_utils#AppendModeline(0)
     command! CLmodeline :call jaandrle_utils#AppendModeline(1)
     
-    nnoremap <leader>t :silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &<cr>
+    if executable('konsole')
+        command! -nargs=? ALTterminal if <q-args>=='' | execute 'silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &'
+                    \| else | execute 'silent !(konsole -e /bin/bash --rcfile <(echo "source ~/.profile;<args>") > /dev/null 2>&1) &' | endif
+    else
+        command! -nargs=? ALTterminal silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &
+    endif
+    nnoremap <leader>t :ALTterminal<cr>
     
     if has("patch-8.1.0360")
         set diffopt+=algorithm:patience
         set diffopt+=indent-heuristic
     endif
 "" #endregion B
-"" #region H – Helpers + remap 'sS' (primary s<tab>, see `vim-scommands`)
+"" #region H – Helpers + remap 'sS' (primary ss, see `vim-scommands`)
     nmap sh<leader> :map <leader><cr>
-    nmap shh        :call feedkeys(":map! \<c-u\> \| map \<c-up\> \| map \<c-down\>")<cr>
-    call scommands#map('<tab>', 'CL', "n,v")
+    nmap shh        :call feedkeys(":map! ů \| map é \| map ř \| map ž \| map č")<cr>
+    call scommands#map('s', 'CL', "n,v")
     command! -nargs=? CLscratch 10split | enew | setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted
         \| if <q-args>!='' | execute 'normal "'.<q-args>.'p' | endif
         \| nnoremap <buffer> ;q :q<cr>
@@ -112,7 +120,6 @@
     set statusline+=·%{&filetype}··
     set statusline+=∷·%{mini_sessions#name('–')}·· 
     
-    nmap <s-u> <c-r>
     set nobackup nowritebackup                                      " Some servers have issues with backup files, see #649.
                                                                     " Return to last edit position when opening files (You want this!)
     autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -170,13 +177,15 @@
     set pastetoggle=<F2>
     nnoremap <silent> <leader>" :call jaandrle_utils#copyRegister()<cr>
     
-    nmap <expr> ¨ buffer_number("#")==-1 ? "sb<cr>" : "\<c-^>"
+    nmap <expr> ě buffer_number("#")==-1 ? "sb<cr>" : "\<c-^>"
     nmap sB :buffers<cr>:b<space>
     nmap sb :CtrlPBuffer<cr>
     command! CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
     command! ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg', 'tn')
+    let g:ctrlp_map = 'š'
+    command! -nargs=? SETctrlp execute 'nnoremap '.g:ctrlp_map.' :CtrlP <args><cr>'
     let g:ctrlp_clear_cache_on_exit = 0
-    call scommands#map('p', 'CtrlP', "n")
+    call scommands#map('š', 'CtrlP', "n")
 "" #endregion CN
 "" #region FOS – File(s) + Openning + Saving
     set autowrite autoread
@@ -199,11 +208,6 @@
     call scommands#map('e', 'Vifm', "n")
 "" #endregion FOS
 "" #region EN – Editor navigation + search
-    " maybe `:help keymap`?
-    nmap ž ^
-    nmap č $
-    nmap <c-down> gj
-    nmap <c-up> gk
     call jaandrle_utils#MapSmartKey('Home')
     call jaandrle_utils#MapSmartKey('End')
 
@@ -303,25 +307,15 @@
         endif
     endfunction
 
-    """ #region Coc completion
-    inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ coc#refresh()
-    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-                                                " Use tab for trigger completion with characters ahead and navigate.
-                                                " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-                                                " other plugin before putting this into your config.
-    if has('nvim')                                                                  " Use <c-space> to trigger completion.
-        inoremap <silent><expr> <c-space> coc#refresh()
-    else
-        inoremap <silent><expr> <c-@> coc#refresh()
-    endif
-    inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-                                                    " Make <CR> auto-select the first completion item and notify coc.nvim to
-                                                    " format on enter, <cr> could be remapped by other vim plugin
-    """ #endregion Coc completion
+    nnoremap <F1> :CLwhereami<cr>
+    inoremap <silent><expr> <F1> pumvisible() ? coc#_select_confirm() : coc#refresh()
+    inoremap <silent><expr> <tab> pumvisible() ? "\<c-n>" : <sid>check_back_space() ? "\<tab>" : coc#refresh()
+    inoremap <silent><expr> <s-tab> pumvisible() ? "\<c-p>" : "\<c-h>"
+    function! s:check_back_space() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+
     xmap <leader>if <Plug>(coc-funcobj-i)
     omap <leader>if <Plug>(coc-funcobj-i)
     xmap <leader>af <Plug>(coc-funcobj-a)
@@ -330,7 +324,8 @@
     nmap <silent> <leader>gd <Plug>(coc-diagnostic-next)
     nmap <silent> <leader>gD <Plug>(coc-diagnostic-prev)
                     " navigate diagnostics, use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-    nnoremap <silent> gh :call <SID>show_documentation()<CR>
+    nnoremap <silent> gh :call <sid>show_documentation(0)<cr>
+    vnoremap <silent> gh :<c-u>call <sid>show_documentation(1)<cr>
     autocmd CursorHold * silent call CocActionAsync('highlight')
     """ #region Coc popups scroll (not working for me now, newer version if Vim)
                                                         " Highlight the symbol and its references when holding the cursor.
@@ -354,7 +349,6 @@
                                           \ '▶Cursor:'col('.')'/'col('$')
     command CLhelpCocPlug         call feedkeys(':<c-u>help <Plug>(coc	', 'tn')
     command CLhelpCocAction       call feedkeys(':<c-u>help CocAction(''	', 'tn')
-    command CLdocumentation       call <sid>show_documentation()
     command CLrename              call CocActionAsync('rename')
     command CLrenameFile          exec 'CocCommand workspace.renameCurrentFile'
     command CLjsdoc               exec 'CocCommand docthis.documentThis'
@@ -368,15 +362,16 @@
     nmap <leader>/ :CocSearch 
     nmap <leader>? <leader>/
     
-    function! s:check_back_space() abort
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction
-    function! s:show_documentation()
+    function! s:show_documentation(is_visual)
+        let word= a:is_visual ? getline("'<")[getpos("'<")[2]-1:getpos("'>")[2]-1] : expand('<cword>')
         if (index(['vim','help'], &filetype) >= 0)
-            execute 'h '.expand('<cword>')
+            execute 'h '.word
         elseif (index(['git'], &filetype) >= 0 || !coc#rpc#ready())
-            execute '!' . &keywordprg . " " . expand('<cword>')
+            execute '!' . &keywordprg . " " . word
+        elseif &filetype=='html'
+            if coc#source#custom_elements#hover(word)==0
+                call CocActionAsync('doHover')
+            endif
         else
             call CocActionAsync('doHover')
         endif

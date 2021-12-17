@@ -1,4 +1,5 @@
 let g:user_tips_list= [
+    \ ':vebose ★ * … ★: eg. map/set/…',
     \ ':clist+:cc :cn :cN :copen :cwindow :cclose',
     \ ':undolist :earlier :later',
     \ ':llist+:ll :ln :lN :lopen :lwindow :lclose',
@@ -17,7 +18,7 @@ let g:user_tips_list= [
     \ 'Replace mode → R',
     \ 'J gJ K gwip g~ ~',
     \ 'Folds → zm za zi (zfG/zd) zc zC zo zO … :*fold<tab>',
-    \ '<c-]> (`)¨`) <c-t>',
+    \ '<c-]> (`é`) <c-t>',
     \ 'Macro defs. → ]D [D ]<c-D> [<c-D> … :dlist string … :djump string',
     \ ':update | edit ++ff=dos | setlocal ff=unix',
     \ ':set scrollbind :diffthis :diffoff :diff*<tab>',
@@ -32,7 +33,7 @@ let g:user_tips_list= [
     \ ':set spell :spell<tab> … z= zg zug ]s [s',
     \ ':lhistory :lolder :lnewer',
     \ ':[m]ove :[c]opy (:t) :p :#',
-    \ ':help i_CTRL-<tab> … i_CTRL-Y',
+    \ ':help i_CTRL-<tab> … i_CTRL-Y … i<c-u>',
     \ '*grep onchange -r . --include=*.\{js,md\} …or http://jdem.cz/fgytv8',
     \ ':diffget :diffput c] [c',
     \ ':chistory :colder :cnewer',
