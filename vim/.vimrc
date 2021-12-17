@@ -177,15 +177,15 @@
     set pastetoggle=<F2>
     nnoremap <silent> <leader>" :call jaandrle_utils#copyRegister()<cr>
     
-    nmap <expr> ě buffer_number("#")==-1 ? "sb<cr>" : "\<c-^>"
+    nmap <expr> š buffer_number("#")==-1 ? "sb<cr>" : "\<c-^>"
     nmap sB :buffers<cr>:b<space>
     nmap sb :CtrlPBuffer<cr>
     command! CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
     command! ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg', 'tn')
-    let g:ctrlp_map = 'š'
+    let g:ctrlp_map = 'ě'
     command! -nargs=? SETctrlp execute 'nnoremap '.g:ctrlp_map.' :CtrlP <args><cr>'
     let g:ctrlp_clear_cache_on_exit = 0
-    call scommands#map('š', 'CtrlP', "n")
+    call scommands#map('ě', 'CtrlP', "n")
 "" #endregion CN
 "" #region FOS – File(s) + Openning + Saving
     set autowrite autoread
