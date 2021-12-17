@@ -1,32 +1,26 @@
 """ VIM config file | Jan Andrle | 2021-12-17 (VIM >=8.1)
 "" #region B – Base
+    scriptencoding utf-8 | set encoding=utf-8
     let $BASH_ENV = "~/.bashrc"
-    :scriptencoding utf-8                   " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
-    set encoding=utf-8                                                 " unicode characters in the file autoload/float.vim
+    set runtimepath^=~/.vim/bundle/*
+    runtime macros/matchit.vim
     set hidden                                                                  " TextEdit might fail if hidden is not set.
-    set updatetime=300      " Having longer updatetime (default is 4s) leads to noticeable delays and poor user experience.
-    set lazyredraw                                                                          " Reduce the redraw frequency
-    set ttyfast                                                                 " Send more characters in fast terminals
-    set noerrorbells novisualbell
+    
     set title
     colorscheme codedark
-    let mapleader = "\\"
+    set updatetime=300 lazyredraw ttyfast   " Having longer updatetime (default is 4s) leads to noticeable delays and poor user experience. Also reduce redraw frequency and fast terminal typing
+    set noerrorbells novisualbell
+    
     cabbrev <expr> %PWD%  execute('pwd')
     cabbrev <expr> %CD%   fnameescape(expand('%:p:h'))
     cabbrev <expr> %CW%   expand('<cword>')
-
-    set runtimepath^=~/.vim/bundle/*
-    runtime macros/matchit.vim
     
+    let mapleader = "\\"
     " better for my keyboard, but maybe use `:help keymap`?
     nnoremap ů ;
     nnoremap ; :
     nnoremap ž <c-]>
     nnoremap ř <c-r>
-    
-    set modeline
-    command! CLmodelineBasic :call jaandrle_utils#AppendModeline(0)
-    command! CLmodeline :call jaandrle_utils#AppendModeline(1)
     
     if executable('konsole')
         command! -nargs=? ALTterminal if <q-args>=='' | execute 'silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &'
@@ -37,9 +31,7 @@
     nnoremap <leader>t :ALTterminal<cr>
     
     if has("patch-8.1.0360")
-        set diffopt+=algorithm:patience
-        set diffopt+=indent-heuristic
-    endif
+        set diffopt+=algorithm:patience diffopt+=indent-heuristic | endif
 "" #endregion B
 "" #region H – Helpers + remap 'sS' (primary ss, see `vim-scommands`)
     nmap sh<leader> :map <leader><cr>
@@ -51,8 +43,7 @@
     
     call scommands#map('S', 'SET', "n,v")
     function s:SetToggle(option)
-        let cmd= ' set '.a:option.'! | set '.a:option.'?'
-        execute 'command! SETTOGGLE'.a:option.cmd
+        let cmd= ' set '.a:option.'! | set '.a:option.'?' | execute 'command! SETTOGGLE'.a:option.cmd
     endfunction
     
     call scommands#map('a', 'ALT', "n,V")
@@ -95,21 +86,17 @@
     augroup END
 "" #endregion H
 "" #region SLH – Status Line + Command Line + History (general) + Sessions + File Update, …
-    set showcmd                                                                             " Show size of visual selection
-    set cmdheight=2                                                             " Give more space for displaying messages.
-    set wildmenu wildmode=list:longest,list:full                                        " Tab autocomplete in command mode
-    set showmode
+    set showcmd cmdheight=2 showmode
+    set wildmenu wildmode=list:longest,list:full                                    " Tab autocomplete in command mode
     
     set sessionoptions-=options
     command! -nargs=1 CLSESSIONcreate :call mini_sessions#create(<f-args>)
     command! CLSESSIONconfig :call mini_sessions#sessionConfig()
     command! -nargs=1 -complete=customlist,mini_sessions#complete CLSESSIONload :call mini_sessions#load(<f-args>)
     command! -nargs=0 Scd :call mini_sessions#recoverPwd()
-    command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
     
-    execute 'hi! User2 ctermbg='.synIDattr(synIDtrans(hlID('StatusLine')), 'bg').
-        \' ctermfg=grey'
-    set laststatus=2                                                                           " Show status line on startup
+    execute 'hi! User2 ctermbg='.synIDattr(synIDtrans(hlID('StatusLine')), 'bg').' ctermfg=grey'
+    set laststatus=2                                                                     " Show status line on startup
     set statusline+=··%1*≡·%{QuickFixStatus()}%*··
     set statusline+=%2*»·%{user_tips#current()}%*··
     set statusline+=%=
@@ -120,50 +107,32 @@
     set statusline+=·%{&filetype}··
     set statusline+=∷·%{mini_sessions#name('–')}·· 
     
-    set nobackup nowritebackup                                      " Some servers have issues with backup files, see #649.
-                                                                    " Return to last edit position when opening files (You want this!)
-    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-    set nobackup nowritebackup noswapfile                                                       " Turn off backup files
-    set history=500                                                         " How many lines of history has to remember
-                                                                                 " Savig edit history for next oppening
+    set history=500                                                   " How many lines of (cmd) history has to remember
+    set nobackup nowritebackup noswapfile " Turn off backup files. Some servers have issues with backup files, see #649.
     try
-        set undodir=~/.vim/undodir
-        set undofile
-    catch
-    endtry
+        set undodir=~/.vim/undodir undofile | catch | endtry
+    command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
 "" #endregion SLH
 "" #region LLW – Left Column + Line + Wrap + Scrolling
     if has("nvim-0.5.0") || has("patch-8.1.1564")           " Recently vim can merge signcolumn and number column into one
-        set signcolumn=number | else | set signcolumn=yes
-    endif      " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
-    set cursorline                                                                        " Always show current position
-    set ruler
-    set number                                                                                        " Enable line numbers
-    call <sid>SetToggle('relativenumber')
-    set foldcolumn=2                                                                   " Add a bit extra margin to the left
-    set nowrap                                                                                      " Don't wrap long lines
-    set colorcolumn=+1                                                                                  " …marker visual
+        set signcolumn=number | else | set signcolumn=yes | endif  " show always to prevent shifting when diagnosticappears
+    set cursorline                                                                      " Always show current position
+    set number foldcolumn=2                               " enable line numbers and add a bit extra margin to the left
+    set colorcolumn=+1                                                                                " …marker visual
     command -nargs=? SETtextwidth if <q-args> | let &textwidth=<q-args> | let &colorcolumn='<args>,120,240' | else | let &textwidth=250 | let &colorcolumn='120,240' | endif
     SETtextwidth                                                                    " wraping lines and show two lines
-    call <sid>SetToggle('wrap')
+    set nowrap | call <sid>SetToggle('wrap')                                        " Don't wrap long lines by default
     set breakindent breakindentopt=shift:2 showbreak=↳ 
     
-    set scrolloff=5                                                                  " Leave lines of buffer when scrolling
-    set sidescrolloff=10                                             " Leave characters of horizontal buffer when scrolling
-    for l in [ 'r', 'R', 'l', 'L' ]                " Disable scrollbars (real hackers don't use scrollbars for navigation!)
-        exec ':set guioptions-='.l
-    endfor
+    set scrolloff=5 sidescrolloff=10                                        " offset for lines/columns when scrolling
+    for l in [ 'r', 'R', 'l', 'L' ] | exec ':set guioptions-='.l | endfor                        " disable scrollbars
 "" #endregion LLW
 "" #region F – Folds
     set foldmarker=#region,#endregion
-    augroup remember_folds
-        autocmd!
-        autocmd BufWinLeave *.* mkview
-        autocmd BufWinEnter *.* silent! loadview
-    augroup END
-    command!            SETFOLDregions set foldmethod=marker
-    command! -nargs=1   SETFOLDindent set foldmethod=indent | let &foldlevel=<q-args> | let &foldnestmax=<q-args>+1
-    command! -nargs=*   SETFOLDindents set foldmethod=indent | let &foldlevel=split(<q-args>, ' ')[0] | let &foldnestmax=split(<q-args>, ' ')[1]
+    augroup remember_folds | autocmd! | autocmd BufWinLeave *.* mkview | autocmd BufWinEnter *.* silent! loadview | augroup END
+    command! -nargs=0  SETFOLDregions set foldmethod=marker
+    command! -nargs=1  SETFOLDindent set foldmethod=indent | let &foldlevel=<q-args> | let &foldnestmax=<q-args>+1
+    command! -nargs=*  SETFOLDindents set foldmethod=indent | let &foldlevel=split(<q-args>, ' ')[0] | let &foldnestmax=split(<q-args>, ' ')[1]
 
     nnoremap <silent> <leader>zJ :call jaandrle_utils#fold_nextOpen('j')<cr>
     nnoremap <silent> <leader>zj :call jaandrle_utils#fold_nextClosed('j')<cr>
@@ -173,8 +142,7 @@
     nnoremap <silent> <leader>zN zc:call jaandrle_utils#fold_nextOpen('k')<cr>
 "" #endregion F
 "" #region CN – Clipboard + Navigation throught Buffers + Windows + … (CtrlP)
-    nnoremap <F2> :set invpaste paste?<CR>
-    set pastetoggle=<F2>
+    set pastetoggle=<F2> | nnoremap <F2> :set invpaste paste?<CR>
     nnoremap <silent> <leader>" :call jaandrle_utils#copyRegister()<cr>
     
     nmap <expr> š buffer_number("#")==-1 ? "sb<cr>" : "\<c-^>"
@@ -188,9 +156,12 @@
     call scommands#map('ě', 'CtrlP', "n")
 "" #endregion CN
 "" #region FOS – File(s) + Openning + Saving
-    set autowrite autoread
-    autocmd FocusGained,BufEnter *.* checktime                                                          " …still autoread
+    set autowrite autoread | autocmd FocusGained,BufEnter *.* checktime
     command -bar -nargs=0 -range=% CLtrimEndLineSpaces call jaandrle_utils#trimEndLineSpaces(<line1>,<line2>)
+    
+    set modeline
+    command! CLmodelineBasic :call jaandrle_utils#AppendModeline(0)
+    command! CLmodeline :call jaandrle_utils#AppendModeline(1)
 
     set path+=src/**,app/**,build/**                                                        " File matching for `:find`
     for ignore in [ '.git', '.npm', 'node_modules' ]
@@ -200,10 +171,7 @@
     set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
     set wildignore+=*.pdf,*.psd
 
-    " these three lines needs to be commented to let vim dowmload spelllangs!!! … see http://jdem.cz/fgyw25
-    let g:vifm_replace_netrw = 1
-    let g:loaded_netrw       = 1
-    let g:loaded_netrwPlugin = 1
+    let g:vifm_replace_netrw= 1 | let g:loaded_netrw= 1 | let g:loaded_netrwPlugin= 1  " this line needs to be commented to let vim dowmload spelllangs!!! … see http://jdem.cz/fgyw25
     nmap <leader>e :Vifm<cr>
     call scommands#map('e', 'Vifm', "n")
 "" #endregion FOS
@@ -225,29 +193,23 @@
     let g:highlightedyank_highlight_duration= 250
     set showmatch                                               " Quick highlight oppening bracket/… for currently writted
     command! SETTOGGLErainbowParentheses call rainbow_parentheses#toggle()
-    let g:rainbow#pairs = [['(', ')'], ['[', ']'], [ '{', '}' ]]
-    let g:rainbow#blacklist = [203]
+    let g:rainbow#pairs= [['(', ')'], ['[', ']'], [ '{', '}' ]] | let g:rainbow#blacklist = [203]
     set timeoutlen=1000 ttimeoutlen=0                                                  " Remove timeout when hitting escape
     set completeopt=menuone,preview,noinsert,noselect
     set backspace=indent,eol,start                  " Allow cursor keys in insert mode:  http://vi.stackexchange.com/a/2163
     let g:cwordhi#autoload= 1
-                                                    " Switch syntax highlighting on, when the terminal has colors. Also switch on highlighting the last used search pattern.
     if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
-      syntax on
-    endif
+      syntax on | endif
     if v:version > 703 || v:version == 703 && has("patch541")
-      set formatoptions+=j " Delete comment character when joining commented lines
-    endif
-    set list                                                            " Highlight spec. chars / Display extra whitespace
-    set listchars=tab:»·,trail:·,extends:#,nbsp:~,space:·
+      set formatoptions+=j | endif                             " Delete comment character when joining commented lines
+    set list listchars=tab:»·,trail:·,extends:#,nbsp:~,space:·      " Highlight spec. chars / Display extra whitespace
     call <sid>SetToggle('list')
-    set expandtab smarttab                                                        " Use spaces instead of tabs and be smart
+    set expandtab smarttab                                                   " Use spaces instead of tabs and be smart
     call <sid>SetToggle('expandtab')
     command! -nargs=1 SETtab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
     SETtab 4
     command! -nargs=? SETspell if <q-args>==&spelllang || <q-args>=='' | set spell! | else | set spell | set spelllang=<args> | endif | if &spell | set spelllang | endif
-    set shiftround                                                          " round diff shifts to the base of n*shiftwidth
-    set autoindent                                                              " https://stackoverflow.com/a/18415867
+    set shiftround autoindent   " round diff shifts to the base of n*shiftwidth,  https://stackoverflow.com/a/18415867
     filetype plugin indent on
 
     nnoremap <leader>y "+y
@@ -262,14 +224,10 @@
     nnoremap <leader>*o o * <space><bs>
     nnoremap <leader>o o<space><bs><esc>
     nnoremap <leader><s-o> <s-o><space><bs><esc>
-    augroup syntaxSyncMinLines
-        autocmd!
-        autocmd Syntax * syn sync minlines=2000
-    augroup END
+    
+    augroup syntaxSyncMinLines | autocmd! |  autocmd Syntax * syn sync minlines=2000 | augroup END
     if !has("gui_running")
-        hi clear SpellBad
-        hi SpellBad cterm=underline,italic
-    endif
+        hi clear SpellBad | hi SpellBad cterm=underline,italic | endif
 "" #endregion EA
 "" #region GIT
     call scommands#map('g', 'GIT', "n,V")
