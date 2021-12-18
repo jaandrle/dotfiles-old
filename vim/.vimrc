@@ -257,20 +257,27 @@
 "" #endregion EA
 "" #region GIT
     call scommands#map('g', 'GIT', "n,V")
-    command! GITstatus silent! execute 'ALTredirKeep !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo'
-        \| $normal oTips: You can use `gf` to navigate into files. Also `;e` for reload or `;q` for `:bd`.
-    command! -nargs=? GITcommit !clear && git status & git commit --interactive -v <args>
-    command! GITrestoreThis !clear && git status %:p -s & git restore %:p --patch
-    command! -nargs=? GITdiff if <q-args>=='' | silent! execute 'ALTredirKeep !git diff %:p' | else | execute 'ALTredirKeep !git diff <args>' | endif
-    command! GITlog silent! execute 'ALTredirKeep !git log --date=iso'
-    command! GITlogList !git log-list
-    command! -nargs=? GITfetch ALTredir !git fetch <args>
-    command! -nargs=? GITpull ALTredir !git pull <args>
-    command! -nargs=? GITpush ALTredir !git push <args>
-    cabbrev GITP GITpush
-    command! -nargs=? GITonlyCommit !git commit -v <args>
-    command! -nargs=? GITonlyAdd !git status & git add -i <args>
-    command! -range GITblame ALTredir !git -C %:p:h blame -L <line1>,<line2> %:t
+    function GitCommandCompletion(_, CmdLine, __)
+        let l:cmd= a:CmdLine->split()
+        let l:cmd_start= l:cmd[0]->substitute('GIT', 'git ', '')->trim()->split(' ')
+        return bash#complete((l:cmd_start+l:cmd[1:])->join())
+    endfunction
+    command -nargs=* -complete=customlist,GitCommandCompletion
+        \ GIT !git <args>
+    command! -nargs=* -complete=customlist,GitCommandCompletion 
+        \ GITstatus ALTredirKeep !git status-- <args>
+    command! -nargs=* -complete=customlist,GitCommandCompletion 
+        \ GITcommit !git commit-- <args>
+    command! -nargs=* -complete=customlist,GitCommandCompletion 
+        \ GITpush ALTredir !git push <args>
+    command! -nargs=* -complete=customlist,GitCommandCompletion 
+        \ GITdiff silent! execute 'ALTredirKeep !git diff '.(<q-args>=='' ? '%:p':'<args>')
+    command! -nargs=0 -range
+        \ GITblameThis ALTredir !git -C %:p:h blame -L <line1>,<line2> %:t
+    command! -nargs=0
+        \ GITrestoreThis !clear && git status %:p -s & git restore %:p --patch
+    command! -nargs=0
+        \ GITlog silent! execute 'ALTredirKeep !git log --date=iso'
 "" #endregion GIT
 "" #region COC – COC and so on, compilers
     let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tsserver' ]
@@ -373,3 +380,4 @@
 
 " vim: set tabstop=4 shiftwidth=4 textwidth=250 expandtab :
 " vim>60: set foldmethod=marker foldmarker=#region,#endregion :
+"

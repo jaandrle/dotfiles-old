@@ -1,6 +1,7 @@
 this_dir=$(dirname $(readlink -f $0))
 
 ln -s $this_dir/.XCompose ~/.XCompose
+ln -s $this_dir/.gitconfig ~/.gitconfig
 mkdir ~/bin
 ln -s $this_dir/bin/_awk ~/bin/_awk
 ln -s $this_dir/bin/_calc ~/bin/_calc

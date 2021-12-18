@@ -13,6 +13,8 @@
 	log-list = log --color --graph --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'%Cred%h%Creset %Cgreen[%ad] -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset'
 	log-list-nocolors = log --graph --date=format:'%Y-%m-%d %H:%M:%S' --pretty=format:'%h [%ad] -%d %s <%an>'
 	log-tags = tag -l --sort=-creatordate --format='[%(creatordate:short)] %(refname:short): %(subject)'
+    status--= !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo
+    commit--= !clear && git status & git commit --interactive -v
 [core]
 	whitespace = trailing-space,space-before-tab,blank-at-eol
 	editor = vim
