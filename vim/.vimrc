@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-12-17 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-12-18 (VIM >=8.1)
 "" #region B – Base
     scriptencoding utf-8 | set encoding=utf-8
     let $BASH_ENV = "~/.bashrc"
@@ -37,9 +37,10 @@
     nmap sh<leader> :map <leader><cr>
     nmap shh        :call feedkeys(":map! ů \| map é \| map ř \| map ž \| map č")<cr>
     call scommands#map('s', 'CL', "n,v")
-    command! -nargs=? CLscratch 10split | enew | setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted
-        \| if <q-args>!='' | execute 'normal "'.<q-args>.'p' | endif
-        \| nnoremap <buffer> ;q :q<cr>
+    command! -nargs=?
+        \ CLscratch 10split | enew | setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted
+            \| if <q-args>!='' | execute 'normal "'.<q-args>.'p' | endif
+            \| nnoremap <buffer> ;q :q<cr>
     
     call scommands#map('S', 'SET', "n,v")
     function s:SetToggle(option)
@@ -47,15 +48,20 @@
     endfunction
     
     call scommands#map('a', 'ALT', "n,V")
-    command! -nargs=0 ALTredrawSyntax edit | normal `"
+    command! -nargs=0
+        \ ALTredrawSyntax edit | normal `"
     cabbrev ALTR ALTredrawSyntax
-    command! -complete=command -bar -range -nargs=+ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
-    command! -complete=command -bar -range -nargs=+ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
+    command! -complete=command -bar -range -nargs=+
+        \ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
+    command! -complete=command -bar -range -nargs=+
+        \ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
     set grepprg=LC_ALL=C\ grep\ -nrsH
-    command! -nargs=+ -complete=file_in_path -bar ALTgrep  cgetexpr jaandrle_utils#grep(<f-args>)
-        \| call setqflist([], 'a', {'title': ':' . g:jaandrle_utils#last_command})
-    command! -nargs=+ -complete=file_in_path -bar ALTlgrep lgetexpr jaandrle_utils#grep(<f-args>)
-        \| call setloclist(0, [], 'a', {'title': ':' . g:jaandrle_utils#last_command})
+    command! -nargs=+ -complete=file_in_path -bar
+        \ ALTgrep  cgetexpr jaandrle_utils#grep(<f-args>)
+            \| call setqflist([], 'a', {'title': ':' . g:jaandrle_utils#last_command})
+    command! -nargs=+ -complete=file_in_path -bar
+        \ ALTlgrep lgetexpr jaandrle_utils#grep(<f-args>)
+            \| call setloclist(0, [], 'a', {'title': ':' . g:jaandrle_utils#last_command})
     
     let g:quickfix_len= 0
     function! QuickFixStatus() abort
@@ -90,28 +96,26 @@
     set wildmenu wildmode=list:longest,list:full                                    " Tab autocomplete in command mode
     
     set sessionoptions-=options
-    command! -nargs=1 CLSESSIONcreate :call mini_sessions#create(<f-args>)
-    command! CLSESSIONconfig :call mini_sessions#sessionConfig()
-    command! -nargs=1 -complete=customlist,mini_sessions#complete CLSESSIONload :call mini_sessions#load(<f-args>)
-    command! -nargs=0 Scd :call mini_sessions#recoverPwd()
+    command! -nargs=1
+        \ CLSESSIONcreate :call mini_sessions#create(<f-args>)
+    command! -nargs=0
+        \ CLSESSIONconfig :call mini_sessions#sessionConfig()
+    command! -nargs=1 -complete=customlist,mini_sessions#complete
+        \ CLSESSIONload :call mini_sessions#load(<f-args>)
+    command! -nargs=0
+        \ Scd :call mini_sessions#recoverPwd()
     
     execute 'hi! User2 ctermbg='.synIDattr(synIDtrans(hlID('StatusLine')), 'bg').' ctermfg=grey'
     set laststatus=2                                                                     " Show status line on startup
-    set statusline+=··%1*≡·%{QuickFixStatus()}%*··
-    set statusline+=%2*»·%{user_tips#current()}%*··
-    set statusline+=%=
-    set statusline+=%<%f
-    set statusline+=%R\%M··
-    set statusline+=▶·%{&fileformat}
-    set statusline+=·%{&fileencoding?&fileencoding:&encoding}
-    set statusline+=·%{&filetype}··
-    set statusline+=∷·%{mini_sessions#name('–')}·· 
+    set statusline+=··%1*≡·%{QuickFixStatus()}%*··%2*»·%{user_tips#current()}%*··%=
+    set statusline+=%<%f%R\%M··▶·%{&fileformat}·%{&fileencoding?&fileencoding:&encoding}·%{&filetype}··∷·%{mini_sessions#name('–')}·· 
     
     set history=500                                                   " How many lines of (cmd) history has to remember
-    set nobackup nowritebackup noswapfile " Turn off backup files. Some servers have issues with backup files, see #649.
+    set nobackup nowritebackup noswapfile         " …there is issue #649 (for servers) and I’m using git/system backups
     try
         set undodir=~/.vim/undodir undofile | catch | endtry
-    command CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
+    command! CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
+    command! SETundoClear let old_undolevels=&undolevels | set undolevels=-1 | exe "normal a \<BS>\<Esc>" | let &undolevels=old_undolevels | unlet old_undolevels
 "" #endregion SLH
 "" #region LLW – Left Column + Line + Wrap + Scrolling
     if has("nvim-0.5.0") || has("patch-8.1.1564")           " Recently vim can merge signcolumn and number column into one
@@ -119,7 +123,8 @@
     set cursorline                                                                      " Always show current position
     set number foldcolumn=2                               " enable line numbers and add a bit extra margin to the left
     set colorcolumn=+1                                                                                " …marker visual
-    command -nargs=? SETtextwidth if <q-args> | let &textwidth=<q-args> | let &colorcolumn='<args>,120,240' | else | let &textwidth=250 | let &colorcolumn='120,240' | endif
+    command -nargs=?
+        \ SETtextwidth if <q-args> | let &textwidth=<q-args> | let &colorcolumn='<args>,120,240' | else | let &textwidth=250 | let &colorcolumn='120,240' | endif
     SETtextwidth                                                                    " wraping lines and show two lines
     set nowrap | call <sid>SetToggle('wrap')                                        " Don't wrap long lines by default
     set breakindent breakindentopt=shift:2 showbreak=↳ 
@@ -127,20 +132,6 @@
     set scrolloff=5 sidescrolloff=10                                        " offset for lines/columns when scrolling
     for l in [ 'r', 'R', 'l', 'L' ] | exec ':set guioptions-='.l | endfor                        " disable scrollbars
 "" #endregion LLW
-"" #region F – Folds
-    set foldmarker=#region,#endregion
-    augroup remember_folds | autocmd! | autocmd BufWinLeave *.* mkview | autocmd BufWinEnter *.* silent! loadview | augroup END
-    command! -nargs=0  SETFOLDregions set foldmethod=marker
-    command! -nargs=1  SETFOLDindent set foldmethod=indent | let &foldlevel=<q-args> | let &foldnestmax=<q-args>+1
-    command! -nargs=*  SETFOLDindents set foldmethod=indent | let &foldlevel=split(<q-args>, ' ')[0] | let &foldnestmax=split(<q-args>, ' ')[1]
-
-    nnoremap <silent> <leader>zJ :call jaandrle_utils#fold_nextOpen('j')<cr>
-    nnoremap <silent> <leader>zj :call jaandrle_utils#fold_nextClosed('j')<cr>
-    nnoremap <silent> <leader>zK :call jaandrle_utils#fold_nextOpen('k')<cr>
-    nnoremap <silent> <leader>zk :call jaandrle_utils#fold_nextClosed('k')<cr>
-    nnoremap <silent> <leader>zn zc:call jaandrle_utils#fold_nextOpen('j')<cr>
-    nnoremap <silent> <leader>zN zc:call jaandrle_utils#fold_nextOpen('k')<cr>
-"" #endregion F
 "" #region CN – Clipboard + Navigation throught Buffers + Windows + … (CtrlP)
     set pastetoggle=<F2> | nnoremap <F2> :set invpaste paste?<CR>
     nnoremap <silent> <leader>" :call jaandrle_utils#copyRegister()<cr>
@@ -148,20 +139,23 @@
     nmap <expr> š buffer_number("#")==-1 ? "sb<cr>" : "\<c-^>"
     nmap sB :buffers<cr>:b<space>
     nmap sb :CtrlPBuffer<cr>
-    command! CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
-    command! ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg', 'tn')
+    command!
+        \ CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
+    command!
+        \ ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg', 'tn')
     let g:ctrlp_map = 'ě'
-    command! -nargs=? SETctrlp execute 'nnoremap '.g:ctrlp_map.' :CtrlP <args><cr>'
+    command! -nargs=?
+        \ SETctrlp execute 'nnoremap '.g:ctrlp_map.' :CtrlP <args><cr>'
     let g:ctrlp_clear_cache_on_exit = 0
     call scommands#map('ě', 'CtrlP', "n")
 "" #endregion CN
 "" #region FOS – File(s) + Openning + Saving
     set autowrite autoread | autocmd FocusGained,BufEnter *.* checktime
-    command -bar -nargs=0 -range=% CLtrimEndLineSpaces call jaandrle_utils#trimEndLineSpaces(<line1>,<line2>)
-    
+    command -bar -nargs=0 -range=%
+        \ CLtrimEndLineSpaces call jaandrle_utils#trimEndLineSpaces(<line1>,<line2>)
     set modeline
-    command! CLmodelineBasic :call jaandrle_utils#AppendModeline(0)
-    command! CLmodeline :call jaandrle_utils#AppendModeline(1)
+    command! -nargs=?
+        \ CLmodeline :call jaandrle_utils#AppendModeline(<q-args>=='basic' ? 0 : 1)
 
     set path+=src/**,app/**,build/**                                                        " File matching for `:find`
     for ignore in [ '.git', '.npm', 'node_modules' ]
@@ -188,30 +182,45 @@
 
     nmap sj <Plug>(JumpMotion)
 "" #endregion EN
-"" #region EA – Editing adjustment + White chars
-    autocmd VimEnter * try | call rainbow_parentheses#toggle() | catch | endtry
+"" #region EA – Editing adjustment + White chars + Folds
+    " PARENTHESES plugin junegunn/rainbow_parentheses.vim
+    let g:rainbow#pairs= [['(', ')'], ['[', ']'], [ '{', '}' ]]
+    let g:rainbow#blacklist = [203]
+    autocmd VimEnter * try
+        \| call rainbow_parentheses#toggle() | catch | endtry
+    command!
+        \ SETTOGGLErainbowParentheses call rainbow_parentheses#toggle()
+    " HIGHLIGHT&YANK plugins machakann/vim-highlightedyank & cwordhi.vim
     let g:highlightedyank_highlight_duration= 250
-    set showmatch                                               " Quick highlight oppening bracket/… for currently writted
-    command! SETTOGGLErainbowParentheses call rainbow_parentheses#toggle()
-    let g:rainbow#pairs= [['(', ')'], ['[', ']'], [ '{', '}' ]] | let g:rainbow#blacklist = [203]
-    set timeoutlen=1000 ttimeoutlen=0                                                  " Remove timeout when hitting escape
-    set completeopt=menuone,preview,noinsert,noselect
-    set backspace=indent,eol,start                  " Allow cursor keys in insert mode:  http://vi.stackexchange.com/a/2163
     let g:cwordhi#autoload= 1
-    if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
-      syntax on | endif
+    set showmatch                                               " Quick highlight oppening bracket/… for currently writted
+    set timeoutlen=1000 ttimeoutlen=0                                                  " Remove timeout when hitting escape
+    " TAB
     if v:version > 703 || v:version == 703 && has("patch541")
       set formatoptions+=j | endif                             " Delete comment character when joining commented lines
-    set list listchars=tab:»·,trail:·,extends:#,nbsp:~,space:·      " Highlight spec. chars / Display extra whitespace
-    call <sid>SetToggle('list')
     set expandtab smarttab                                                   " Use spaces instead of tabs and be smart
     call <sid>SetToggle('expandtab')
-    command! -nargs=1 SETtab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
+    command! -nargs=1
+        \ SETtab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
     SETtab 4
-    command! -nargs=? SETspell if <q-args>==&spelllang || <q-args>=='' | set spell! | else | set spell | set spelllang=<args> | endif | if &spell | set spelllang | endif
+    set backspace=indent,eol,start                  " Allow cursor keys in insert mode:  http://vi.stackexchange.com/a/2163
     set shiftround autoindent   " round diff shifts to the base of n*shiftwidth,  https://stackoverflow.com/a/18415867
     filetype plugin indent on
-
+    " SYNTAX&COLORS
+    if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
+      syntax on | endif
+    set list listchars=tab:»·,trail:·,extends:#,nbsp:~,space:·      " Highlight spec. chars / Display extra whitespace
+    call <sid>SetToggle('list')
+    augroup syntax_sync_min_lines
+        autocmd!
+        autocmd Syntax * syn sync minlines=2000
+    augroup END
+    " SPELL
+    if !has("gui_running")
+        hi clear SpellBad | hi SpellBad cterm=underline,italic | endif
+    command! -nargs=?
+        \ SETspell if <q-args>==&spelllang || <q-args>=='' | set spell! | else | set spell | set spelllang=<args> | endif | if &spell | set spelllang | endif
+    " EDIT HEPERS
     nnoremap <leader>y "+y
     vnoremap <leader>y "+y
     noremap <leader>p "+p
@@ -224,10 +233,27 @@
     nnoremap <leader>*o o * <space><bs>
     nnoremap <leader>o o<space><bs><esc>
     nnoremap <leader><s-o> <s-o><space><bs><esc>
-    
-    augroup syntaxSyncMinLines | autocmd! |  autocmd Syntax * syn sync minlines=2000 | augroup END
-    if !has("gui_running")
-        hi clear SpellBad | hi SpellBad cterm=underline,italic | endif
+    " FOLDS
+    command! -nargs=0
+        \ SETFOLDregions set foldmethod=marker
+    command! -nargs=1
+        \ SETFOLDindent set foldmethod=indent | let &foldlevel=<q-args> | let &foldnestmax=<q-args>+1
+    command! -nargs=*
+        \ SETFOLDindents set foldmethod=indent | let &foldlevel=split(<q-args>, ' ')[0] | let &foldnestmax=split(<q-args>, ' ')[1]
+    nnoremap <silent> <leader>zJ :call jaandrle_utils#fold_nextOpen('j')<cr>
+    nnoremap <silent> <leader>zj :call jaandrle_utils#fold_nextClosed('j')<cr>
+    nnoremap <silent> <leader>zK :call jaandrle_utils#fold_nextOpen('k')<cr>
+    nnoremap <silent> <leader>zk :call jaandrle_utils#fold_nextClosed('k')<cr>
+    nnoremap <silent> <leader>zn zc:call jaandrle_utils#fold_nextOpen('j')<cr>
+    nnoremap <silent> <leader>zN zc:call jaandrle_utils#fold_nextOpen('k')<cr>
+    set foldmarker=#region,#endregion
+    " SAVE VIEW
+    set viewoptions=cursor,folds
+    augroup remember__view
+        autocmd!
+        autocmd BufWinLeave *.* if &buflisted | mkview | endif
+        autocmd BufWinEnter *.* silent! loadview
+    augroup END
 "" #endregion EA
 "" #region GIT
     call scommands#map('g', 'GIT', "n,V")
@@ -249,9 +275,9 @@
 "" #region COC – COC and so on, compilers
     let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tsserver' ]
     autocmd FileType scss setl iskeyword+=@-@
-    command -nargs=? ALTmake
-        \  if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
-        \| if <q-args>!='' | silent make <args> | else | silent make % | endif | checktime | silent redraw!        " …prev line, hotfix (filetype detection does’t works)
+    command -nargs=?
+        \ ALTmake  if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
+            \| if <q-args>!='' | silent make <args> | else | silent make % | endif | checktime | silent redraw!        " …prev line, hotfix (filetype detection does’t works)
     autocmd BufWritePost *.{php,js} execute 'ALTmake' | call <sid>QuickFixCmdPost()
     function! CustomSessionSyntax(type)
         if(a:type=="gulp_place")
@@ -265,7 +291,7 @@
         endif
     endfunction
 
-    nnoremap <F1> :CLwhereami<cr>
+    set completeopt=menuone,preview,noinsert,noselect
     inoremap <silent><expr> <F1> pumvisible() ? coc#_select_confirm() : coc#refresh()
     inoremap <silent><expr> <tab> pumvisible() ? "\<c-n>" : <sid>check_back_space() ? "\<tab>" : coc#refresh()
     inoremap <silent><expr> <s-tab> pumvisible() ? "\<c-p>" : "\<c-h>"
@@ -301,6 +327,7 @@
     call scommands#map('C', 'Coc', "n,v")
     nmap sc :CocList lists<cr>
     nmap Sc :CocListResume<cr>
+    nnoremap <F1> :CLwhereami<cr>
     command CLwhereami            echo      '▶File:'expand('%:t')
                                           \ '▶Coc(state/function): 'coc#status()'/'CocAction("getCurrentFunctionSymbol")
                                           \ '▶Line:'line('.')'/'line('$')
