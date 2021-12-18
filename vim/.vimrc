@@ -13,6 +13,7 @@
     
     cabbrev <expr> %PWD%  execute('pwd')
     cabbrev <expr> %CD%   fnameescape(expand('%:p:h'))
+    cabbrev <expr> %CS%   mini_enhancement#selectedText()
     cabbrev <expr> %CW%   expand('<cword>')
     
     let mapleader = "\\"
@@ -240,12 +241,6 @@
         \ SETFOLDindent set foldmethod=indent | let &foldlevel=<q-args> | let &foldnestmax=<q-args>+1
     command! -nargs=*
         \ SETFOLDindents set foldmethod=indent | let &foldlevel=split(<q-args>, ' ')[0] | let &foldnestmax=split(<q-args>, ' ')[1]
-    nnoremap <silent> <leader>zJ :call jaandrle_utils#fold_nextOpen('j')<cr>
-    nnoremap <silent> <leader>zj :call jaandrle_utils#fold_nextClosed('j')<cr>
-    nnoremap <silent> <leader>zK :call jaandrle_utils#fold_nextOpen('k')<cr>
-    nnoremap <silent> <leader>zk :call jaandrle_utils#fold_nextClosed('k')<cr>
-    nnoremap <silent> <leader>zn zc:call jaandrle_utils#fold_nextOpen('j')<cr>
-    nnoremap <silent> <leader>zN zc:call jaandrle_utils#fold_nextOpen('k')<cr>
     set foldmarker=#region,#endregion
     " SAVE VIEW
     set viewoptions=cursor,folds
