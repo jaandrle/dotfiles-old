@@ -110,8 +110,8 @@
     set nobackup nowritebackup noswapfile         " …there is issue #649 (for servers) and I’m using git/system backups
     try
         set undodir=~/.vim/undodir undofile | catch | endtry
-    command! CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later'
-    command! SETundoClear let old_undolevels=&undolevels | set undolevels=-1 | exe "normal a \<BS>\<Esc>" | let &undolevels=old_undolevels | unlet old_undolevels
+    command! CLundotree UndotreeToggle | echo 'Use also :undolist :earlier :later' | UndotreeFocus
+    command! SETundoClear let old_undolevels=&undolevels | set undolevels=-1 | exe "normal a \<BS>\<Esc>" | let &undolevels=old_undolevels | unlet old_undolevels | write
 "" #endregion SLH
 "" #region LLW – Left Column + Line + Wrap + Scrolling
     if has("nvim-0.5.0") || has("patch-8.1.1564")           " Recently vim can merge signcolumn and number column into one
