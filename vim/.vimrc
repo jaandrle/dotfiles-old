@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2021-12-18 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2021-12-19 (VIM >=8.1)
 "" #region B – Base
     scriptencoding utf-8 | set encoding=utf-8
     let $BASH_ENV = "~/.bashrc"
@@ -18,30 +18,27 @@
     
     let mapleader = "\\"
     " better for my keyboard, but maybe use `:help keymap`?
+    nnoremap § @
     nnoremap ů ;
     nnoremap ; :
     nnoremap ž <c-]>
     nnoremap ř <c-r>
     
     if executable('konsole')
-        command! -nargs=? ALTterminal if <q-args>=='' | execute 'silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &'
-                    \| else | execute 'silent !(konsole -e /bin/bash --rcfile <(echo "source ~/.profile;<args>") > /dev/null 2>&1) &' | endif
+        command! -nargs=? ALTterminal if <q-args>=='' | execute 'silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &' | else | execute 'silent !(konsole -e /bin/bash --rcfile <(echo "source ~/.profile;<args>") > /dev/null 2>&1) &' | endif
     else
         command! -nargs=? ALTterminal silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &
     endif
     nnoremap <leader>t :ALTterminal<cr>
     
     if has("patch-8.1.0360")
-        set diffopt+=algorithm:patience diffopt+=indent-heuristic | endif
+        set diffopt+=algorithm:patience,indent-heuristic | endif
 "" #endregion B
 "" #region H – Helpers + remap 'sS' (primary ss, see `vim-scommands`)
     nmap sh<leader> :map <leader><cr>
     nmap shh        :call feedkeys(":map! ů \| map é \| map ř \| map ž \| map č")<cr>
     call scommands#map('s', 'CL', "n,v")
-    command! -nargs=?
-        \ CLscratch 10split | enew | setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted
-            \| if <q-args>!='' | execute 'normal "'.<q-args>.'p' | endif
-            \| nnoremap <buffer> ;q :q<cr>
+    command! -nargs=?  CLscratch 10split | enew | setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted | if <q-args>!='' | execute 'normal "'.<q-args>.'p' | endif | nnoremap <buffer> ;q :q<cr>
     
     call scommands#map('S', 'SET', "n,v")
     function s:SetToggle(option)
@@ -49,20 +46,18 @@
     endfunction
     
     call scommands#map('a', 'ALT', "n,V")
+    cabbrev ALTR ALTredrawSyntax
+    set grepprg=LC_ALL=C\ grep\ -nrsH
     command! -nargs=0
         \ ALTredrawSyntax edit | normal `"
-    cabbrev ALTR ALTredrawSyntax
     command! -complete=command -bar -range -nargs=+
         \ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
     command! -complete=command -bar -range -nargs=+
         \ ALTredirKeep call jaandrle_utils#redir(1, <q-args>, <range>, <line1>, <line2>)
-    set grepprg=LC_ALL=C\ grep\ -nrsH
     command! -nargs=+ -complete=file_in_path -bar
-        \ ALTgrep  cgetexpr jaandrle_utils#grep(<f-args>)
-            \| call setqflist([], 'a', {'title': ':' . g:jaandrle_utils#last_command})
+        \ ALTgrep  cgetexpr jaandrle_utils#grep(<f-args>) | call setqflist([], 'a', {'title': ':' . g:jaandrle_utils#last_command})
     command! -nargs=+ -complete=file_in_path -bar
-        \ ALTlgrep lgetexpr jaandrle_utils#grep(<f-args>)
-            \| call setloclist(0, [], 'a', {'title': ':' . g:jaandrle_utils#last_command})
+        \ ALTlgrep lgetexpr jaandrle_utils#grep(<f-args>) | call setloclist(0, [], 'a', {'title': ':' . g:jaandrle_utils#last_command})
     
     let g:quickfix_len= 0
     function! QuickFixStatus() abort
@@ -124,14 +119,14 @@
     set cursorline                                                                      " Always show current position
     set number foldcolumn=2                               " enable line numbers and add a bit extra margin to the left
     set colorcolumn=+1                                                                                " …marker visual
-    command -nargs=?
-        \ SETtextwidth if <q-args> | let &textwidth=<q-args> | let &colorcolumn='<args>,120,240' | else | let &textwidth=250 | let &colorcolumn='120,240' | endif
+    command -nargs=? SETtextwidth if <q-args> | let &textwidth=<q-args> | let &colorcolumn='<args>,120,240' | else | let &textwidth=250 | let &colorcolumn='120,240' | endif
     SETtextwidth                                                                    " wraping lines and show two lines
     set nowrap | call <sid>SetToggle('wrap')                                        " Don't wrap long lines by default
     set breakindent breakindentopt=shift:2 showbreak=↳ 
     
     set scrolloff=5 sidescrolloff=10                                        " offset for lines/columns when scrolling
-    for l in [ 'r', 'R', 'l', 'L' ] | exec ':set guioptions-='.l | endfor                        " disable scrollbars
+    for l in [ 'r', 'R', 'l', 'L' ]
+        exec ':set guioptions-='.l | endfor                        " disable scrollbars
 "" #endregion LLW
 "" #region CN – Clipboard + Navigation throught Buffers + Windows + … (CtrlP)
     set pastetoggle=<F2> | nnoremap <F2> :set invpaste paste?<CR>
@@ -140,19 +135,16 @@
     nmap <expr> š buffer_number("#")==-1 ? "sb<cr>" : "\<c-^>"
     nmap sB :buffers<cr>:b<space>
     nmap sb :CtrlPBuffer<cr>
-    command!
-        \ CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
-    command!
-        \ ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg', 'tn')
+    command!            CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
+    command!            ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg', 'tn')
     let g:ctrlp_map = 'ě'
-    command! -nargs=?
-        \ SETctrlp execute 'nnoremap '.g:ctrlp_map.' :CtrlP <args><cr>'
+    command! -nargs=?   SETctrlp execute 'nnoremap '.g:ctrlp_map.' :CtrlP <args><cr>'
     let g:ctrlp_clear_cache_on_exit = 0
     call scommands#map('ě', 'CtrlP', "n")
 "" #endregion CN
 "" #region FOS – File(s) + Openning + Saving
     set autowrite autoread | autocmd FocusGained,BufEnter *.* checktime
-    command -bar -nargs=0 -range=%
+    command! -bar -nargs=0 -range=%
         \ CLtrimEndLineSpaces call jaandrle_utils#trimEndLineSpaces(<line1>,<line2>)
     set modeline
     command! -nargs=?
@@ -178,8 +170,8 @@
     nmap <silent>ú :nohlsearch<bar>diffupdate<cr>
 
     call scommands#map('n', 'NAV', "n")
-    command NAVjumps             call jaandrle_utils#gotoJumpChange('jump')
-    command NAVchanges           call jaandrle_utils#gotoJumpChange('change')
+    command! NAVjumps call jaandrle_utils#gotoJumpChange('jump')
+    command! NAVchanges call jaandrle_utils#gotoJumpChange('change')
 
     nmap sj <Plug>(JumpMotion)
 "" #endregion EN
@@ -189,8 +181,7 @@
     let g:rainbow#blacklist = [203]
     autocmd VimEnter * try
         \| call rainbow_parentheses#toggle() | catch | endtry
-    command!
-        \ SETTOGGLErainbowParentheses call rainbow_parentheses#toggle()
+    command! SETTOGGLErainbowParentheses call rainbow_parentheses#toggle()
     " HIGHLIGHT&YANK plugins machakann/vim-highlightedyank & cwordhi.vim
     let g:highlightedyank_highlight_duration= 250
     let g:cwordhi#autoload= 1
@@ -201,8 +192,7 @@
       set formatoptions+=j | endif                             " Delete comment character when joining commented lines
     set expandtab smarttab                                                   " Use spaces instead of tabs and be smart
     call <sid>SetToggle('expandtab')
-    command! -nargs=1
-        \ SETtab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
+    command! -nargs=1 SETtab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
     SETtab 4
     set backspace=indent,eol,start                  " Allow cursor keys in insert mode:  http://vi.stackexchange.com/a/2163
     set shiftround autoindent   " round diff shifts to the base of n*shiftwidth,  https://stackoverflow.com/a/18415867
@@ -219,8 +209,7 @@
     " SPELL
     if !has("gui_running")
         hi clear SpellBad | hi SpellBad cterm=underline,italic | endif
-    command! -nargs=?
-        \ SETspell if <q-args>==&spelllang || <q-args>=='' | set spell! | else | set spell | set spelllang=<args> | endif | if &spell | set spelllang | endif
+    command! -nargs=? SETspell if <q-args>==&spelllang || <q-args>=='' | set spell! | else | set spell | set spelllang=<args> | endif | if &spell | set spelllang | endif
     " EDIT HEPERS
     for l in [ 'y', 'p', 'd' ] | for m in [ 'n', 'v' ]
         execute m.'noremap <leader>'.l.' "+'.l
@@ -231,12 +220,9 @@
     nnoremap <leader>o o<space><bs><esc>
     nnoremap <leader><s-o> <s-o><space><bs><esc>
     " FOLDS
-    command! -nargs=0
-        \ SETFOLDregions set foldmethod=marker
-    command! -nargs=1
-        \ SETFOLDindent set foldmethod=indent | let &foldlevel=<q-args> | let &foldnestmax=<q-args>+1
-    command! -nargs=*
-        \ SETFOLDindents set foldmethod=indent | let &foldlevel=split(<q-args>, ' ')[0] | let &foldnestmax=split(<q-args>, ' ')[1]
+    command! -nargs=0 SETFOLDregions set foldmethod=marker
+    command! -nargs=1 SETFOLDindent set foldmethod=indent | let &foldlevel=<q-args> | let &foldnestmax=<q-args>+1
+    command! -nargs=* SETFOLDindents set foldmethod=indent | let &foldlevel=split(<q-args>, ' ')[0] | let &foldnestmax=split(<q-args>, ' ')[1]
     set foldmarker=#region,#endregion
     " SAVE VIEW
     set viewoptions=cursor,folds
@@ -248,37 +234,43 @@
 "" #endregion EA
 "" #region GIT
     call scommands#map('g', 'GIT', "n,V")
-    function GitCommandCompletion(_, CmdLine, __)
+    function s:gitCompletion(_, CmdLine, __)
         let l:cmd= a:CmdLine->split()
         let l:cmd_start= l:cmd[0]->substitute('GIT', 'git ', '')->trim()->split(' ')
         return bash#complete((l:cmd_start+l:cmd[1:])->join())
     endfunction
-    command -nargs=* -complete=customlist,GitCommandCompletion
-        \ GIT !git <args>
-    command! -nargs=* -complete=customlist,GitCommandCompletion 
+    function s:gitCmd(candidate)
+        let l:main= a:candidate->split()[0]
+        let l:pre= ([ 'log' ])->index(l:main)!=-1
+                    \ ? 'ALTredirKeep !' : 
+                \ ([ 'push', 'pull', 'fetch' ])->index(l:main)!=-1
+                    \ ? 'ALTredir !' :
+                    \'!clear && echo ":: git '.a:candidate->escape('"').' ::" && '
+        execute l:pre.'git '.a:candidate
+    endfunction
+    command! -nargs=* -complete=customlist,<sid>gitCompletion
+        \ GIT call <sid>gitCmd(<q-args>)
+    command! -nargs=* -complete=customlist,<sid>gitCompletion
         \ GITstatus ALTredirKeep !git status-- <args>
-    command! -nargs=* -complete=customlist,GitCommandCompletion 
+    command! -nargs=* -complete=customlist,<sid>gitCompletion
         \ GITcommit !git commit-- <args>
-    command! -nargs=* -complete=customlist,GitCommandCompletion 
+    command! -nargs=* -complete=customlist,<sid>gitCompletion
         \ GITpush ALTredir !git push <args>
-    command! -nargs=* -complete=customlist,GitCommandCompletion 
+    command! -nargs=* -complete=customlist,<sid>gitCompletion
         \ GITdiff silent! execute 'ALTredirKeep !git diff '.(<q-args>=='' ? '%:p':'<args>')
     command! -nargs=0 -range
         \ GITblameThis ALTredir !git -C %:p:h blame -L <line1>,<line2> %:t
     command! -nargs=0
         \ GITrestoreThis !clear && git status %:p -s & git restore %:p --patch
-    command! -nargs=0
-        \ GITlog silent! execute 'ALTredirKeep !git log --date=iso'
 "" #endregion GIT
 "" #region COC – COC and so on, compilers
     let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tsserver' ]
     autocmd FileType scss setl iskeyword+=@-@
-    command -nargs=?
-        \ ALTmake  if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
-            \| if <q-args>!='' | silent make <args> | else | silent make % | endif | checktime | silent redraw!        " …prev line, hotfix (filetype detection does’t works)
+    command -nargs=? ALTmake if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
+                          \| if <q-args>!='' | silent make <args> | else | silent make % | endif | checktime | silent redraw!        " …prev line, hotfix (filetype detection does’t works)
     autocmd BufWritePost *.{php,js} execute 'ALTmake' | call <sid>QuickFixCmdPost()
-    function! CustomSessionSyntax(type)
-        if(a:type=="gulp_place")
+    function! CustomKeyWord(word)
+        if(a:word=="gulp_place")
             highlight link gulp_place ErrorMsg
             syntax match gulp_place "gulp_place"
             augroup gulp_place
@@ -326,21 +318,21 @@
     nmap sc :CocList lists<cr>
     nmap Sc :CocListResume<cr>
     nnoremap <F1> :CLwhereami<cr>
-    command CLwhereami            echo      '▶File:'expand('%:t')
+    command! CLwhereami            echo      '▶File:'expand('%:t')
                                           \ '▶Coc(state/function): 'coc#status()'/'CocAction("getCurrentFunctionSymbol")
                                           \ '▶Line:'line('.')'/'line('$')
                                           \ '▶Cursor:'col('.')'/'col('$')
-    command CLhelpCocPlug         call feedkeys(':<c-u>help <Plug>(coc	', 'tn')
-    command CLhelpCocAction       call feedkeys(':<c-u>help CocAction(''	', 'tn')
-    command CLrename              call CocActionAsync('rename')
-    command CLrenameFile          exec 'CocCommand workspace.renameCurrentFile'
-    command CLjsdoc               exec 'CocCommand docthis.documentThis'
-    command CLcodeactionCursor    call CocActionAsync('codeAction', 'cursor')
-    command CLfixCodeQuick        call CocActionAsync('doQuickfix')
-    command NAVdefinition        call CocActionAsync('jumpDefinition')
-    command NAVtype              call CocActionAsync('jumpTypeDefinition')
-    command NAVimplementation    call CocActionAsync('jumpImplementation')
-    command NAVreferences        call CocActionAsync('jumpReferences')
+    command! CLhelpCocPlug         call feedkeys(':<c-u>help <Plug>(coc	', 'tn')
+    command! CLhelpCocAction       call feedkeys(':<c-u>help CocAction(''	', 'tn')
+    command! CLrename              call CocActionAsync('rename')
+    command! CLrenameFile          exec 'CocCommand workspace.renameCurrentFile'
+    command! CLjsdoc               exec 'CocCommand docthis.documentThis'
+    command! CLcodeactionCursor    call CocActionAsync('codeAction', 'cursor')
+    command! CLfixCodeQuick        call CocActionAsync('doQuickfix')
+    command! NAVdefinition         call CocActionAsync('jumpDefinition')
+    command! NAVtype               call CocActionAsync('jumpTypeDefinition')
+    command! NAVimplementation     call CocActionAsync('jumpImplementation')
+    command! NAVreferences         call CocActionAsync('jumpReferences')
     
     nmap <leader>/ :CocSearch 
     nmap <leader>? <leader>/
@@ -360,15 +352,5 @@
         endif
     endfunction
 "" #endregion COC
-
-" #region T – TODO
-" 1) Stylus
-"     - [iloginow/vim-stylus: A better vim plugin for stylus, including proper and up-to-date syntax highligting, indentation and autocomplete](https://github.com/iloginow/vim-stylus)
-"     - [sheerun/vim-polyglot: A solid language pack for Vim.](https://github.com/sheerun/vim-polyglot)
-" 1) [Create custom source · neoclide/coc.nvim Wiki](https://github.com/neoclide/coc.nvim/wiki/Create-custom-source)
-" 1) coc-*: viml, svg
-" #endregion T
-
 " vim: set tabstop=4 shiftwidth=4 textwidth=250 expandtab :
 " vim>60: set foldmethod=marker foldmarker=#region,#endregion :
-"
