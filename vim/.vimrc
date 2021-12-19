@@ -222,16 +222,12 @@
     command! -nargs=?
         \ SETspell if <q-args>==&spelllang || <q-args>=='' | set spell! | else | set spell | set spelllang=<args> | endif | if &spell | set spelllang | endif
     " EDIT HEPERS
-    nnoremap <leader>y "+y
-    vnoremap <leader>y "+y
-    noremap <leader>p "+p
-    vnoremap <leader>p "+p
+    for l in [ 'y', 'p', 'd' ] | for m in [ 'n', 'v' ]
+        execute m.'noremap <leader>'.l.' "+'.l
+    endfor | endfor
     nnoremap <s-k> a<cr><esc>
     nnoremap <leader>cw *``cgn
     nnoremap <leader>cb #``cgN
-    nnoremap <leader>,o <s-a>,<cr><space><bs>
-    nnoremap <leader>;o <s-a>;<cr><space><bs>
-    nnoremap <leader>*o o * <space><bs>
     nnoremap <leader>o o<space><bs><esc>
     nnoremap <leader><s-o> <s-o><space><bs><esc>
     " FOLDS
