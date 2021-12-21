@@ -33,6 +33,10 @@
     
     if has("patch-8.1.0360")
         set diffopt+=algorithm:patience,indent-heuristic | endif
+    augroup vimrc_help
+        autocmd!
+        autocmd BufEnter *.txt if &buftype == 'help' | wincmd L | vertical resize 90 | endif
+    augroup END
 "" #endregion B
 "" #region H – Helpers + remap 'sS' (primary ss, see `vim-scommands`)
     nmap sh<leader> :map <leader><cr>
@@ -341,7 +345,8 @@
         let word= a:is_visual ? getline("'<")[getpos("'<")[2]-1:getpos("'>")[2]-1] : expand('<cword>')
         if (index(['vim','help'], &filetype) >= 0)
             execute 'h '.word
-        elseif (index(['git'], &filetype) >= 0 || !coc#rpc#ready())
+        elseif (index(['git','man'], &filetype) >= 0 || !coc#rpc#ready())
+            if &filetype=='man' | let word= "'".word."'" | endif
             execute '!' . &keywordprg . " " . word
         elseif &filetype=='html'
             if coc#source#custom_elements#hover(word)==0
