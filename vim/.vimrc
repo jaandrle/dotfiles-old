@@ -215,14 +215,11 @@
         hi clear SpellBad | hi SpellBad cterm=underline,italic | endif
     command! -nargs=? SETspell if <q-args>==&spelllang || <q-args>=='' | set spell! | else | set spell | set spelllang=<args> | endif | if &spell | set spelllang | endif
     " EDIT HEPERS
-    for l in [ 'y', 'p', 'd' ] | for m in [ 'n', 'v' ]
-        execute m.'noremap <leader>'.l.' "+'.l
-    endfor | endfor
-    nnoremap <s-k> a<cr><esc>
-    nnoremap <leader>cw *``cgn
-    nnoremap <leader>cb #``cgN
     nnoremap <leader>o o<space><bs><esc>
-    nnoremap <leader><s-o> <s-o><space><bs><esc>
+    nnoremap <leader>O O<space><bs><esc>
+    nnoremap <s-k> a<cr><esc>
+    for l in [ 'y', 'p', 'P', 'd' ] | for m in [ 'n', 'v' ]
+        execute m.'noremap <leader>'.l.' "+'.l | endfor | endfor
     " FOLDS
     command! -nargs=0 SETFOLDregions set foldmethod=marker
     command! -nargs=1 SETFOLDindent set foldmethod=indent | let &foldlevel=<q-args> | let &foldnestmax=<q-args>+1
@@ -330,6 +327,8 @@
     command! CLhelpCocAction       call feedkeys(':<c-u>help CocAction(''	', 'tn')
     command! CLrename              call CocActionAsync('rename')
     command! CLrenameFile          exec 'CocCommand workspace.renameCurrentFile'
+    command! -nargs=? -bang
+           \ CLreplace             call feedkeys(':<c-u>'.(<q-args>==''?'.':<q-args>).'s/'.("<bang>"=='!'?mini_enhancement#selectedText():expand('<cword>')).'//cgODODOD', 'tn')
     command! CLjsdoc               exec 'CocCommand docthis.documentThis'
     command! CLcodeactionCursor    call CocActionAsync('codeAction', 'cursor')
     command! CLfixCodeQuick        call CocActionAsync('doQuickfix')
