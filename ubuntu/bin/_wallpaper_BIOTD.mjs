@@ -25,7 +25,8 @@ function update(data){
     })
     .catch(e=> console.error(String(e)));
 }
-function getImage_(url, name, description){
+function getImage_(url, name, desc){
+    const description= desc.replace("(©", "<br>(©");
     return get_(url_main+url)
     .then(res=> {
         const fs= createWriteStream(folder+name+'.jpg');

@@ -11,18 +11,19 @@
         }
         div{ position: relative; flex: 1; }
         img{ height: 100%; width: 100%; object-fit: contain; }
-        .detail{ position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); padding: .25rem 1rem;
-            background: rgba(0, 0, 0, .35); color: whitesmoke; }
+        .detail{ position: absolute; bottom: 0; left: 0; padding: .5rem 1rem;
+            text-align: center; background: rgba(0, 0, 0, .35); color: whitesmoke; }
+        div:last-of-type .detail{ left: initial; right: 0; }
     </style>
 </head>
 <body>
     <div>
         <img src="now.jpg">
-        <div class="detail"><p>::now::</p></div>
+        <div class="detail">::now::</div>
     </div>
     <div>
         <img src="prev.jpg">
-        <div class="detail"><p>::prev::</p></div>
+        <div class="detail">::prev::</div>
     </div>
 </body>
 </html>
