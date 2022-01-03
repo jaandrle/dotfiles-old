@@ -6,6 +6,7 @@ mkdir ~/bin
 ln -s $this_dir/bin/_awk ~/bin/_awk
 ln -s $this_dir/bin/_calc ~/bin/_calc
 ln -s $this_dir/bin/_cordova-release.mjs ~/bin/_cordova-release.mjs
+ln -s $this_dir/bin/_wallpaper_BIOTD.mjs ~/bin/_wallpaper_BIOTD.mjs
 ln -s $this_dir/bin/_extract ~/bin/_extract
 ln -s $this_dir/bin/_vim_plugins ~/bin/_vim_plugins
 ln -s $this_dir/bin/_vim_cache_clean ~/bin/_vim_cache_clean

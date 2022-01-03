@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bing Image Of The Day</title>
+    <style>
+        body{ display: flex; flex-flow: row nowrap;
+            width: 100vw; height: 100vh; overflow: hidden; margin: 0;
+        }
+        div{ position: relative; flex: 1; }
+        img{ height: 100%; width: 100%; object-fit: contain; }
+        .detail{ position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); padding: .25rem 1rem;
+            background: rgba(0, 0, 0, .35); color: whitesmoke; }
+    </style>
+</head>
+<body>
+    <div>
+        <img src="now.jpg">
+        <div class="detail"><p>::now::</p></div>
+    </div>
+    <div>
+        <img src="prev.jpg">
+        <div class="detail"><p>::prev::</p></div>
+    </div>
+</body>
+</html>
