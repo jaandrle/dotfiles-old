@@ -13,17 +13,14 @@
         img{ height: 100%; width: 100%; object-fit: contain; }
         .detail{ position: absolute; bottom: 0; left: 0; padding: .5rem 1rem;
             text-align: center; background: rgba(0, 0, 0, .35); color: whitesmoke; }
-        div:last-of-type .detail{ left: initial; right: 0; }
+        .prev .detail{ left: initial; right: 0; }
+        @media screen and (max-width: 1920px){
+            .prev{display: none;}
+        }
     </style>
 </head>
 <body>
-    <div>
-        <img src="now.jpg">
-        <div class="detail">::now::</div>
-    </div>
-    <div>
-        <img src="prev.jpg">
-        <div class="detail">::prev::</div>
-    </div>
+    <div class="now">  <img src="now.jpg">  <div class="detail">::now::</div> </div>
+    <div class="prev"> <img src="prev.jpg"> <div class="detail">::prev::</div> </div>
 </body>
 </html>
