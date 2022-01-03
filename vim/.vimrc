@@ -1,10 +1,10 @@
-""" VIM config file | Jan Andrle | 2021-12-19 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2022-01-03 (VIM >=8.1)
 "" #region B – Base
     scriptencoding utf-8 | set encoding=utf-8
     let $BASH_ENV = "~/.bashrc"
     set runtimepath^=~/.vim/bundle/*
     runtime macros/matchit.vim
-    set hidden                                                                  " TextEdit might fail if hidden is not set.
+    set hidden
     
     set title
     colorscheme codedark
@@ -19,10 +19,12 @@
     let mapleader = "\\"
     " better for my keyboard, but maybe use `:help keymap`?
     nnoremap § @
+    nnoremap §§ @@
     nnoremap ů ;
     nnoremap ; :
+    nnoremap <leader>u U
+    nnoremap U <c-r>
     nnoremap ž <c-]>
-    nnoremap ř <c-r>
     
     if executable('konsole')
         command! -nargs=? ALTterminal if <q-args>=='' | execute 'silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &' | else | execute 'silent !(konsole -e /bin/bash --rcfile <(echo "source ~/.profile;<args>") > /dev/null 2>&1) &' | endif
