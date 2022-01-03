@@ -138,9 +138,9 @@
     set pastetoggle=<F2> | nnoremap <F2> :set invpaste paste?<CR>
     nnoremap <silent> <leader>" :call jaandrle_utils#copyRegister()<cr>
     
-    nmap <expr> š buffer_number("#")==-1 ? "sb<cr>" : "\<c-^>"
-    nmap sB :buffers<cr>:b<space>
-    nmap sb :CtrlPBuffer<cr>
+    nmap <expr> š buffer_number("#")==-1 ? "sš<cr>" : "\<c-^>"
+    nmap s3 :buffers<cr>:b<space>
+    nmap sš :CtrlPBuffer<cr>
     command!            CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
     command!            ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg', 'tn')
     let g:ctrlp_map = 'ě'
