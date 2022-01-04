@@ -1,22 +1,27 @@
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 [user]
-	name = Jan Andrle
-	email = andrle.jan@centrum.cz
+    name = Jan Andrle
+    email = andrle.jan@centrum.cz
 [credential]
-	# see https://stackoverflow.com/questions/5343068/is-there-a-way-to-cache-https-credentials-for-pushing-commits/18362082#18362082
-	helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
+    # see https://stackoverflow.com/questions/5343068/is-there-a-way-to-cache-https-credentials-for-pushing-commits/18362082#18362082
+    helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
 [alias]
-	log-list = log --color --graph --pretty=format:'%Cred%h%Creset %Cgreen[%ad] -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset'
-	log-list-nocolors = log --graph --pretty=format:'%h [%ad] -%d %s <%an>'
-	log-tags = tag -l --sort=-creatordate --format='[%(creatordate:short)] %(refname:short): %(subject)'
+    branches = branch -l -v -a
+    tags = tag -l --sort=-creatordate --format='%(refname:short):	[%(creatordate:short)]	%(subject)'
+    log-authors = shortlog -ns
+    log-list = log --color --graph --pretty=format:'%Cred%h%Creset %Cgreen[%ad] -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset'
+    log-list-nocolors = log --graph --pretty=format:'%h [%ad] -%d %s <%an>'
     status--= !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo
     commit--= !clear && git status & git commit --interactive -v
+    stashpush = !git stash && git pull && git push && git stash pop
 [core]
-	whitespace = trailing-space,space-before-tab,blank-at-eol
-	editor = vim
+    editor = vim
+[merge]
+    tool = vimdiff
+    conflictstyle = diff3
 [log]
     date=iso

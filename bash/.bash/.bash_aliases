@@ -11,7 +11,8 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
-clean_history(){ awk '!seen[$0]++ {print $0}' $HOME/.bash_history; }
+history_clean(){ awk '!seen[$0]++ {print $0}' $HOME/.bash_history; }
+history_most_used(){ LC_ALL=C cat ~/.bash_history | cut -d ';' -f 2- | _awk 1 | sort | uniq -c | sort -r -n | head -n ${1-10}; }
 LAST_PWD_PATH="$BASH_DOTFILES/.bash_last_pwd"
 [ -f "$LAST_PWD_PATH" ] && OLDPWD=`cat $LAST_PWD_PATH`
 cd(){ builtin cd "$@" && echo `pwd` > "$LAST_PWD_PATH"; }
