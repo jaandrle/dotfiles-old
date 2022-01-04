@@ -35,14 +35,14 @@
     
     if has("patch-8.1.0360")
         set diffopt+=algorithm:patience,indent-heuristic | endif
+    set diffopt+=iwhite
     augroup vimrc_help
         autocmd!
         autocmd BufEnter *.txt if &buftype == 'help' | wincmd L | vertical resize 90 | endif
     augroup END
 "" #endregion B
 "" #region H – Helpers + remap 'sS' (primary ss, see `vim-scommands`)
-    nmap sh<leader> :map <leader><cr>
-    nmap shh        :call feedkeys(":map! ů \| map é \| map ř \| map ž \| map č")<cr>
+    nmap sh :execute 'ALTredir :map s \<bar> map '.mapleader.' \<bar> map § \<bar> map ů \<bar> map ; \<bar> map U \<bar> map ž'<cr>
     call scommands#map('s', 'CL', "n,v")
     command! -nargs=?  CLscratch 10split | enew | setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted | if <q-args>!='' | execute 'normal "'.<q-args>.'p' | endif | nnoremap <buffer> ;q :q<cr>
     
@@ -178,6 +178,7 @@
     call scommands#map('n', 'NAV', "n")
     command! NAVjumps call jaandrle_utils#gotoJumpChange('jump')
     command! NAVchanges call jaandrle_utils#gotoJumpChange('change')
+    command! NAVmarks call jaandrle_utils#gotoMarks()
 
     nmap sj <Plug>(JumpMotion)
 "" #endregion EN
