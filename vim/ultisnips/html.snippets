@@ -1,0 +1,56 @@
+# A valid snippet should starts with:
+#
+#		snippet trigger_word [ "description" [ options ] ]
+#
+# and end with:
+#
+#		endsnippet
+#
+# Snippet options:
+#
+#		b - Beginning of line.
+#		i - In-word expansion.
+#		w - Word boundary.
+#		r - Regular expression
+#		e - Custom context snippet
+#		A - Snippet will be triggered automatically, when condition matches.
+#
+# Basic example:
+#
+#		snippet emitter "emitter properties" b
+#		private readonly ${1} = new Emitter<$2>()
+#		public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+#		endsnippet
+#
+# Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+snippet sceleton "HTML5" b
+<!DOCTYPE html>
+<!-- ${0}DEL IE https://www.paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+<!-- DEL IE https://stackoverflow.com/questions/6771258/what-does-meta-http-equiv-x-ua-compatible-content-ie-edge-do -->
+<!-- DEL https://www.vzhurudolu.cz/prirucka/viewport-meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- DEL CSP https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP | https://github.com/Prinzhorn/minimal-csp -->
+<!-- DEL https://github.com/jensimmons/cssremedy -->
+
+<!-- DEL meta značky obecně https://www.vzhurudolu.cz/prirucka/meta-open-graph -->
+    <title></title>
+    <meta name="description" content="">
+<!-- DEL IE https://www.sitepoint.com/html5-older-browsers-and-the-shiv/ -->
+<!-- DEL https://www.vzhurudolu.cz/prirucka/checklist -->
+</head>
+<body>
+    <!-- DEL -->
+</body>
+</html>
+endsnippet
+
+snippet viewport_cordova "viewport used in cordova apps"
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
+endsnippet
+snippet csp_cordova "CSP used in cordova"
+<meta http-equiv="Content-Security-Policy" content="default-src * gap://ready file: gulp_place('app.url_scheme', 'variable'):; style-src 'self' 'unsafe-inline'; img-src * data: *; script-src 'self' 'unsafe-inline' 'unsafe-eval'"/>
+<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; img-src 'self' data: android-webview-video-poster:; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+endsnippet

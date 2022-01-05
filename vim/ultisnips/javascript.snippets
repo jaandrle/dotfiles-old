@@ -1,0 +1,71 @@
+snippet sceleton_cli "nodejs" b
+#!/usr/bin/env node
+/* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true */
+${0}
+endsnippet
+snippet sceleton_zx "zx" b
+#!/usr/bin/env zx
+/* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true */
+${0}
+endsnippet
+snippet jshint "JSHint header" b
+/* jshint esversion: 6,-W097, -W040, browser: true, expr: true, undef: true */
+/* global ${0} */
+endsnippet
+snippet global "JSHint global"
+/* global ${0} */
+endsnippet
+snippet devel "JSHint devel"
+${1}/* jshint devel: true *///gulp.keep.line${0}
+endsnippet
+
+snippet log "console.log"
+${1}console.log('${0}');
+endsnippet
+snippet stor "localStorage"
+${1}localStorage.${2:g}etItem("${0}");
+endsnippet
+
+snippet promise "return? new Promise"
+${1:return }new Promise(function(resolve, reject){
+    ${0:/* async code */}
+});
+endsnippet
+snippet for "classical loop"
+for(${1:let} ${2:i}= 0, ${2}_length= ${3:ITERABLE}.length; ${2}<${2}_length; ${2}++){
+    ${0:/* statement */}
+}
+endsnippet
+snippet switch "classical switch"
+switch (${1}){
+    case ${2}:
+        ${0}
+        break;
+    default:
+}
+endsnippet
+snippet desctr "object destructure"
+${1:const} { $0 }= ${2:def};
+endsnippet
+snippet ready "document ready"
+${1}document.addEventListener('DOMContentLoaded', ${0}, false)
+endsnippet
+snippet readyEvent "vanilla JS content ready event name"
+${1}DOMContentLoaded${0}
+endsnippet
+
+snippet selid
+${1}document.getElementById('${0}')
+endsnippet
+snippet seltag
+${1}getElementsByTagName('${0}')
+endsnippet
+snippet selclass
+${1}getElementsByClassName('${0}')
+endsnippet
+snippet sel
+${1}querySelector('${0}')
+endsnippet
+snippet selall
+${1}querySelectorAll('${0}')
+endsnippet
