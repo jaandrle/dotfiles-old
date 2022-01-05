@@ -42,7 +42,7 @@
     augroup END
 "" #endregion B
 "" #region H – Helpers + remap 'sS' (primary ss, see `vim-scommands`)
-    nmap sh :execute 'ALTredir :map s \<bar> map '.mapleader.' \<bar> map § \<bar> map ů \<bar> map ; \<bar> map U \<bar> map ž'<cr>
+    nmap sh :execute 'ALTredir :map s \<bar> map '.mapleader.' \<bar> map § \<bar> map ů \<bar> map ; \<bar> map U \<bar> map ž'<cr>:g/^$/d<cr>:g/^v  s/m$<cr>úgg
     call scommands#map('s', 'CL', "n,v")
     command! -nargs=?  CLscratch 10split | enew | setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted | if <q-args>!='' | execute 'normal "'.<q-args>.'p' | endif | nnoremap <buffer> ;q :q<cr>
     
@@ -264,8 +264,8 @@
         \ GITdiff silent! execute 'ALTredirKeep !git diff '.(<q-args>=='' ? '%:p':'<args>')
     command! -nargs=0 -range
         \ GITblameThis ALTredir !git -C %:p:h blame -L <line1>,<line2> %:t
-    command! -nargs=0
-        \ GITrestoreThis !clear && git status %:p -s & git restore %:p --patch
+    command! -nargs=*
+        \ GITrestore execute '!clear && git status '.(<q-args>=='.' ? '%:p':'<args>').' -s & git restore '.(<q-args>=='' ? '%:p':'<args>').' --patch'
 "" #endregion GIT
 "" #region COC – COC and so on, compilers
     let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tsserver' ]
