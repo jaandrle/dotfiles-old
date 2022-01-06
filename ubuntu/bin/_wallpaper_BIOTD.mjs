@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* jshint esversion: 6,-W097, -W040, browser: true, expr: true, undef: true */
 import { readFileSync, writeFileSync, createWriteStream } from "fs";
 import { get } from "https";
 import { homedir } from "os";
@@ -16,11 +17,9 @@ get_(url_main+"/HPImageArchive.aspx?format=js&idx=0&n=2&mkt=cs-CZ")
 
 function update(data){
     if(data===null) return false;
-    const { url, copyright }= data;
     Promise.allSettled(data.map(({ url, copyright }, id)=> getImage_(url, id ? "prev" : "now", copyright)))
     .then(res=> {
         let template= readFileSync(folder+"index_template.html").toString();
-        res[0].status
         writeFileSync(folder+"index.html", res.reduce((out, { status, value })=> status==="rejected" ? out : out.replace(`::${value.name}::`, value.description), template));
     })
     .catch(e=> console.error(String(e)));
@@ -38,8 +37,8 @@ function getImage_(url, name, desc){
     });
 }
 function data(body){
-    try   { return JSON.parse(body).images; }
-    catch { return null; }
+          try   { return JSON.parse(body).images; }
+    catch (_)   { return null; }
 }
 function get_(url){ return new Promise(function(res,rej){ get(url, res).on("error", rej); }); }
 function pipe(...f){ return Array.prototype.reduce.bind(f, (acc, f)=> f(acc)); }

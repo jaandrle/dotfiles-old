@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2022-01-03 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2022-01-06 (VIM >=8.1)
 "" #region B – Base
     scriptencoding utf-8 | set encoding=utf-8
     let $BASH_ENV = "~/.bashrc"
@@ -142,7 +142,7 @@
     nmap s3 :buffers<cr>:b<space>
     nmap sš :CtrlPBuffer<cr>
     command!            CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
-    command!            ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg', 'tn')
+    command!            ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg:echo ''Alternative to `:browse oldfiles`''', 'tn')
     let g:ctrlp_map = 'ě'
     command! -nargs=?   SETctrlp execute 'nnoremap '.g:ctrlp_map.' :CtrlP <args><cr>'
     let g:ctrlp_clear_cache_on_exit = 0
@@ -265,7 +265,7 @@
     command! -nargs=0 -range
         \ GITblameThis ALTredir !git -C %:p:h blame -L <line1>,<line2> %:t
     command! -nargs=*
-        \ GITrestore execute '!clear && git status '.(<q-args>=='.' ? '%:p':'<args>').' -s & git restore '.(<q-args>=='' ? '%:p':'<args>').' --patch'
+        \ GITrestore execute '!clear && git status '.(<q-args>=='.' ? '%:p':'<args>').' -bs & git restore '.(<q-args>=='' ? '%:p':'<args>').' --patch'
 "" #endregion GIT
 "" #region COC – COC and so on, compilers
     let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tsserver' ]

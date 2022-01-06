@@ -1,9 +1,10 @@
 {
     "coc.preferences.rootPatterns": [ ".git", ".vscode" ],
     "diagnostic.separateRelatedInformationAsDiagnostics": true,
-    "diagnostic.errorSign": "✘",
-    "diagnostic.infoSign": "ℹ",
-    "diagnostic.hintSign": "➤",
+    "diagnostic.errorSign": "┅",
+    "diagnostic.warningSign": "┉",
+    "diagnostic.infoSign": "┄",
+    "diagnostic.hintSign": "·",
     "javascript.showUnused": true,
     "coc.source.emoji.filetypes": [ "markdown", "magit", "gitcommit" ]
 }

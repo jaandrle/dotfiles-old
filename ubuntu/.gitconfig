@@ -16,10 +16,12 @@
     log-list = log --color --graph --pretty=format:'%Cred%h%Creset %Cgreen[%ad] -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset'
     log-list-nocolors = log --graph --pretty=format:'%h [%ad] -%d %s <%an>'
     status--= !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo
-    commit--= !clear && git status & git commit --interactive -v
+    commit--= !clear && git status -sb | grep -v -e '^ M' & git commit --interactive -v
     stashpush = !git stash && git pull && git push && git stash pop
 [core]
     editor = vim
+[diff]
+    tool = vimdiff
 [merge]
     tool = vimdiff
     conflictstyle = diff3
