@@ -25,6 +25,9 @@
     nnoremap <leader>u U
     nnoremap U <c-r>
     nnoremap ž <c-]>
+    " <c-bs>
+    imap  <c-w>
+    cmap  <c-w>
     
     if executable('konsole')
         command! -nargs=? ALTterminal if <q-args>=='' | execute 'silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &' | else | execute 'silent !(konsole -e /bin/bash --rcfile <(echo "source ~/.profile;<args>") > /dev/null 2>&1) &' | endif
@@ -40,6 +43,8 @@
         autocmd!
         autocmd BufEnter *.txt if &buftype == 'help' | wincmd L | vertical resize 90 | endif
     augroup END
+    
+    let g:loaded_vimballPlugin = 1 " :h pi_vimball
 "" #endregion B
 "" #region H – Helpers + remap 'sS' (primary ss, see `vim-scommands`)
     nmap sh :execute 'ALTredir :map s \<bar> map '.mapleader.' \<bar> map § \<bar> map ů \<bar> map ; \<bar> map U \<bar> map ž'<cr>:g/^$/d<cr>:g/^v  s/m$<cr>úgg

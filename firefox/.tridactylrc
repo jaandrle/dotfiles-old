@@ -7,11 +7,22 @@ set modeindicator true
 set hintfiltermode simple
 set hintchars fsahjklgyuiopqwertnmzxcvb
 set smoothscroll true
+set incsearch true
+
+bind / fillcmdline find
+bind ? fillcmdline find -?
+bind n findnext 1
+bind N findnext -1
+bind ú nohlsearch
+" */#: Temporary implementation using find
+" TODO: implement these properly with forwards/backwards cycling
+bind * js tri.controller.acceptExCmd(`find ${window.getSelection()+""}`);
+bind # js tri.controller.acceptExCmd(`find -? ${window.getSelection()+""}`);
 
 " Binds
 unbindurl ^https://www.youtube.com/* >>
 unbindurl ^https://www.youtube.com/* <<
-bindurl ^https://mail.centrum.cz/* ;; composite hint_focus ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
+bindurl ^https://mail.centrum.cz/* ěě composite hint_focus ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
 set keymap ě ;
 bind š tab #
 bind dd tabclose
