@@ -1,8 +1,8 @@
 let g:user_tips_list= [
     \ ':vebose ★ * … ★: eg. map/set/…',
-    \ ':clist+:cc :cn :cN :copen :cwindow :cclose',
+    \ ':clist+:cc :+cc :-cc :copen :cwindow :cclose',
     \ ':undolist :earlier :later',
-    \ ':llist+:ll :ln :lN :lopen :lwindow :lclose',
+    \ ':llist+:ll :+ll :-ll :lopen :lwindow :lclose',
     \ ':m ''>+1 … :m ''<-2',
     \ 'QuickList → :set ma+‘edit’+;w ;s … ;q',
     \ 'Buffer info → <c-g> g<c-g> … :map <buffer><tab>',

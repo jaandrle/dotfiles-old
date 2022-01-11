@@ -17,7 +17,12 @@ unbindurl ^https://www.youtube.com/* >>
 unbindurl ^https://www.youtube.com/* <<
 bindurl ^https://mail.centrum.cz/* ěě composite hint_focus ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
 set keymap ě ;
+set keymap ; :
 bind š tab #
+unbind --mode=normal s
+bind sš fillcmdline tab
+bind -c fillcmdline recontain
+bind sc fillcmdline container
 bind dd tabclose
 bind \ym composite js ({ textContent= "", href= "", alt= "", src= "" }= document.getSelection().focusNode, `[${textContent?textContent:"!"+alt}](${href?href:src})`) | clipboard yank
 bind gnk tabopen -c osobní https://keep.google.com/u/0/#NOTE/1UXE_BEihe2EexHwZqEYA2oSdILLxF74SPcaLFMStfIpMkWPnStWJDQqH5C1TryJld_dC
@@ -27,12 +32,12 @@ bind gnC tabopen -c osobní https://calendar.google.com
 bind goC open -c osobní https://calendar.google.com
 bind gwC winopen -c osobní https://calendar.google.com
 unbind --mode=normal d
-bind --mode=visual \gt composite js "https://translate.google.com/?sl=auto&tl=cs&op=translate&text="+encodeURI(document.getSelection().toString()) | tabopen
+bind --mode=visual \t composite js "https://translate.google.com/?sl=auto&tl=cs&op=translate&text="+encodeURI(document.getSelection().toString()) | tabopen
 " Sites (mails) notes using Github Gists
-bind \gn js tri.controller.acceptExCmd(`tabopen -c pracovní https://gist.github.com/jaandrle/ff1de72c500557f401e190b4ec05aa62#${document.title.replace(/[:|\.,\?\!_]/g, '').replace(/ /g, '-').toLowerCase()}`)
-bind \gN composite clipboard yankmd ; tabopen -c pracovní https://gist.github.com/jaandrle/ff1de72c500557f401e190b4ec05aa62/edit
-bindurl ^https://mail.centrum.cz/* \gn js tri.controller.acceptExCmd(`tabopen -c pracovní https://gist.github.com/jaandrle/ff1de72c500557f401e190b4ec05aa62#${(new URLSearchParams(window.location.search)).get("msg")}`)
-bindurl ^https://mail.centrum.cz/* \gN composite js tri.controller.acceptExCmd(`clipboard yank [${(new URLSearchParams(window.location.search)).get("msg")}](https://mail.centrum.cz/?msg=${(new URLSearchParams(window.location.search)).get("msg")})`) ; tabopen -c pracovní https://gist.github.com/jaandrle/ff1de72c500557f401e190b4ec05aa62/edit
+bind sn js tri.controller.acceptExCmd(`tabopen -c pracovní https://gist.github.com/jaandrle/ff1de72c500557f401e190b4ec05aa62#${document.title.replace(/["':|\.,\?\!_]/g, '').replace(/ /g, '-').toLowerCase()}`)
+bind sN composite clipboard yankmd ; tabopen -c pracovní https://gist.github.com/jaandrle/ff1de72c500557f401e190b4ec05aa62/edit
+bindurl ^https://mail.centrum.cz/* sn js tri.controller.acceptExCmd(`tabopen -c pracovní https://gist.github.com/jaandrle/ff1de72c500557f401e190b4ec05aa62#${(new URLSearchParams(window.location.search)).get("msg")}`)
+bindurl ^https://mail.centrum.cz/* sN composite js tri.controller.acceptExCmd(`clipboard yank [${(new URLSearchParams(window.location.search)).get("msg")}](https://mail.centrum.cz/?msg=${(new URLSearchParams(window.location.search)).get("msg")})`) ; tabopen -c pracovní https://gist.github.com/jaandrle/ff1de72c500557f401e190b4ec05aa62/edit
 
 " Aliases
 alias hint_focus hint -;
