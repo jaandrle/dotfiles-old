@@ -7,17 +7,10 @@ set modeindicator true
 set hintfiltermode simple
 set hintchars fsahjklgyuiopqwertnmzxcvb
 set smoothscroll true
-set incsearch true
 
-bind / fillcmdline find
-bind ? fillcmdline find -?
-bind n findnext 1
-bind N findnext -1
-bind ú nohlsearch
-" */#: Temporary implementation using find
-" TODO: implement these properly with forwards/backwards cycling
-bind * js tri.controller.acceptExCmd(`find ${window.getSelection()+""}`);
-bind # js tri.controller.acceptExCmd(`find -? ${window.getSelection()+""}`);
+" /?*# … search collising with native ui + another problems
+" https://gist.github.com/BurntSushi/393546a65db38d57cedcfd72c6d89bf3#file-tridactylrc-L18
+unbind <c-f> " pgdown for scrolling
 
 " Binds
 unbindurl ^https://www.youtube.com/* >>
@@ -35,6 +28,11 @@ bind goC open -c osobní https://calendar.google.com
 bind gwC winopen -c osobní https://calendar.google.com
 unbind --mode=normal d
 bind --mode=visual \gt composite js "https://translate.google.com/?sl=auto&tl=cs&op=translate&text="+encodeURI(document.getSelection().toString()) | tabopen
+" Sites (mails) notes using Github Gists
+bind \gn js tri.controller.acceptExCmd(`tabopen -c pracovní https://gist.github.com/jaandrle/ff1de72c500557f401e190b4ec05aa62#${document.title.replace(/[:|\.,\?\!_]/g, '').replace(/ /g, '-').toLowerCase()}`)
+bind \gN composite clipboard yankmd ; tabopen -c pracovní https://gist.github.com/jaandrle/ff1de72c500557f401e190b4ec05aa62/edit
+bindurl ^https://mail.centrum.cz/* \gn js tri.controller.acceptExCmd(`tabopen -c pracovní https://gist.github.com/jaandrle/ff1de72c500557f401e190b4ec05aa62#${(new URLSearchParams(window.location.search)).get("msg")}`)
+bindurl ^https://mail.centrum.cz/* \gN composite js tri.controller.acceptExCmd(`clipboard yank [${(new URLSearchParams(window.location.search)).get("msg")}](https://mail.centrum.cz/?msg=${(new URLSearchParams(window.location.search)).get("msg")})`) ; tabopen -c pracovní https://gist.github.com/jaandrle/ff1de72c500557f401e190b4ec05aa62/edit
 
 " Aliases
 alias hint_focus hint -;
