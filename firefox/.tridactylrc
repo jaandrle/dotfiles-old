@@ -9,9 +9,30 @@ set hintfiltermode simple
 set hintchars fsahjklgyuiopqwertnmzxcvb
 set smoothscroll true
 
+unbind zI
+unbind zM
+unbind zO
+unbind zR
+unbind zi
+unbind zm
+unbind zo
+unbind zr
+unbind zz
+bind zt hint -z
+bind zz composite hint -z ; scrollpage -0.5
+bind zb composite hint -z ; scrollpage -0.95
+bind gm scrollto 42.5 x
+bind gM scrollto 42.5 x
+bind zo0 zoom 1
+bind zo+ zoom 0.1 true
+bind zo- zoom -0.1 true
+bind zO+ zoom 0.5 true
+bind zO- zoom -0.5 true
+
 " /?*# … search collising with native ui + another problems
 " https://gist.github.com/BurntSushi/393546a65db38d57cedcfd72c6d89bf3#file-tridactylrc-L18
 unbind <c-f> " pgdown for scrolling
+bind gi hint -Jc input,textarea,[contenteditable="true"]
 
 unbindurl ^https://www.youtube.com/* >>
 unbindurl ^https://www.youtube.com/* <<
@@ -50,6 +71,8 @@ bindurl ^https://mail.centrum.cz/* sN composite js tri.controller.acceptExCmd(`c
 
 alias hint_focus hint -;
 quickmark c moz-extension://616498c0-3916-4f0b-b0a9-ce01ecf2298d/popup.html
+
+command data_delall composite hint_focus * ; js document.activeElement.querySelectorAll("input").forEach(el=> el.checked=false)
 
 " For syntax highlighting see https://github.com/tridactyl/vim-tridactyl
 " vim: set filetype=tridactyl

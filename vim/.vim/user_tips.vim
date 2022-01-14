@@ -31,7 +31,7 @@ let g:user_tips_list= [
     \ '`textwidth` → n_gq* v_gq',
     \ 'File encryption → :X … vim -x filename',
     \ ':sort /,/',
-    \ 'zz zb zt gm gM',
+    \ 'zz zb zt zL zH gm gM',
     \ '<c-a> <c-x> g<c-a>…',
     \ ':set spell :spell<tab> … z= zg zug ]s [s',
     \ ':lhistory :lolder :lnewer',
