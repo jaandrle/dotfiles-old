@@ -22,7 +22,7 @@ function jaaENV {
     if [ ! -z ${nodejs+x} ]; then nvm use $nodejs; fi
     if [ ! -z ${gradle+x} ]; then sdk use gradle $gradle | tr -d '\n'; echo ; fi
     if [ ! -z ${php+x} ];    then
-        php_local=`php --version | _awk 2 | head -n 1`
+        php_local=`php --version | §awk 2 | head -n 1`
         if [[ "$php_local" == "$php"* ]]; then
             echo "php $php"
         else

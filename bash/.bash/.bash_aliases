@@ -27,9 +27,9 @@ alias §cd.='clear;§ls'
 alias §find.='find . -maxdepth 1'
 
 alias §psmem_all='ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem'
-alias §psmem='_psmem_all | head -n 10'
+alias §psmem='§psmem_all | head -n 10'
 alias §pscpu_all='ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu'
-alias §pscpu='_pscpu_all | head -n 10'
+alias §pscpu='§pscpu_all | head -n 10'
 
 alias §='clear'
 
