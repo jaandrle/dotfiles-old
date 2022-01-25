@@ -50,8 +50,16 @@ bindurl ^https://mail.centrum.cz/* ěě composite hint_focus ; js document.activ
 bind š tab #
 bind sš fillcmdline tab
 
+" b→t→n to make more consistent with gn*
+unbind --mode=normal b
+unbind --mode=normal B
+bind --mode=normal t fillcmdline tab
+bind --mode=normal T fillcmdline taball
+bind --mode=normal n fillcmdline tabopen
+bind --mode=normal N current_url tabopen
+
 bind -c fillcmdline recontain
-bind sc fillcmdline container
+bind sc fillcmdline_notrail container
 
 bind \ym composite js ({ textContent= "", href= "", alt= "", src= "" }= document.getSelection().focusNode, `[${textContent?textContent:"!"+alt}](${href?href:src})`) | clipboard yank
 bind --mode=visual \t composite js "https://translate.google.com/?sl=auto&tl=cs&op=translate&text="+encodeURI(document.getSelection().toString()) | tabopen

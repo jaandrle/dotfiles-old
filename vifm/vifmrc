@@ -172,26 +172,32 @@
 " #region F – Filetypes
     nnoremap ov :!vim %"f<cr>
     nnoremap oo :file &<cr>l
-    nnoremap oO :file &<cr>jl
+    nnoremap oO :file &<cr>/[#$]<cr>l
     
     " #region Farch – Archives
         if has('win')
-            fileviewer *.zip,*.jar,*.war,*.ear,*.oxt tar -tf %c
+            fileviewer *.zip,*.jar,*.war,*.ear,*.oxt,
+            \*.docx,*.pptx,*.xmlx,*.epub
+                \ tar -tf %c
         else
-            fileviewer *.zip,*.jar,*.war,*.ear,*.oxt zip -sf %c
+            fileviewer *.zip,*.jar,*.war,*.ear,*.oxt,
+            \*.docx,*.pptx,*.xmlx,*.epub
+                \ zip -sf %c
         endif
-        filetype *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg
-            \ {Mount with fuse-zip}
-            \ FUSE_MOUNT|fuse-zip %SOURCE_FILE %DESTINATION_DIR,
-            \ {View contents}
-            \ zip -sf %c | less,
-            \ {Extract here}
-            \ _extract %"f
+        filetype *.zip,*.jar,*.war,*.ear,*.oxt,*.apkg,
+            \*.docx,*.pptx,*.xmlx,
+            \*.epub,*.eml
+                \ {Mount with fuse-zip}
+                \ FUSE_MOUNT|fuse-zip %SOURCE_FILE %DESTINATION_DIR,
+                \ {View contents}
+                \ zip -sf %c | less,
+                \ {Extract here}
+                \ §extract %"f
         filetype *.tar,*.tar.bz2,*.tbz2,*.tgz,*.tar.gz,*.tar.xz,*.txz
             \ {Mount with archivemount}
             \ FUSE_MOUNT|archivemount %SOURCE_FILE %DESTINATION_DIR,
             \ {Extract here}
-            \ _extract %"f
+            \ §extract %"f
         fileviewer *.tgz,*.tar.gz tar -tzf %c
         fileviewer *.tar.bz2,*.tbz2 tar -tjf %c
         fileviewer *.tar.txz,*.txz xz --list %c
@@ -199,19 +205,17 @@
         filetype *.rar {Mount with rar2fs}
             \ FUSE_MOUNT|rar2fs %SOURCE_FILE %DESTINATION_DIR,
             \ {Extract here}
-            \ _extract %"f
+            \ §extract %"f
         fileviewer *.rar unrar v %c
         filetype *.iso {Mount with fuseiso}
             \ FUSE_MOUNT|fuseiso %SOURCE_FILE %DESTINATION_DIR,
             \ {Extract here}
-            \ _extract %"f
+            \ §extract %"f
         filetype *.7z {Mount with fuse-7z}
             \ FUSE_MOUNT|fuse-7z %SOURCE_FILE %DESTINATION_DIR,
             \ {Extract here}
-            \ _extract %"f
+            \ §extract %"f
         fileviewer *.7z 7z l %c
-        filetype *.eml {Extract here}
-            \ _extract %"f
     " #endregion Farch
     filetype *.ftp {Mount with curlftpfs}
         \ FUSE_MOUNT2|curlftpfs -o ftp_port=-,,disable_eprt %PARAM %DESTINATION_DIR %FOREGROUND,
@@ -251,7 +255,7 @@
         filetype *.asc {Check signature}
             \ !!gpg --verify %c,
     " #endregion Futils
-    " #region Fimages – Images
+    " #region FmediaBin
         if has('win')
             fileviewer 
                 \*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm,
@@ -269,17 +273,18 @@
                 \ echo $(file -b %f)
                 \ %pc
             fileviewer 
-                \*.exe,*.epub,*.doc,*.docx,
+                \*.exe,*.doc,
                 \*.svg,
                 \ echo $(file -b %f) && echo — && echo $(ls -lh %f)&& echo — && echo $(head %f | tr -d '\0')
             fileviewer *.pdf pdftotext -nopgbrk %c -
             fileviewer <video/*>,<audio/*> mediainfo %c
-            fileviewer .*/,*/ tree %c -L 3
-            fileviewer ../ tree %c -L 1
         endif
-    " #endregion Fimages
+    " #endregion FmediaBin
+    fileviewer .*/,*/ tree %c -L 3
+    fileviewer ../ tree %c -L 1
 " #endregion F
 " #region S – sS keys
+    nnoremap sf :file &
     nnoremap sjj :cd ./
     nnoremap sjh :cd ~/
     nnoremap sjg :cd ~/Vzdálené/GitHub/
