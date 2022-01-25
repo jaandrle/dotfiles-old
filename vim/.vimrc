@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2022-01-06 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2022-01-25 (VIM >=8.1)
 "" #region B – Base
     scriptencoding utf-8 | set encoding=utf-8
     let $BASH_ENV = "~/.bashrc"
@@ -150,8 +150,13 @@
     command!            ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg:echo ''Alternative to `:browse oldfiles`''', 'tn')
     let g:ctrlp_map = 'ě'
     command! -nargs=?   SETctrlp execute 'nnoremap '.g:ctrlp_map.' :CtrlP <args><cr>'
+    call scommands#map(g:ctrlp_map, 'CtrlP', "n")
     let g:ctrlp_clear_cache_on_exit = 0
-    call scommands#map('ě', 'CtrlP', "n")
+    let g:ctrlp_prompt_mappings= {
+        \ 'ToggleType(1)':        ['<c-up>'],
+        \ 'ToggleType(-1)':       ['<c-down>'],
+        \ 'PrtCurStart()':        ['<c-b>'],
+    \}
 "" #endregion CN
 "" #region FOS – File(s) + Openning + Saving
     set autowrite autoread | autocmd FocusGained,BufEnter *.* checktime
@@ -184,8 +189,6 @@
     command! NAVjumps call jaandrle_utils#gotoJumpChange('jump')
     command! NAVchanges call jaandrle_utils#gotoJumpChange('change')
     command! NAVmarks call jaandrle_utils#gotoMarks()
-
-    nmap sj <Plug>(JumpMotion)
 "" #endregion EN
 "" #region EA – Editing adjustment + White chars + Folds
     " PARENTHESES plugin junegunn/rainbow_parentheses.vim
@@ -309,6 +312,8 @@
                     " navigate diagnostics, use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
     nnoremap <silent> gh :call <sid>show_documentation(0)<cr>
     vnoremap <silent> gh :<c-u>call <sid>show_documentation(1)<cr>
+    nnoremap <leader>gf :let g:ctrlp_default_input=expand("<cword>") <bar> execute 'CtrlP' <bar> unlet g:ctrlp_default_input <cr>
+    vnoremap <leader>gf :<c-u>let g:ctrlp_default_input=mini_enhancement#selectedText() <bar> execute 'CtrlP' <bar> unlet g:ctrlp_default_input <cr>
     autocmd CursorHold * silent call CocActionAsync('highlight')
     """ #region Coc popups scroll (not working for me now, newer version if Vim)
                                                         " Highlight the symbol and its references when holding the cursor.
