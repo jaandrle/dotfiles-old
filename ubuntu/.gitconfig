@@ -18,6 +18,9 @@
     status--= !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo
     commit--= !clear && git status -sb | grep -v -e '^ M' & git commit --interactive -v
     stashpush = !git stash && git pull && git push && git stash pop
+    unstage = reset HEAD --
+    undoall = reset --soft HEAD^
+    diff-dirs = diff --dirstat --find-copies --find-renames --histogram --color
 [core]
     editor = vim
 [diff]
