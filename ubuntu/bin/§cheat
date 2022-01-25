@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ ! -t 0 ]; then
+    exo-open --launch TerminalEmulator -- -e "§cheat $*"
+    exit
+fi
+curl -fGsS --compressed cht.sh/${1:-:help} | less -R -S

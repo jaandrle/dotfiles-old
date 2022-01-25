@@ -4,9 +4,11 @@ ln -s $this_dir/.XCompose ~/.XCompose
 ln -s $this_dir/.gitconfig ~/.gitconfig
 mkdir ~/bin
 ln -s $this_dir/bin/§awk ~/bin/§awk
+ln -s $this_dir/bin/§battery ~/bin/§battery
 ln -s $this_dir/bin/§calc ~/bin/§calc
 ln -s $this_dir/bin/§cordova-release.mjs ~/bin/§cordova-release.mjs
 ln -s $this_dir/bin/§extract ~/bin/§extract
+ln -s $this_dir/bin/§cheat ~/bin/§cheat
 ln -s $this_dir/bin/§software ~/bin/§software
 ln -s $this_dir/bin/§trans.mjs ~/bin/§trans
 ln -s $this_dir/bin/§vim_plugins ~/bin/§vim_plugins

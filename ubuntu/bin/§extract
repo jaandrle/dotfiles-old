@@ -48,6 +48,10 @@ case "$ARC" in
     *.tbz2)      tar xjf "$ARC"     ;;
     *.tgz)       tar xzf "$ARC"     ;;
     *.zip)       unzip "$ARC"       ;;
+    *.epub)      unzip "$ARC"       ;;
+    *.docx)      unzip "$ARC"       ;;
+    *.xmlx)      unzip "$ARC"       ;;
+    *.pptx)      unzip "$ARC"       ;;
     *.Z)         uncompress "$ARC"  ;;
     *.7z)        7z x "$ARC"        ;;
     *.eml)       munpack -t "$ARC"  ;;
