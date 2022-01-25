@@ -26,6 +26,7 @@ let g:user_tips_list= [
     \ ':update | edit ++ff=dos | setlocal ff=unix',
     \ ':set scrollbind (`scb`) … :diffthis :diffoff :diff*<tab>',
     \ ":let i=10 | 'a,'bg/Abc/s/yy/\=i/ |let i=i+1 # convert yy to 10,11,12 etc",
+    \ 'use \zs \ze \c inside `?`|`/`',
     \ 'v_* :%s//replacement',
     \ ':5,10norm! @a … :g/pattern/norm! @a',
     \ '`textwidth` → n_gq* v_gq',
