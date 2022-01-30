@@ -2,6 +2,7 @@ this_dir=$(dirname $(readlink -f $0))
 
 ln -s $this_dir/.XCompose ~/.XCompose
 ln -s $this_dir/.gitconfig ~/.gitconfig
+ln -s $this_dir/gh_config.yml ~/.config/gh/config.yml
 mkdir ~/bin
 ln -s $this_dir/bin/§awk ~/bin/§awk
 ln -s $this_dir/bin/§battery ~/bin/§battery

@@ -1,0 +1,59 @@
+eval "$(gh completion -s bash)"
+§gh(){
+    this='$gh'
+    arg=${1:-help}
+    if [[ "$arg" = "help" ]]; then
+        echo -e "\
+    $this@v22-01-29 – additional/helpers for \`gh\`
+    Usage: $this --[help|owners] args
+        help	[default] prints this text
+        owners	prints owners to whis user has access ('owner/repo')
+            usage: …owners [--pick arg]
+            --pick	(arg) in fact greps output 'owners'
+        alerts  prints repo alerts
+            usage: …alerts --[all|active|dismissed] #one of them
+            --active	[default] pritns out dismissed
+            --all	prints all
+            --dismissed	prints only dismissed
+    
+    gh tips: https://gist.github.com/ChristopherA/3cca24936fb2c84786a29f67bacacd3e
+    used ectension: heaths/gh-label
+        "
+        return 0
+    fi
+    if [[ "$arg" = "alerts" ]]; then
+        out=`gh api graphql -F owner=":owner" -F repo=":repo" -f query='
+        query($owner: String!, $repo: String!, $endCursor: String) {
+            repository(owner: $owner, name: $repo) {
+            vulnerabilityAlerts(first: 100, after: $endCursor) {
+                nodes {
+                createdAt
+                dismissReason
+                dismissedAt
+                securityAdvisory { summary, permalink }
+                securityVulnerability { package { name }, severity, firstPatchedVersion { identifier }, }
+                vulnerableManifestPath
+                }
+            }
+            }
+        }
+        ' -q '
+            .data.repository.vulnerabilityAlerts.nodes.[] |
+            .securityAdvisory + { "remediation": .securityVulnerability | { (.package.name): ">=\(.firstPatchedVersion.identifier)" } , "dismissedAt": .dismissedAt, "path": .vulnerableManifestPath }
+        ' | tr -s '\n' ', ' | xargs -0 -I{} echo '[{}]' | sed 's/},]/}]/'`
+        [[ "$out" = "" ]] && echo "[]" && return 0
+        filter="${2:---active}"
+        [[ "$filter" = "--all" ]] && echo "$out" | jq && return 0
+        [[ "$filter" = "--active" ]] && echo "$out" | jq '[ .[] | select(.dismissedAt == null) | del(.dismissedAt) ]' && return 0
+        [[ "$filter" = "--dismissed" ]] && echo "$out" | jq '[ .[] | select(.dismissedAt) | del(.dismissedAt) ]' && return 0
+    fi
+    [[ ! "$arg" = "owners" ]] && echo "Wrong argument, see '$this help'" && return 1
+    
+    out=`gh api user -q '(.login + "	user")'`
+    out="${out}\n`gh api user/orgs -q '(.[].login+"	organization")'`"
+    if [[ "$2" = "--pick" ]]; then
+        echo -e `echo -e "$out" | grep "$3" | cut --delimiter="	" -f -1`
+        return 0
+    fi
+    echo -e "$out"
+}
