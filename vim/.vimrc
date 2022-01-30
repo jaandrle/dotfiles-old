@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2022-01-25 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2022-01-30 (VIM >=8.1)
 "" #region B – Base
     scriptencoding utf-8 | set encoding=utf-8
     let $BASH_ENV = "~/.bashrc"
@@ -25,6 +25,8 @@
     nnoremap <leader>u U
     nnoremap U <c-r>
     nnoremap ž <c-]>
+    nnoremap <c-up> <c-y>
+    nnoremap <c-down> <c-e>
     " <c-bs>
     imap  <c-w>
     cmap  <c-w>
@@ -75,8 +77,9 @@
         hi! link User1 StatusLine
         if !g:quickfix_len  | return 'Ø' | endif
         if g:quickfix_len>0 | return g:quickfix_len | endif
-        execute 'hi! User1 ctermbg='.synIDattr(synIDtrans(hlID('StatusLine')), 'bg').
-            \' ctermfg='.synIDattr(synIDtrans(hlID('WarningMsg')), 'fg')
+        let type= &termguicolors ? 'gui' : 'cterm'
+        execute 'hi! User1 '.type.'bg='.synIDattr(synIDtrans(hlID('StatusLine')), 'bg').
+            \' '.type.'fg='.synIDattr(synIDtrans(hlID('WarningMsg')), 'fg')
         return -g:quickfix_len
     endfunction
     function! s:QuickFixCmdPost() abort
@@ -191,9 +194,10 @@
     command! NAVmarks call jaandrle_utils#gotoMarks()
 "" #endregion EN
 "" #region EA – Editing adjustment + White chars + Folds
+    let g:markdown_fenced_languages= [ 'javascript', 'json', 'html', 'php', 'bash', 'vim' ]
     " PARENTHESES plugin junegunn/rainbow_parentheses.vim
     let g:rainbow#pairs= [['(', ')'], ['[', ']'], [ '{', '}' ]]
-    let g:rainbow#blacklist = [203]
+    let g:rainbow#blacklist = [203,9]
     autocmd VimEnter * try
         \| call rainbow_parentheses#toggle() | catch | endtry
     command! SETTOGGLErainbowParentheses call rainbow_parentheses#toggle()
@@ -204,7 +208,7 @@
     set timeoutlen=1000 ttimeoutlen=0                                                  " Remove timeout when hitting escape
     " TAB
     if v:version > 703 || v:version == 703 && has("patch541")
-      set formatoptions+=j | endif                             " Delete comment character when joining commented lines
+        set formatoptions+=j | endif                            " Delete comment character when joining commented lines
     set expandtab smarttab                                                   " Use spaces instead of tabs and be smart
     call <sid>SetToggle('expandtab')
     command! -nargs=1 SETtab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
@@ -213,8 +217,10 @@
     set shiftround autoindent   " round diff shifts to the base of n*shiftwidth,  https://stackoverflow.com/a/18415867
     filetype plugin indent on
     " SYNTAX&COLORS
+    if ($TERM =~ '256' && has("termguicolors"))
+        set termguicolors | endif
     if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
-      syntax on | endif
+        syntax on | endif
     set list listchars=tab:»·,trail:·,extends:#,nbsp:~,space:·      " Highlight spec. chars / Display extra whitespace
     call <sid>SetToggle('list')
     augroup syntax_sync_min_lines
@@ -248,7 +254,9 @@
     call scommands#map('g', 'GIT', "n,V")
     function s:gitCompletion(_, CmdLine, __)
         let l:cmd= a:CmdLine->split()
-        let l:cmd_start= l:cmd[0]->substitute('GIT', 'git ', '')->trim()->split(' ')
+        let l:cmd_start= l:cmd[0]
+            \ ->substitute('GIThub', 'gh', '')
+            \ ->substitute('GIT', 'git ', '')->trim()->split(' ')
         return bash#complete((l:cmd_start+l:cmd[1:])->join())
     endfunction
     function s:gitCmd(candidate)
@@ -274,6 +282,10 @@
         \ GITblameThis ALTredir !git -C %:p:h blame -L <line1>,<line2> %:t
     command! -nargs=*
         \ GITrestore execute '!clear && git status '.(<q-args>=='.' ? '%:p':'<args>').' -bs & git restore '.(<q-args>=='' ? '%:p':'<args>').' --patch'
+    command! -nargs=* -complete=customlist,<sid>gitCompletion
+        \ GIThub execute '!clear && gh '.<q-args>
+    command! -nargs=?
+        \ GIThubIssue execute '!clear && gh issue view '.expand('<cword>').' '.(<q-args>=='web' ? '--web' : '--comments')
 "" #endregion GIT
 "" #region COC – COC and so on, compilers
     let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tsserver' ]
@@ -342,6 +354,7 @@
     command! CLrenameFile          exec 'CocCommand workspace.renameCurrentFile'
     command! -nargs=? -bang
            \ CLreplace             call feedkeys(':<c-u>'.(<q-args>==''?'.':<q-args>).'s/'.("<bang>"=='!'?mini_enhancement#selectedText():expand('<cword>')).'//cgODODOD', 'tn')
+    command! CLrepeatLastChange    call feedkeys('/\V<C-r>"<CR>cgn<C-a><Esc>', 'tn')
     command! CLjsdoc               exec 'CocCommand docthis.documentThis'
     command! CLcodeactionCursor    call CocActionAsync('codeAction', 'cursor')
     command! CLfixCodeQuick        call CocActionAsync('doQuickfix')
@@ -357,7 +370,7 @@
         let word= a:is_visual ? getline("'<")[getpos("'<")[2]-1:getpos("'>")[2]-1] : expand('<cword>')
         if (index(['vim','help'], &filetype) >= 0)
             execute 'h '.word
-        elseif (index(['git','man'], &filetype) >= 0 || !coc#rpc#ready())
+        elseif (index(['git','gitcommit','man'], &filetype) >= 0 || !coc#rpc#ready())
             if &filetype=='man' | let word= "'".word."'" | endif
             execute '!' . &keywordprg . " " . word
         elseif &filetype=='html'

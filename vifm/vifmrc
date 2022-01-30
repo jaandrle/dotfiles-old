@@ -131,6 +131,11 @@
 "" #region C – Commands
     cnoremap <c-b> <a-b>
     cnoremap <c-f> <a-f>
+    cnoremap <> <><left>
+    cnoremap () ()<left>
+    cnoremap {} {}<left>
+    cnoremap "" ""<left>
+    cnoremap '' ''<left>
     " #region :com[mand][!] command_name action
     " The following macros can be used in a command
     " %a is replaced with the user arguments.
@@ -173,6 +178,7 @@
     nnoremap ov :!vim %"f<cr>
     nnoremap oo :file &<cr>l
     nnoremap oO :file &<cr>/[#$]<cr>l
+    nnoremap on :file &<cr>/xdg-open<cr>l
     
     " #region Farch – Archives
         if has('win')

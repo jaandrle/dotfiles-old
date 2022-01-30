@@ -35,7 +35,7 @@
 <!--endregion-->
 
 ## Náhodná část z konfiguračního souboru `.vimrc`
-``` %%VIMRC%%
+```vim %%VIMRC%%
 ```
 
 <!--region Mapování -->

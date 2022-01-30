@@ -3,12 +3,8 @@ My cross-platform config file. Now primarly **Ubuntu**, in the past also Windows
 
 To navigate my secondary editor use [../vscode](../vscode).
 
-### Mnemo
-1. __"*y__, __"*p__, __"+y__, __"+p__
-1. __"\_y__, __"\_p__
-
 ### Plugins
-```terminal
+```bash
 _vim_plugins --add ctrlpvim/ctrlp.vim
 _vim_plugins --add tpope/vim-repeat
 _vim_plugins --add tpope/vim-surround
@@ -37,3 +33,6 @@ Also call `:helptags ~/.vim/bundle/`.
 
 #### Native plugins
 - [mbbill/undotree: The undo history visualizer for VIM](https://github.com/mbbill/undotree)
+
+## To consider
+- [vimwiki/vimwiki: Personal Wiki for Vim](https://github.com/vimwiki/vimwiki)

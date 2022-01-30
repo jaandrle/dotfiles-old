@@ -1,5 +1,5 @@
+""" Tridactyl config file | Jan Andrle | 2022-01-25
 " General Settings
-set update.lastchecktime 1635159555061
 set configversion 2.0
 set theme dark
 set modeindicatorshowkeys true
@@ -46,6 +46,7 @@ bind st fillcmdline_notrail tab
 set keymap ě ;
 set keymap ; :
 bindurl ^https://mail.centrum.cz/* ěě composite hint_focus ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
+bind --mode=normal ;gt hint -c [tabindex]
 
 bind š tab #
 bind sš fillcmdline tab
@@ -84,3 +85,4 @@ command data_delall composite hint_focus * ; js document.activeElement.querySele
 
 " For syntax highlighting see https://github.com/tridactyl/vim-tridactyl
 " vim: set filetype=tridactyl
+" vim: set ft=vim :
