@@ -15,5 +15,5 @@ if(help){
     `);
     process.exit(0);
 }
-const url= "https://www.wolframalpha.com/input/?i="+encodeURI(query_array.join(" "));
+const url= "https://www.wolframalpha.com/input/?i="+encodeURI(query_array.join(" ")).replace(/\+/g, '%2B');
 $`exo-open --launch WebBrowser ${url}`;

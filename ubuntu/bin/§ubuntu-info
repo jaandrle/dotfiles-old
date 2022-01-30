@@ -1,0 +1,57 @@
+#!/bin/bash
+this="${0##*/}"
+this_version="2021-01-22"
+USAGE="\
+    $this@v$this_version
+    Wrapper around '/etc/os-release' to show Ubuntu (like) os info.
+    Usage:  $this --[help|all|raw]
+
+        'all' [default] prints all infos
+        'pick' prints only given key (default key is 'DESCRIPTION')
+        'raw' cats '/etc/os-release'
+       'help' prints this text
+
+    Examples:
+        $this --all
+        $this --pick NAME
+        $this --pick VERSION_NAME
+        $this --all | grep NAME
+"
+arg=${1:---all}
+if [[ "$arg" = "--help" ]]; then
+    echo -e "$USAGE"
+    exit 0
+fi
+if [[ "$arg" = "--raw" ]]; then
+    cat /etc/os-release
+    exit 0
+fi
+
+. /etc/os-release
+out="ID=$ID"
+out="${out}\nDESCRIPTION=$PRETTY_NAME"
+case "$ID" in
+      neon) out="${out}\nNAME=$NAME ($VARIANT)"
+            out="${out}\nVERSION=$VERSION ($VERSION_ID)"
+            ;;
+         *) out="${out}\nNAME=$NAME"
+            out="${out}\nVERSION=$VERSION"
+            ;;
+esac
+out="${out}\nVERSION_NICK=$UBUNTU_CODENAME"
+codename=`grep $(lsb_release -rs) /usr/share/python-apt/templates/Ubuntu.info | grep -m 1 "Description: Ubuntu " | cut -d "'" -f2`
+out="${out}\nVERSION_NAME=$codename"
+out="${out}\nLIKE=$ID_LIKE"
+out="${out}\n`grep URL /etc/os-release | sed 's/^\([A-Z_]*\)_URL/URL_\1/'`"
+
+if [[ "$arg" = "--all" ]]; then
+    echo -e "$out"
+    exit 0
+fi
+if [[ "$arg" = "--pick" ]]; then
+    echo -e `echo -e "$out" | grep "\b${2:-DESCRIPTION}\b" | cut -d = -f 2-`
+    exit 0
+fi
+
+echo "Wrong argument, see '--help'."
+exit 1
