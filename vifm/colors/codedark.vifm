@@ -1,0 +1,26 @@
+" codedark like color scheme for vifm
+" Reset all styles first
+highlight clear
+
+highlight Win		cterm=none	ctermfg=188	ctermbg=none
+highlight Border	cterm=none	ctermfg=none	ctermbg=none
+
+highlight TopLine	cterm=none	ctermfg=117	ctermbg=235
+highlight TopLineSel	cterm=bold	ctermfg=75	ctermbg=235
+highlight StatusLine	cterm=bold	ctermfg=65	ctermbg=234
+highlight ErrorMsg	cterm=bold	ctermfg=203	ctermbg=235
+highlight JobLine	cterm=bold	ctermfg=75	ctermbg=235
+highlight WildMenu	cterm=bold	ctermfg=188	ctermbg=235
+highlight CmdLine	cterm=none	ctermfg=188	ctermbg=235
+
+highlight CurrLine	cterm=none	ctermfg=none	ctermbg=0
+highlight OtherLine	cterm=none	ctermfg=247	ctermbg=237
+highlight Selected	cterm=none	ctermfg=none	ctermbg=235
+
+highlight Directory	cterm=none	ctermfg=179	ctermbg=none
+highlight Executable	cterm=none	ctermfg=176	ctermbg=none
+highlight Link		cterm=none	ctermfg=173	ctermbg=none
+highlight BrokenLink	cterm=none	ctermfg=164	ctermbg=none
+highlight Device	cterm=none	ctermfg=187	ctermbg=none
+highlight Fifo		cterm=none	ctermfg=187	ctermbg=none
+highlight Socket	cterm=none	ctermfg=187	ctermbg=none

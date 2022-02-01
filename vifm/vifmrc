@@ -61,11 +61,7 @@
     set quickview
     command! SetView :view
     set dotfiles
-    
-    colorscheme zenburn_1
-    hi Win ctermbg=none
-    hi Border ctermbg=none
-    
+    colorscheme codedark
     set wildmenu wildstyle=popup
     set suggestoptions=normal,visual,view,otherpane,keys,foldsubkeys,marks,registers
     set ignorecase smartcase incsearch
