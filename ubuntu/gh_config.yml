@@ -9,8 +9,7 @@ pager:
 # Aliases allow you to create nicknames for gh commands
 aliases:
     co: pr checkout
-    project-cols: '!gh project list-columns -p `gh project list | grep $1\$ | §awk 1`'
-    project-cards: '!gh project list-columns -p `gh project list | grep $1\$ | §awk 1` | head -n $(($2+1)) | tail -n 1 | §awk 1 | xargs -I {} gh api projects/columns/{}/cards -q "[ .[] | { "issue": (try .content_url | split(\"/\") | .[-1] catch null), note, id } ]" | jq'
+    §modules: issue list --label "modules (auxiliary)" --state "closed"
 # The path to a unix socket through which send HTTP connections. If blank, HTTP traffic will be handled by net/http.DefaultTransport.
 http_unix_socket:
 # What web browser gh should use when opening URLs. If blank, will refer to environment.
