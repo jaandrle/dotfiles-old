@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2022-01-30 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2022-02-01 (VIM >=8.1)
 "" #region B – Base
     scriptencoding utf-8 | set encoding=utf-8
     let $BASH_ENV = "~/.bashrc"
@@ -194,6 +194,9 @@
     command! NAVmarks call jaandrle_utils#gotoMarks()
 "" #endregion EN
 "" #region EA – Editing adjustment + White chars + Folds
+    " use <c-v>§ for §
+    inoremap § <esc>
+
     let g:markdown_fenced_languages= [ 'javascript', 'json', 'html', 'php', 'bash', 'vim' ]
     " PARENTHESES plugin junegunn/rainbow_parentheses.vim
     let g:rainbow#pairs= [['(', ')'], ['[', ']'], [ '{', '}' ]]

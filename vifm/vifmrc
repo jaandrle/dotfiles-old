@@ -1,4 +1,4 @@
-"" VIFM Config file / 2021-12-08 / Jan Andrle
+"" VIFM Config file / 2022-02-01 / Jan Andrle
 "" #region B – Bookmarks
     if !has('win')
         :bmark! "~/" home
