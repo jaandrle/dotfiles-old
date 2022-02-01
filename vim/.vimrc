@@ -271,6 +271,12 @@
                     \'!clear && echo ":: git '.a:candidate->escape('"').' ::" && '
         execute l:pre.'git '.a:candidate
     endfunction
+    function s:githubCmd(type, candidate)
+        let l:pre= !a:type
+                \ ? '!clear && echo ":: gh '.a:candidate->escape('"').' ::" && ' :
+                \ a:type == 1 ? 'ALTredir !' : 'ALTredirKeep !'
+        execute l:pre.'gh '.a:candidate
+    endfunction
     command! -nargs=* -complete=customlist,<sid>gitCompletion
         \ GIT call <sid>gitCmd(<q-args>)
     command! -nargs=* -complete=customlist,<sid>gitCompletion
@@ -285,10 +291,10 @@
         \ GITblameThis ALTredir !git -C %:p:h blame -L <line1>,<line2> %:t
     command! -nargs=*
         \ GITrestore execute '!clear && git status '.(<q-args>=='.' ? '%:p':'<args>').' -bs & git restore '.(<q-args>=='' ? '%:p':'<args>').' --patch'
-    command! -nargs=* -complete=customlist,<sid>gitCompletion
-        \ GIThub execute '!clear && gh '.<q-args>
-    command! -nargs=?
-        \ GIThubIssue execute '!clear && gh issue view '.expand('<cword>').' '.(<q-args>=='web' ? '--web' : '--comments')
+    command! -count -nargs=* -complete=customlist,<sid>gitCompletion
+        \ GIThub call <sid>githubCmd(<count>, <q-args>)
+    command! -nargs=? -bang
+        \ GIThubIssue execute ( "<bang>"=="!" ? 'ALTredirKeep !' : '!clear &&' ) . 'gh issue view '.expand('<cword>').' '.<q-args>
 "" #endregion GIT
 "" #region COC – COC and so on, compilers
     let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tsserver' ]
