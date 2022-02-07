@@ -26,6 +26,8 @@ LAST_PWD_PATH="$BASH_DOTFILES/.bash_last_pwd"
 cd(){ builtin cd "$@" && echo `pwd` > "$LAST_PWD_PATH"; }
 
 history_clean(){ awk '!seen[$0]++ {print $0}' $HOME/.bash_history; }
+history_edit(){ vim $HOME/.bash_history; }
+history_cat(){ LC_ALL=C cat ~/.bash_history; }
 history_most_used(){ LC_ALL=C cat ~/.bash_history | cut -d ';' -f 2- | §awk 1 | sort | uniq -c | sort -r -n | head -n ${1-10}; }
 
 §(){
@@ -43,7 +45,8 @@ else
 fi
 alias §ls='ls -pQFh --group-directories-first'
 alias §ls.='§ls -A'
-§lsl(){ §ls. -l $* --color=always | less -R -S; }
+alias §less='less -R -S'
+§lsl(){ §ls. -l $* --color=always | §less; }
 
 alias §cd.='clear;§ls'
 §cd..(){ cd $(eval printf '../'%.0s {1..$1}); }

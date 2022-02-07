@@ -10,6 +10,8 @@ pager:
 aliases:
     co: pr checkout
     §modules: issue list --label "modules (auxiliary)" --state "closed"
+    §grepAsana_: '!grep "Issue is synchronized with this \[Asana task\]" | §awk -F "(" 2 | §awk -F ")" 1 | §awk -F "/" 6'
+    §indigo: api user/orgs -q '.[0].login'
 # The path to a unix socket through which send HTTP connections. If blank, HTTP traffic will be handled by net/http.DefaultTransport.
 http_unix_socket:
 # What web browser gh should use when opening URLs. If blank, will refer to environment.

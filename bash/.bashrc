@@ -11,7 +11,8 @@ shopt -s expand_aliases
 [ -f $BASH_DOTFILES/.bash_jaaENV ] && . $BASH_DOTFILES/.bash_jaaENV
 [ -f $BASH_DOTFILES/.bash_sdkman ] && . $BASH_DOTFILES/.bash_sdkman
 [ -f $BASH_DOTFILES/.bash_nvm ] && . $BASH_DOTFILES/.bash_nvm
-[ -f $BASH_DOTFILES/.bash_gh ] && . $BASH_DOTFILES/.bash_gh
+# to have completion in vim
+[ -f $BASH_DOTFILES/.bash_completions ] && . $BASH_DOTFILES/.bash_completions
 
 [[ $- != *i* ]] && return                   # If not running interactively, don't do anything
 

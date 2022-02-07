@@ -2,6 +2,7 @@ let g:user_tips_list= [
     \ ':vebose ★ * … ★: eg. map/set/…',
     \ ':clist+:cc :+cc :-cc :copen :cwindow :cclose',
     \ ':undolist :earlier :later',
+    \ 'git mergetool → vimdiff3 → https://stackoverflow.com/a/163659',
     \ ':llist+:ll :+ll :-ll :lopen :lwindow :lclose',
     \ ':m ''>+1 … :m ''<-2',
     \ 'QuickList → :set ma+‘edit’+;w ;s … ;q',
