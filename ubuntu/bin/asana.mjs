@@ -4,12 +4,15 @@ import { get, request } from "https";
 import { clearLine, moveCursor } from "readline";
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
 import { createInterface } from "readline";
+import { execFileSync } from "child_process";
 
 const alias_join= "<%space%>";
 const { script_name, path, Authorization, argvs }= scriptsInputs();
 const { isTTY }= process.stdout;
+const isTCS= /-256(color)?$/i.test(process.env.TERM);
 const user_= prepareUser();
-const opt_fields_tasks= [ "name", "memberships.project.name", "memberships.section.name", "modified_at", "num_subtasks", "custom_fields", "permalink_url", "tags.name" ];
+const opt_fields_tasks_mem= [ "memberships.project.name", "memberships.section.name" ];
+const opt_fields_tasks= [ "name", ...opt_fields_tasks_mem, "modified_at", "num_subtasks", "custom_fields", "permalink_url", "tags.name", "tags.gid" ];
 (async function main_(cmd= "list"){
     if("completion_bash"===cmd) return completion_bash();
     if("auth"===cmd) return auth_();
@@ -22,8 +25,9 @@ const opt_fields_tasks= [ "name", "memberships.project.name", "memberships.secti
     if("list"!==cmd) return Promise.reject(`Unknown command '${cmd}'`);
     const type= argvs.shift() ?? "tasks-todo";
 
-    if("tags"===type) return tags_();
-    if("custom_fields"===type) return customFields_();
+    if("tags"===type) return pinTags_();
+    if("custom_fields"===type) return pinCustomFields_();
+    if("sections"===type) return pinSections_();
 
     if("tasks-todos"===type) return todo_();
     if("tasks-favorites"===type) return list_(true);
@@ -59,7 +63,7 @@ function completion_bash(){
     }
     if("list"===first){
         if(level==3)
-            console.log(matches([ "tasks-todos", "tasks-favorites", "tasks-all", "tags", "custom_fields" ]));
+            console.log(matches([ "tasks-todos", "tasks-favorites", "tasks-all", "tags", "custom_fields", "sections" ]));
         else
             console.log(matches([ "--help", "list" ]));
         process.exit(0);
@@ -83,7 +87,7 @@ function question_(rl, q){ return new Promise(r=> rl.question(q+": ", r)); }
 function abbreviate(argvs){
     //#region …
     const [ type= "custom_fields", cmd= "list", name, value= "" ]= argvs;
-    const prefix= type==="custom_fields" ? "C" : "T";
+    const prefix= type==="custom_fields" ? "C" : (type==="tags" ? "T" : "S");
     if("list"===cmd) return alias(prefix, [], ([n,v])=> ([ n.slice(1), v ]));
     return alias(prefix, [ cmd, prefix + name,
         type==="custom_fields" ? '{"'+value.split("=").join('":"')+'"}' : value
@@ -137,7 +141,7 @@ async function api_(){
 }
 async function questionChoose_(rl, options){
     //#region …
-    let answers= await question_(rl, "choose from list");
+    const answers= await question_(rl, "choose from list");
     if(answers==="*") return options;
     return answers.split(" ").flatMap(function(v){
         if(v.indexOf("-")===-1) return [ Number(v) ];
@@ -146,7 +150,36 @@ async function questionChoose_(rl, options){
     });
     //#endregion …
 }
-async function tags_(){
+/**
+ * @param {Interface} rl
+ * @param {string[]} options
+ * @returns Promise<string>
+ */
+async function questionCmd_(rl, options){
+    //#region …
+    const is_colors= isTTY && isTCS;
+    let c= 75;
+    console.log("\n*** Commands ***" + options.reduce(function(o, curr){
+        c+= curr.length;
+        if(is_colors) curr= curr.replace(/\[(\w)\]/g, "\x1b[34m$1\x1b[0m");
+        if(c<76) return o+" ··· "+curr;
+        c-= 75;
+        return o+"\n  "+curr;
+    }, ""));
+    return await question_(rl, f("What now", "blue"));
+    //#endregion …
+}
+/**
+ * @param {string} text
+ * @param {"blue"|"red"|"green"|"yellow"|"magenta"|"cyan"|"crimson"} color
+ * @returns {string}
+ */
+function f(text, color){
+    if(!isTTY || !isTCS) return text;
+    const c= JSON.parse('{"red":"\\u001b[31m","green":"\\u001b[32m","yellow":"\\u001b[33m","blue":"\\u001b[34m","magenta":"\\u001b[35m","cyan":"\\u001b[36m","crimson":"\\u001b[38m"}');
+    return c[color]+text+"\x1b[0m";
+}
+async function pinTags_(){
     //#region …
     const spinEnd= spiner();
     const tags= await get_("tags", { qs: { opt_fields: [ "followers", "name" ] } });
@@ -164,12 +197,11 @@ async function tags_(){
         spinEnd();
         print();
         while(true){
-            console.log("Options: [q]uit\t[f]ilter\t[t]oggle pin (*)");
-            const cmd= await question_(rl, "operation");
+            const cmd= await questionCmd_(rl, [ "[q]uit", "[f]ilter", "[t]oggle pin (*)" ]);
             if(!cmd) continue;
             try{
                 switch(cmd){
-                    case "q": rl.close(); return true;
+                    case "q": rl.close(); return 0;
                     case "f": tags= filter(await question_(rl, "filter by name")); print(); continue;
                     case "t": (await questionChoose_(rl, Object.keys(tags))).map(toggle); print(); continue;
                     default: throw new Error(`Unknown '${cmd}'`);
@@ -199,7 +231,81 @@ async function tags_(){
     }
     //#endregion …
 }
-async function customFields_(){
+async function pinSections_(){
+    //#region …
+    const spinEnd= spiner();
+    const num_workspace= argvs.shift() ?? "list";
+    exitHelp(num_workspace);
+    const list_workspaces= await user_().then(({ workspaces })=> workspaces);
+    if("list"===num_workspace)
+        return printList("Workspaces", list_workspaces);
+    const data_workspace= list_workspaces[num_workspace];
+    
+    const projects= await get_("users/me/favorites", { qs: { workspace: data_workspace.gid, resource_type: "project", opt_fields: [ "name", "gid" ] } });
+    const list= [];
+    for(const project of Object.values(projects)){
+        const sections= await get_(`projects/${project.gid}/sections`);
+        const pv= { project: project.gid };
+        if(!sections.length){
+            list.push({ name: project.name, value: JSON.stringify(pv) });
+            continue;
+        }
+        for(const section of Object.values(sections))
+            list.push({ name: project.name+" → "+section.name, value: JSON.stringify(Object.assign({}, pv, { section: section.gid })) });
+    }
+    return await shell_(list);
+    
+    function filter(name_filter= ""){
+        if(!name_filter) return list;
+        return Object.values(list).filter(({ name })=> name.indexOf(name_filter)!==-1);
+    }
+    async function shell_(list_cf){
+        const rl= createInterface({ input: process.stdin, output: process.stdout, historySize: 30 });
+        const pinned= Object.keys(configRead().aliases).filter(name=> name[0]==="S").map(name=> name.slice(1));
+        spinEnd();
+        print();
+        while(true){
+            const cmd= await questionCmd_(rl, [ "[q]uit", "[f]ilter", "[t]oggle pin (*)" ]);
+            if(!cmd) continue;
+            try{
+                switch(cmd){
+                    case "q": rl.close(); return 0;
+                    case "f": list_cf= filter(await question_(rl, "filter by name")); print(); continue;
+                    case "t": (await questionChoose_(rl, Object.keys(list_cf))).map(toggle); print(); continue;
+                    default: throw new Error(`Unknown '${cmd}'`);
+                }
+            } catch(e){
+                console.error(e.message+" …exit with 'q'"); continue;
+            }
+        }
+        function toggle(num){
+            const { value, name }= list_cf[num];
+            const index= pinned.indexOf(name);
+            const operation= index===-1 ? "add" : "remove";
+            const error= abbreviate([ "sections", operation, name, value ]);
+            if(error) throw new Error("Tag operation failed!");
+            if(operation==="add") pinned.unshift(name);
+            else pinned.splice(index, 1);
+            return console.log(`'${operation[0].toUpperCase()+operation.slice(1)} ${name}' successfully done.`);
+        }
+        function print(){ return console.log("\n"+list_cf.map(({name}, num)=> `\t${pinned.indexOf(name)===-1?"":"*"}${num}: ${name}`).join("\n")); }
+    }
+    
+    function printList(title, list){
+        spinEnd();
+        if(isTTY)
+            console.log(`${title}\nNUM\tNAME\tGID`);
+        console.log(list.map(({ name, gid }, num)=> `${num}\t${name}\t${gid}`).join("\n"));
+    }
+    function exitHelp(num){
+        if("--help"!==num) return false;
+        spinEnd();
+        console.log("HELP");
+        process.exit(0);
+    }
+    //#endregion …
+}
+async function pinCustomFields_(){
     //#region …
     const spinEnd= spiner();
     const num_workspace= argvs.shift() ?? "list";
@@ -226,12 +332,11 @@ async function customFields_(){
         spinEnd();
         print();
         while(true){
-            console.log("Options: [q]uit\t[f]ilter\t[t]oggle pin (*)");
-            const cmd= await question_(rl, "operation");
+            const cmd= await questionCmd_(rl, [ "[q]uit", "[f]ilter", "[t]oggle pin (*)" ]);
             if(!cmd) continue;
             try{
                 switch(cmd){
-                    case "q": rl.close(); return true;
+                    case "q": rl.close(); return 0;
                     case "f": list_cf= filter(await question_(rl, "filter by name")); print(); continue;
                     case "t": (await questionChoose_(rl, Object.keys(list_cf))).map(toggle); print(); continue;
                     default: throw new Error(`Unknown '${cmd}'`);
@@ -250,7 +355,7 @@ async function customFields_(){
             else pinned.splice(index, 1);
             return console.log(`'${operation[0].toUpperCase()+operation.slice(1)} ${name}' successfully done.`);
         }
-        function print(){ return console.log("\n"+list_cf.map(({name}, num)=> `\t${num}: ${name}${pinned.indexOf(name)===-1?"":"*"}`).join("\n")); }
+        function print(){ return console.log("\n"+list_cf.map(({name}, num)=> `\t${pinned.indexOf(name)===-1?"":"*"}${num}: ${name}`).join("\n")); }
     }
     
     function printList(title, list){
@@ -304,7 +409,7 @@ function todo_(){
             return printList(`Task todo in project '${data_project.name}'`, list_sections);
         const data_section= list_sections[num_section][1];
         
-        const num_task= argvs.shift() ?? "list";
+        const num_task= argvs.shift() ?? "mark";
         exitHelp(num_task);
         const list_tasks= Object.entries(data_section.list);
         return await tasks_(list_tasks, num_task, data_project, data_section, spinEnd);
@@ -352,7 +457,7 @@ async function list_(is_favorites){
         return printList(`Sections in '${data_workspace.name}' → '${data_project.name}'`, list_sections);
     const data_section= list_sections[num_section];
 
-    const num_task= argvs.shift() ?? "list";
+    const num_task= argvs.shift() ?? "mark";
     exitHelp(num_task);
     const list_tasks= Object.entries(await get_(`sections/${data_section.gid}/tasks`, { cache: "no-cache", qs: { opt_fields: opt_fields_tasks } }));
     return await tasks_(list_tasks, num_task, data_project, data_section, spinEnd);
@@ -387,36 +492,75 @@ async function marks_(){
     function getTasks_(){ return Promise.all(data_marks[mark].tasks.map(gid=> get_(`tasks/${gid}`, { cache: "no-cache", gs: { opt_fields: opt_fields_tasks } }))); }
     async function shell_(options, task_){
         const rl= createInterface({ input: process.stdin, output: process.stdout, historySize: 30 });
+        const open_= getOpen();
         while(true){
             print(list_tasks);
-            console.log("Operations: [q]uit\t[v]iew\t[c]ustom_[f]ields");
-            const cmd= await question_(rl, "operation");
+            const cmd= await questionCmd_(rl, [ "[q]uit", "[v]iev", "[w]eb", "[c]ustom [f]ields", "[t]ag toggle", "[s]ection (project)" ]);
             if(!cmd) continue;
             try{
                 switch(cmd){
-                    case "q": rl.close(); return true;
+                    case "q": rl.close(); return 0;
                     case "v": await Promise.all((await questionChoose_(rl, options)).map(task_)); continue;
                     case "cf": await updateCF_(await questionChoose_(rl, options), rl); continue;
+                    case "t": await updateTag_(await questionChoose_(rl, options), rl); continue;
+                    case "s": await updateSection_(await questionChoose_(rl, options), rl); continue;
+                    case "w": await questionChoose_(rl, options).then(openTaskWeb_); continue;
+                    default: throw new Error(`Unknown '${cmd}'`);
                 }
             } catch(e){
                 console.error(e.message+" …exit with 'q'"); continue;
             }
         }
+        function openTaskWeb_(tasks){ return Promise.all(tasks.map(n=> open_(list_tasks[n].permalink_url+"/f"))); }
+    }
+    async function updateSection_(tasks, rl){
+        const aliases= configRead().aliases;
+        const aliases_keys= Object.keys(aliases).filter(v=> v[0]==="S");
+        console.log("sections: \n  "+aliases_keys.map((v,n)=> n+": "+v.slice(1)).join("\n  "));
+        const abb= await question_(rl, "section num");
+        if(!abb) return 0;
+        const section= configRead().aliases[aliases_keys[abb]];
+        if(!section){ console.log("Unknown section"); return 0; }
+        const data= JSON.parse(section);
+        
+        return await Promise.all(tasks.map(async function(num){
+            const data_task= list_tasks[num];
+            return putPost_(`tasks/${data_task.gid}/addProject`, { qs: { data }, method: "POST" })
+            .then(()=> get_(`tasks/${data_task.gid}`, { qs: { opt_fields: opt_fields_tasks_mem } }))
+            .then(m=> list_tasks[num].memberships= m.memberships);
+        })).catch(console.error);
+    }
+    async function updateTag_(tasks, rl){
+        const aliases= configRead().aliases;
+        const aliases_keys= Object.keys(aliases).filter(v=> v[0]==="T");
+        console.log("tags: \n  "+aliases_keys.map((v,n)=> n+": "+v.slice(1)).join("\n  "));
+        const abb= await question_(rl, "tag num");
+        if(!abb) return 0;
+        const tag= configRead().aliases[aliases_keys[abb]];
+        if(!tag){ console.log("Unknown tag"); return 0; }
+        
+        return await Promise.all(tasks.map(async function(num){
+            const data_task= list_tasks[num];
+            const toggle= data_task.tags.find(t=> t.gid===tag) ? "removeTag" : "addTag";
+            return putPost_(`tasks/${data_task.gid}/${toggle}`, { qs: { data: { tag } }, method: "POST" })
+            .then(()=> get_(`tasks/${data_task.gid}/tags`, { qs: { opt_fields: [ "name", "gid" ] } }))
+            .then(tags=> list_tasks[num].tags= tags);
+        })).catch(console.error);
     }
     async function updateCF_(tasks, rl){
         const aliases= configRead().aliases;
         const aliases_keys= Object.keys(aliases).filter(v=> v[0]==="C");
         console.log("custom_fields abbreviates: \n  "+aliases_keys.map((v,n)=> n+": "+v.slice(1)).join("\n  "));
         const abb= await question_(rl, "custom_fields num");
+        if(!abb) return 0;
         const json_data_pre= configRead().aliases[aliases_keys[abb]];
-        if(!json_data_pre){
-            console.log("Unknown custom_fields");
-            return 0;
-        }
+        if(!json_data_pre){ console.log("Unknown custom_fields"); return 0; }
+        
         const json_data= json_data_pre.indexOf("<%1%>")===-1 ? json_data_pre : json_data_pre.replace(/<%1%>/g, await question_(rl, "argument needed"));
         return await Promise.all(tasks.map(async function(num){
             const data_task= list_tasks[num];
-            return put_("tasks/"+data_task.gid, { qs: { "data": { custom_fields: JSON.parse(json_data) } } });
+            return putPost_("tasks/"+data_task.gid, { qs: { data: { custom_fields: JSON.parse(json_data), opt_fields: opt_fields_tasks } } })
+            .then(task=> list_tasks[num]= task);
         })).catch(console.error);
     }
     function print(list_tasks){
@@ -433,14 +577,13 @@ async function marks_(){
 }
 async function tasks_(list_tasks, num_task, data_project, data_section, spinEnd){
     //#region …
+    spinEnd();
+    if("mark"===num_task&&isTTY)
+        return await shell_(list_tasks.map(([num])=> num), num_task=> taskView_(list_tasks[num_task][1]));
     if("list"===num_task){
-        spinEnd();
-        if(isTTY)
-            return await shell_(list_tasks.map(([num])=> num), num_task=> taskView_(list_tasks[num_task][1]));
         print();
         return 0;
     }
-    spinEnd();
     await taskView_(list_tasks[num_task][1]);
 
     function print(marked= new Set()){
@@ -462,17 +605,20 @@ async function tasks_(list_tasks, num_task, data_project, data_section, spinEnd)
         await editInfo_();
         print(marked);
         while(true){
-            console.log("Options:\nMark:\t[q]uit\t[e]dit\t[c]urrently [s]aved\t[s]ave (append)\t[s]ave ([r]eplace)\nTask(s):\t[v]iew\t[m]ark\t[m]ark [s]ubtasks");
-            const cmd= await question_(rl, "operation");
+            const cmd= await questionCmd_(rl, [
+                "[q]uit", "[e]dit mark", "[c]urrent [m]arks",
+                "[s]ave – append", "[s]ave – [r]eplace",
+                "[v]iev task(s)", "[m]ark toggle", "[m]ark toggle ([s]ubtasks)"
+            ]);
             if(!cmd) continue;
             try{
                 switch(cmd){
-                    case "q": rl.close(); return true;
+                    case "q": rl.close(); return 0;
                     case "v": await Promise.all((await questionChoose_(rl, options)).map(task_)); continue;
                     case "e": await editInfo_(); continue;
-                    case "cs": currentMarks(); continue;
+                    case "cm": currentMarks(); continue;
                     case "m": markTasks(await questionChoose_(rl, options).then(mapTasks)); continue; 
-                    case "ms": await questionChoose_(rl, options).then(getSubtasks_); continue;
+                    case "ms": await questionChoose_(rl, options).then(markSubtasks_); continue;
                     case "sr":
                     case "s":
                         const c= configRead();
@@ -488,26 +634,29 @@ async function tasks_(list_tasks, num_task, data_project, data_section, spinEnd)
         }
         function currentMarks(){ console.log("  Current marks names: "+Object.keys(marks).join(", ")); }
         function mapTasks(ts){ return ts.map(t=> list_tasks[t][1].gid); }
-        function getSubtasks_(nums_){
+        function markSubtasks_(nums_){
             return Promise.all(nums_.map(t=> get_(`tasks/${list_tasks[t][1].gid}/subtasks`, { cache: "no-cache" }))).then(ts=> ts.forEach(t=> markTasks(t.map(({gid})=> gid))));
         }
-        function markTasks(tasks){ tasks.forEach(t=> marked.add(t)); print(marked); }
+        function markTasks(tasks){
+            tasks.forEach(t=> marked.has(t) ? marked.delete(t) : marked.add(t));
+            print(marked);
+        }
         async function editInfo_(){
             name= await question_(rl, "Mark name");
-            if(Reflect.has(marks, name)){
-                console.log("Mark with this name already exists!");
-                marks[name].tasks.forEach(n=> marked.add(n));
-            }
+            if(Reflect.has(marks, name)) console.log("Mark with this name already exists!");
             description= await question_(rl, "Mark description");
         }
     }
     //#endregion …
 }
 async function taskView_(data_task){
-    const { name, gid, custom_fields: custom_fields_pre, modified_at, num_subtasks, permalink_url, tags }= data_task;
+    //#region …
+    const { name, memberships: memberships_pre, gid, custom_fields: custom_fields_pre, modified_at, num_subtasks, permalink_url, tags }= data_task;
+    const memberships= memberships_pre.map(o=> Object.values(o).map(o=> o.name).join(" → "));
     const custom_fields= custom_fields_pre.filter(({ enabled })=> enabled).reduce((out, { name, display_value })=> Reflect.set(out, name, display_value) && out, {});
     const out= {
         name,
+        memberships,
         gid,
         custom_fields,
         subtasks: (await get_(`tasks/${data_task.gid}/subtasks`, { cache: "no-cache" })).map(({ gid, name })=> ({ gid, name })),
@@ -517,6 +666,7 @@ async function taskView_(data_task){
     };
     if(isTTY) console.log(out);
     else console.log(JSON.stringify(out));
+    //#endregion …
 }
 function prepareUser(){
     // #region …
@@ -622,7 +772,14 @@ function get_(path, { cache= "max-age=1", qs= {} }= {}){ return new Promise(func
     .on("error", rej); });
     // #endregion …
 }
-function put_(path, { cache= "max-age=1", method= "PUT", qs= {} }= {}){ return new Promise(function(res,rej){
+/**
+ * @param {string} path
+ * @param {object} def
+ * @param {"max-age=15"|"max-age=1"|"no-cache"} [def.cache="max-age=1"]
+ * @param {"PUT"|"POST"} [def.method="PUT"]
+ * @returns Promise<object>
+ */
+function putPost_(path, { cache= "max-age=1", method= "PUT", qs= {} }= {}){ return new Promise(function(res,rej){
     // #region …
     const data= JSON.stringify(qs);
     const req= request({
@@ -664,6 +821,27 @@ function spiner(){
     };
     // #endregion …
 }
-// asana.mjs list 0 1 3 0 | jq -r '.subtasks[].gid' | xargs -L 1 -I {} curl -X PUT https://app.asana.com/api/1.0/tasks/{}   -H 'Content-Type: application/json'   -H 'Accept: application/json'   -H 'Authorization: Bearer 1/166073643636338:c0165cac0a9591e3a5fcee2c91d90d7f'   -d '{"data": {"custom_fields":{"798840962403818":"798840962403821"}} }'
+function getOpen(){
+    //#region …
+    const { platform } = process;
+    let opener;
+    switch (platform) {
+        case 'android':
+        case 'linux': opener= ['xdg-open']; break;
+        case 'darwin': opener= ['open']; break;
+        case 'win32': opener= ['cmd', ['/c', 'start']]; break;
+    }
+    if(!opener) return ()=> console.error(`Unsupported platform '${platform}'`);
+    return url=> new Promise((resolve, reject) => {
+        try {
+            const [command, args = []]= opener;
+            execFileSync( command, [...args, encodeURI(url)]);
+            return resolve();
+        } catch (error) {
+            return reject(error);
+        }
+    });
+    //#endregion …
+}
 // vim: set tabstop=4 shiftwidth=4 textwidth=250 expandtab :
 // vim>60: set foldmethod=marker foldmarker=#region,#endregion :
