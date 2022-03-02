@@ -62,7 +62,7 @@ _cordova()
 
     # For the first word, supply all of the valid top-level commands
     if [[ ${COMP_CWORD} -eq $i ]]; then
-        opts="create platform plugin prepare compile build emulate serve"
+        opts="help create info platform plugin prepare compile build clean run emulate serve"
         COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
         return 0
     fi
@@ -109,8 +109,18 @@ _cordova()
                     ;;
             esac
             ;;
-        prepare|compile|build|emulate)
+        prepare|compile|emulate)
             platforms ${cur}
+            return 0
+            ;;
+        build)
+            platforms ${cur}
+            COMPREPLY+=( $(compgen -W '--release --debug --help --device --emulator --buildConfig' -- ${cur}) )
+            return 0
+            ;;
+        run)
+            platforms ${cur}
+            COMPREPLY+=( $(compgen -W '--list --noprepare --nobuild --target --release --debug --help --device --emulator --buildConfig' -- ${cur}) )
             return 0
             ;;
         serve)

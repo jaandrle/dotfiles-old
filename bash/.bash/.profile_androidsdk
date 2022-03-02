@@ -4,3 +4,8 @@ export PATH=$PATH:$ANDROID_SDK_ROOT/tools/
 export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools/
 export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/
 export PATH=$PATH:$ANDROID_SDK_ROOT/emulator/
+
+§aHome(){
+    ANDROID_HOME=/home/jaandrle/.local/share/umake/android/android-studio
+    export ANDROID_HOME
+}

@@ -3,3 +3,36 @@ eval "$(gh completion -s bash)"
 # used ectension: heaths/gh-label
 eval "$(asana.mjs completion_bash)"
 \. "$BASH_DOTFILES/cordova.completion"
+eval "$(node --completion-bash)"
+eval "$(npm completion)"
+
+_npx() {
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+
+  if [[ $COMP_CWORD != 1 ]]; then
+    case "${COMP_WORDS[1]}" in
+      gulp)
+        local compls=$(npx gulp --tasks-simple)
+        if [[ $compls == *"__autocomplete_bash"* ]]; then
+            compls="$compls $(npx gulp -L __autocomplete_bash --_l=$COMP_CWORD --_c=$cur)"
+        fi
+      ;;
+    esac
+    COMPREPLY=($(compgen -W "$compls" -- "$cur"))
+    return 0;
+  fi
+
+  local dir=$(pwd -P)
+  while [[ -n "$dir" ]]; do
+    if [[ ! -d $dir/node_modules/.bin ]]; then
+      dir=${dir%/*}
+      continue
+    fi
+    local execs=( `cd $dir/node_modules/.bin; find -L . -type f -executable` )
+    execs=( ${execs[@]/#.\//} )
+    COMPREPLY=( $(compgen -W "${execs[*]} serve" -- "$cur" ) )
+    break
+  done
+}
+
+complete -F _npx npx
