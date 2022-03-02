@@ -24,10 +24,10 @@ if(!existsSync(shared_file_path)){
 }
 
 const [ name, ...params ]= argv.slice(2);
-if(!name){
+if(!name||name==="--help"){
     console.error(`Use one of the options in '\`${shared_file_path}\`.cordova_keys_store'.`);
     console.log("Curently available: "+Object.keys(cordova_keys_store).join(", "));
-    exit(1);
+    exit(!name);
 }
 
 const /* runtime arguments and cwd */
@@ -38,9 +38,9 @@ const /* runtime arguments and cwd */
     apk_dir= platform_build+"outputs/apk/",
     process_clear= params.indexOf("noclear")===-1 && !existsSync(platform+"app/");
 
-console.log("Clering previous builds: start");
+console.log("Clearing previous builds: start");
 if(process_clear) emptyFolder(apk_dir);
-console.log("Clering previous builds: end");
+console.log("Clearing previous builds: end");
 console.log(`Temp '${path}': start`);
 copyFileSync(path, cwd+"keystore.jks");
 console.log(`Temp '${path}': end`);
@@ -54,7 +54,8 @@ cordova_cmd.on("close", function(){
     console.log("Cordova release: end");
     console.log("Cleaning: start");
     unlinkSync(cwd+"keystore.jks");// cordova si to uklada a uz potom bez nej nelze buildit vubec
-    unlinkSync(platform_android+"release-signing.properties");
+    if(existsSync(platform_android+"release-signing.properties"))
+        unlinkSync(platform_android+"release-signing.properties");
     console.log("Cleaning: end");
 });
 
