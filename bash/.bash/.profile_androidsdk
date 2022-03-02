@@ -1,5 +1,5 @@
 # IMPORT IN `$HOME/.profile`
-export ANDROID_HOME_BAK=/home/jaandrle/.local/share/umake/android/android-studio
+export ANDROID_HOME_BAK="$HOME/.local/share/umake/android/android-studio"
 export ANDROID_SDK_ROOT="$HOME/.local/share/umake/android/android-studio-sdk"
 export PATH=$PATH:$ANDROID_SDK_ROOT/tools/
 export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools/
