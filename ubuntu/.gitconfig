@@ -10,6 +10,9 @@
     # see https://stackoverflow.com/questions/5343068/is-there-a-way-to-cache-https-credentials-for-pushing-commits/18362082#18362082
     helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
 [alias]
+    checkout-default= !git checkout `git branch-default`
+    checkout-default--= !git checkout-default && git branch --delete @{-1} --verbose
+    branch-default = !git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'
     branches = for-each-ref --sort=-committerdate refs --format=\"%(authordate:iso8601)\t%(color:blue)%(refname:short)%(HEAD)\t%(if:notequals="")%(upstream:short)%(then)→ %(upstream:short)%(color:reset)%(else)%(color:yellow)%(objectname:short)%(color:reset)\t%(contents:subject)%(end)\"
     tags = tag -l --sort=-creatordate --format='%(refname:short):	[%(creatordate:short)]	%(subject)'
     log-authors = shortlog -ns
