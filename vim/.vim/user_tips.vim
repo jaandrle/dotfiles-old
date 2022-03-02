@@ -6,6 +6,7 @@ let g:user_tips_list= [
     \ ':llist+:ll :+ll :-ll :lopen :lwindow :lclose',
     \ ':m ''>+1 … :m ''<-2',
     \ 'QuickList → :set ma+‘edit’+;w ;s … ;q',
+    \ ':set foldopen-=search',
     \ 'Buffer info → <c-g> g<c-g> … :map <buffer><tab>',
     \ 'Rename file → :saveas * | :silent !rm # | :bw #',
     \ 'Next word location → ]I [I ]<c-I> [<c-I> … <leader>]I <leader>[I',
