@@ -37,6 +37,12 @@ bind gi hint -Jc input,textarea,[contenteditable="true"]
 unbindurl ^https://www.youtube.com/* >>
 unbindurl ^https://www.youtube.com/* <<
 
+bindurl ^https://play.hbomax.com/* -- js document.querySelector("video").currentTime-= 15
+bindurl ^https://play.hbomax.com/* ++ js document.querySelector("video").currentTime+= 15
+bindurl ^https://play.hbomax.com/* // js document.querySelector("video").playbackRate-= 0.25
+bindurl ^https://play.hbomax.com/* ** js document.querySelector("video").playbackRate+= 0.25
+bindurl ^https://play.hbomax.com/* 00 js document.querySelector("video").playbackRate= 1
+
 unbind --mode=normal d
 bind dd tabclose
 

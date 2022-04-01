@@ -197,7 +197,7 @@
     " use <c-v>§ for §
     inoremap § <esc>
 
-    let g:markdown_fenced_languages= [ 'javascript', 'json', 'html', 'php', 'bash', 'vim' ]
+    let g:markdown_fenced_languages= [ 'javascript', 'js=javascript', 'json', 'html', 'php', 'bash', 'vim', 'vimscript=javascript', 'sass' ]
     " PARENTHESES plugin junegunn/rainbow_parentheses.vim
     let g:rainbow#pairs= [['(', ')'], ['[', ']'], [ '{', '}' ]]
     let g:rainbow#blacklist = [203,9]
@@ -352,11 +352,11 @@
     call scommands#map('C', 'Coc', "n,v")
     nmap sc :CocList lists<cr>
     nmap Sc :CocListResume<cr>
-    nnoremap <F1> :CLwhereami<cr>
-    command! CLwhereami            echo      '▶File:'expand('%:t')
-                                          \ '▶Coc(state/function): 'coc#status()'/'CocAction("getCurrentFunctionSymbol")
-                                          \ '▶Line:'line('.')'/'line('$')
-                                          \ '▶Cursor:'col('.')'/'col('$')
+    nnoremap <c-g> :CLwhereami<cr>
+    command! CLwhereami            echo     '"'.expand('%:t').'"'
+                                          \ ( coc#status() != "" ? '»'.coc#status().'/'.CocAction("getCurrentFunctionSymbol").'«' : '»«' )
+                                          \ line('.').'/'.line('$').'L '.col('.').'/'.col('$').'C'
+                                          \ '//'.expand('%:p:h')
     command! CLhelpCocPlug         call feedkeys(':<c-u>help <Plug>(coc	', 'tn')
     command! CLhelpCocAction       call feedkeys(':<c-u>help CocAction(''	', 'tn')
     command! CLrename              call CocActionAsync('rename')
@@ -367,6 +367,9 @@
     command! CLjsdoc               exec 'CocCommand docthis.documentThis'
     command! CLcodeactionCursor    call CocActionAsync('codeAction', 'cursor')
     command! CLfixCodeQuick        call CocActionAsync('doQuickfix')
+    nnoremap <f1> :CLcheat<cr>
+    command! -nargs=?
+           \ CLcheat call cheat_pilot#open(<q-args>==''?&filetype:<q-args>)
     command! NAVdefinition         call CocActionAsync('jumpDefinition')
     command! NAVtype               call CocActionAsync('jumpTypeDefinition')
     command! NAVimplementation     call CocActionAsync('jumpImplementation')

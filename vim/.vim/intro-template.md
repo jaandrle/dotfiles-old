@@ -32,6 +32,7 @@
 
 <!--region Poznámky -->
 ## Poznámky
+- `:help 'suffixesadd'` [gf (goto file) doesn't work in PHP file : vim](https://www.reddit.com/r/vim/comments/t8o0bw/gf_goto_file_doesnt_work_in_php_file/)
 <!--endregion-->
 
 ## Náhodná část z konfiguračního souboru `.vimrc`

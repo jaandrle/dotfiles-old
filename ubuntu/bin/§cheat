@@ -1,6 +1,7 @@
 #!/bin/bash
+out=`curl -fGsS --compressed cht.sh/${1:-:help}`
 if [ ! -t 0 ]; then
-    exo-open --launch TerminalEmulator -- -e "§cheat $*"
+    echo "$out"
     exit
 fi
-curl -fGsS --compressed cht.sh/${1:-:help} | less -R -S
+echo "$out" | less -R -S
