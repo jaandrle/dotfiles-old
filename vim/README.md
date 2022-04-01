@@ -20,7 +20,7 @@ To navigate my secondary editor use [../vscode](../vscode).
 §vim_plugins --add jaandrle/vim-mini_enhancement
 §vim_plugins --add jaandrle/vim-scommands
 §vim_plugins --add jaandrle/vim-user_tips
-§vim_plugins --add jaandrle/vim-cheat_pilot
+§vim_plugins --add jaandrle/vim-cheat_copilot
 
 mkdir -p ~/.vim/pack/coc/start
 cd ~/.vim/pack/coc/start
