@@ -369,7 +369,7 @@
     command! CLfixCodeQuick        call CocActionAsync('doQuickfix')
     nnoremap <f1> :CLcheat<cr>
     command! -nargs=?
-           \ CLcheat call cheat_pilot#open(<q-args>==''?&filetype:<q-args>)
+           \ CLcheat call cheat_copilot#open(<q-args>==''?&filetype:<q-args>)
     command! NAVdefinition         call CocActionAsync('jumpDefinition')
     command! NAVtype               call CocActionAsync('jumpTypeDefinition')
     command! NAVimplementation     call CocActionAsync('jumpImplementation')
