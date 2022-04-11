@@ -9,6 +9,7 @@ let g:user_tips_list= [
     \ ':set foldopen-=search',
     \ 'Buffer info → <c-g> g<c-g> … :map <buffer><tab>',
     \ 'Rename file → :saveas * | :silent !rm # | :bw #',
+    \ 'packadd cfilter',
     \ 'Next word location → ]I [I ]<c-I> [<c-I> … <leader>]I <leader>[I',
     \ ':w !sudo tee > /dev/null %',
     \ '`0·`"·`.·`` … last exit·edit·change·pre-jump … also g''*',

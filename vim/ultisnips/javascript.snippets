@@ -36,6 +36,11 @@ for(${1:let} ${2:i}= 0, ${2}_length= ${3:ITERABLE}.length; ${2}<${2}_length; ${2
     ${0:/* statement */}
 }
 endsnippet
+snippet foreach "PHP-like name" b
+for(${1:const} ${2:element} of ${3:iterable}){
+    ${0:/* statement */}
+}
+endsnippet
 snippet switch "classical switch"
 switch (${1}){
     case ${2}:

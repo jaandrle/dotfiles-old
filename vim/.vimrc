@@ -1,9 +1,9 @@
-""" VIM config file | Jan Andrle | 2022-02-01 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2022-04-11 (VIM >=8.1)
 "" #region B – Base
     scriptencoding utf-8 | set encoding=utf-8
     let $BASH_ENV = "~/.bashrc"
     set runtimepath^=~/.vim/bundle/*
-    runtime macros/matchit.vim
+    packadd! matchit
     set hidden
     
     set title
@@ -286,7 +286,7 @@
     command! -nargs=* -complete=customlist,<sid>gitCompletion
         \ GITpush ALTredir !git push <args>
     command! -nargs=* -complete=customlist,<sid>gitCompletion
-        \ GITdiff silent! execute 'ALTredirKeep !git diff '.(<q-args>=='' ? '%:p':'<args>')
+        \ GITdiff if <q-args>=='' | execute '!clear && git diff %:p' | else | silent! execute 'ALTredirKeep !git diff <args>' | endif
     command! -nargs=0 -range
         \ GITblameThis ALTredir !git -C %:p:h blame -L <line1>,<line2> %:t
     command! -nargs=*
@@ -353,10 +353,13 @@
     nmap sc :CocList lists<cr>
     nmap Sc :CocListResume<cr>
     nnoremap <c-g> :CLwhereami<cr>
-    command! CLwhereami            echo     '"'.expand('%:t').'"'
-                                          \ ( coc#status() != "" ? '»'.coc#status().'/'.CocAction("getCurrentFunctionSymbol").'«' : '»«' )
-                                          \ line('.').'/'.line('$').'L '.col('.').'/'.col('$').'C'
-                                          \ '//'.expand('%:p:h')
+    command! CLwhereami            :call popup_notification([
+                                        \expand('%:t').( coc#status() != "" ? '/'.CocAction("getCurrentFunctionSymbol")."\t…\t".coc#status() : '' ),
+                                        \"– – –",
+                                        \"Line:\t".line('.').' / '.line('$'),
+                                        \"Column:\t".col('.').' / '.col('$'),
+                                        \"Path:\t".expand('%:p:h')
+                                        \], #{ line: &lines-3, pos: 'botleft', moved: 'any', close: 'button', time: 3000 })
     command! CLhelpCocPlug         call feedkeys(':<c-u>help <Plug>(coc	', 'tn')
     command! CLhelpCocAction       call feedkeys(':<c-u>help CocAction(''	', 'tn')
     command! CLrename              call CocActionAsync('rename')
