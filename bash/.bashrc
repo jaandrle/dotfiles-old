@@ -13,6 +13,9 @@ shopt -s expand_aliases
 [ -f $BASH_DOTFILES/.bash_nvm ] && . $BASH_DOTFILES/.bash_nvm
 # to have completion in vim
 [ -f $BASH_DOTFILES/.bash_completions ] && . $BASH_DOTFILES/.bash_completions
+# Install Ruby Gems to ~/.local/share/gems
+export GEM_HOME="$HOME/.local/share/gems"
+export PATH="$HOME/.local/share/gems/bin:$PATH"
 
 [[ $- != *i* ]] && return                   # If not running interactively, don't do anything
 

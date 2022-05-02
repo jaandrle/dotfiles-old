@@ -16,7 +16,10 @@ alias §rm='rm -vi'
 alias §cp='cp -vi'
 alias §mv='mv -vi'
 alias §df='df -Th'
-alias §du='du -h'
+§du(){
+    [[ "$1" == '--help' ]] && echo "§du; §du '../*'" && return 0
+    du -h -x -s -- ${1:-*} | sort -r -h;
+}
 
 alias §xclip-copy='xclip -selection clipboard'
 alias §xclip-paste='xclip -o -selection clipboard'
@@ -61,6 +64,18 @@ alias §pscpu='§pscpu_all | head -n 10'
 alias §dotfiles='cd ~/Vzdálené/GitHub/dotfiles && git status'
 
 §ping-test(){ # Pings ip address of noip.com and www.google.com.
-  ping -c 1 -q 8.23.224.107 | grep --color=never -A 1 statistics
-  ping -c 1 -q www.google.com | grep --color=never -A 1 statistics
+  ping -c 1 -q 8.23.224.107 | grep --color=never -A 1 -i '\---'
+  ping -c 1 -q www.google.com | grep --color=never -A 1 -i '\---'
+}
+§whoami(){
+    [[ "$1" == '--help' ]] && echo '§whoami; §whoami --ip' && return 0
+    local ip=$(curl -s ifconfig.me)
+    [[ "$1" == '--ip' ]] && echo "$ip" && return 0
+    local L="   %s\n"
+    printf "\n"
+    printf "$L" "USER: $(echo $USER)"
+    printf "$L" "IP ADDR: $ip"
+    printf "$L" "HOSTNAME: $(hostname -f)"
+    printf "$L" "KERNEL: $(uname -rms)"
+    printf "\n"
 }
