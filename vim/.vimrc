@@ -302,8 +302,6 @@
         \ GIThub call <sid>githubCmd(<count>, <q-args>)
     command! -nargs=? -bang
         \ GIThubIssue execute ( "<bang>"=="!" ? 'ALTredirKeep !' : '!clear &&' ) . 'gh issue view '.expand('<cword>').' '.<q-args>
-    command! -nargs=0
-        \ GITmoji ALTredir !gitmoji -l
     let g:git_messenger_no_default_mappings= v:true
     let g:git_messenger_date_format= '%Y-%m-%d (%c)'
     let g:git_messenger_always_into_popup= v:true
