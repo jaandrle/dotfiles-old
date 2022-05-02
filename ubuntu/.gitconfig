@@ -41,5 +41,5 @@
 [delta] # [dandavison/delta: A syntax-highlighting pager for git, diff, and grep output](https://github.com/dandavison/delta)
     syntax-theme= Visual Studio Dark+
     navigate = true
-    line-numbers = true
     side-by-side = true
+    line-numbers = true
