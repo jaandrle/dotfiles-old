@@ -66,8 +66,9 @@ endif
 " (some of them may be unused)
 
 let s:cdNone = {'gui': 'NONE', 'cterm': 'NONE', 'cterm256': 'NONE'}
-let s:cdFront = {'gui': '#D4D4D4', 'cterm': s:cterm05, 'cterm256': '188'}
+let s:cdFront = {'gui': '#d0d0d0', 'cterm': s:cterm05, 'cterm256': '188'}
 let s:cdBack = {'gui': '#1E1E1E', 'cterm': s:cterm00, 'cterm256': '234'}
+let s:cdWhite = {'gui': '#f0f0f0', 'cterm': s:cterm05, 'cterm256': '188'}
 
 let s:cdTabCurrent = {'gui': '#1E1E1E', 'cterm': s:cterm00, 'cterm256': '234'}
 let s:cdTabOther = {'gui': '#2D2D2D', 'cterm': s:cterm01, 'cterm256': '236'}
@@ -85,7 +86,7 @@ let s:cdSplitLight = {'gui': '#898989', 'cterm': s:cterm04, 'cterm256': '245'}
 let s:cdSplitDark = {'gui': '#444444', 'cterm': s:cterm03, 'cterm256': '238'}
 let s:cdSplitThumb = {'gui': '#424242', 'cterm': s:cterm04, 'cterm256': '238'}
 
-let s:cdCursorDarkDark = {'gui': '#222222', 'cterm': s:cterm01, 'cterm256': '235'}
+let s:cdCursorDarkDark = {'gui': '#252525', 'cterm': s:cterm01, 'cterm256': '235'}
 let s:cdCursorDark = {'gui': '#51504F', 'cterm': s:cterm03, 'cterm256': '239'}
 let s:cdCursorLight = {'gui': '#AEAFAD', 'cterm': s:cterm04, 'cterm256': '145'}
 let s:cdSelection = {'gui': '#264F78', 'cterm': s:cterm03, 'cterm256': '24'}
@@ -285,15 +286,16 @@ call <sid>hi('TSTag', s:cdBlue, {}, 'none', {})
 call <sid>hi('TSTagDelimiter', s:cdGray, {}, 'none', {})
 
 " Markdown:
-call <sid>hi('markdownBold', s:cdBlue, {}, 'bold', {})
-call <sid>hi('markdownCode', s:cdOrange, {}, 'none', {})
+call <sid>hi('markdownBold', s:cdOrange, {}, 'bold', {})
+call <sid>hi('markdownItalic', s:cdYellowOrange, {}, 'italic', {})
+call <sid>hi('markdownCode', s:cdWhite, {}, 'none', {})
 call <sid>hi('markdownRule', s:cdBlue, {}, 'bold', {})
-call <sid>hi('markdownCodeDelimiter', s:cdOrange, {}, 'none', {})
+call <sid>hi('markdownCodeDelimiter', s:cdWhite, {}, 'none', {})
 call <sid>hi('markdownHeadingDelimiter', s:cdBlue, {}, 'none', {})
 call <sid>hi('markdownFootnote', s:cdOrange, {}, 'none', {})
 call <sid>hi('markdownFootnoteDefinition', s:cdOrange, {}, 'none', {})
-call <sid>hi('markdownUrl', s:cdLightBlue, {}, 'underline', {})
-call <sid>hi('markdownLinkText', s:cdOrange, {}, 'none', {})
+call <sid>hi('markdownUrl', s:cdLightBlue, {}, 'none', {})
+call <sid>hi('markdownLinkText', s:cdLightBlue, {}, 'underline', {})
 call <sid>hi('markdownEscape', s:cdYellowOrange, {}, 'none', {})
 
 " Asciidoc (for default syntax highlighting)

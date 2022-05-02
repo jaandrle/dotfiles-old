@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2022-04-11 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2022-05-02 (VIM >=8.1)
 "" #region B – Base
     scriptencoding utf-8 | set encoding=utf-8
     let $BASH_ENV = "~/.bashrc"
@@ -130,7 +130,7 @@
 "" #region LLW – Left Column + Line + Wrap + Scrolling
     if has("nvim-0.5.0") || has("patch-8.1.1564")           " Recently vim can merge signcolumn and number column into one
         set signcolumn=number | else | set signcolumn=yes | endif  " show always to prevent shifting when diagnosticappears
-    set cursorline                                                                      " Always show current position
+    set cursorline cursorcolumn                                                         " Always show current position
     set number foldcolumn=2                               " enable line numbers and add a bit extra margin to the left
     set colorcolumn=+1                                                                                " …marker visual
     command -nargs=? SETtextwidth if <q-args> | let &textwidth=<q-args> | let &colorcolumn='<args>,120,240' | else | let &textwidth=250 | let &colorcolumn='120,240' | endif
@@ -139,8 +139,6 @@
     set breakindent breakindentopt=shift:2 showbreak=↳ 
     
     set scrolloff=5 sidescrolloff=10                                        " offset for lines/columns when scrolling
-    for l in [ 'r', 'R', 'l', 'L' ]
-        exec ':set guioptions-='.l | endfor                        " disable scrollbars
 "" #endregion LLW
 "" #region CN – Clipboard + Navigation throught Buffers + Windows + … (CtrlP)
     set pastetoggle=<F2> | nnoremap <F2> :set invpaste paste?<CR>
@@ -198,6 +196,14 @@
     inoremap § <esc>
 
     let g:markdown_fenced_languages= [ 'javascript', 'js=javascript', 'json', 'html', 'php', 'bash', 'vim', 'vimscript=javascript', 'sass' ]
+    augroup conceal
+        autocmd!
+        au FileType markdown 
+            \  syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained conceal
+            \| syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\%(\_[^][]\|\[\_[^][]*\]\)*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart concealends
+        au FileType markdown,json 
+            \ setlocal conceallevel=2
+    augroup END
     " PARENTHESES plugin junegunn/rainbow_parentheses.vim
     let g:rainbow#pairs= [['(', ')'], ['[', ']'], [ '{', '}' ]]
     let g:rainbow#blacklist = [203,9]
@@ -235,6 +241,7 @@
         hi clear SpellBad | hi SpellBad cterm=underline,italic | endif
     command! -nargs=? SETspell if <q-args>==&spelllang || <q-args>=='' | set spell! | else | set spell | set spelllang=<args> | endif | if &spell | set spelllang | endif
     " EDIT HEPERS
+    let g:wordmotion_prefix= '<space>'
     nnoremap <leader>o o<space><bs><esc>
     nnoremap <leader>O O<space><bs><esc>
     nnoremap <s-k> a<cr><esc>
@@ -287,17 +294,26 @@
         \ GITpush ALTredir !git push <args>
     command! -nargs=* -complete=customlist,<sid>gitCompletion
         \ GITdiff if <q-args>=='' | execute '!clear && git diff %:p' | else | silent! execute 'ALTredirKeep !git diff <args>' | endif
-    command! -nargs=0 -range
-        \ GITblameThis ALTredir !git -C %:p:h blame -L <line1>,<line2> %:t
+    " command! -nargs=0 -range
+    "     \ GITblameThis ALTredir !git -C %:p:h blame -L <line1>,<line2> %:t
     command! -nargs=*
         \ GITrestore execute '!clear && git status '.(<q-args>=='.' ? '%:p':'<args>').' -bs & git restore '.(<q-args>=='' ? '%:p':'<args>').' --patch'
     command! -count -nargs=* -complete=customlist,<sid>gitCompletion
         \ GIThub call <sid>githubCmd(<count>, <q-args>)
     command! -nargs=? -bang
         \ GIThubIssue execute ( "<bang>"=="!" ? 'ALTredirKeep !' : '!clear &&' ) . 'gh issue view '.expand('<cword>').' '.<q-args>
+    let g:git_messenger_no_default_mappings= v:true
+    let g:git_messenger_date_format= '%Y-%m-%d (%c)'
+    let g:git_messenger_always_into_popup= v:true
+    augroup git_messenger_help
+        autocmd!
+        autocmd FileType gitmessengerpopup setlocal keywordprg=git\ show
+    augroup END
+    command! -nargs=0
+        \ GITblameThis GitMessenger
 "" #endregion GIT
 "" #region COC – COC and so on, compilers
-    let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tsserver' ]
+    let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tabnine', 'coc-tsserver' ]
     autocmd FileType scss setl iskeyword+=@-@
     command -nargs=? ALTmake if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
                           \| if <q-args>!='' | silent make <args> | else | silent make % | endif | checktime | silent redraw!        " …prev line, hotfix (filetype detection does’t works)
@@ -383,18 +399,38 @@
     
     function! s:show_documentation(is_visual)
         let word= a:is_visual ? getline("'<")[getpos("'<")[2]-1:getpos("'>")[2]-1] : expand('<cword>')
-        if (index(['vim','help'], &filetype) >= 0)
-            execute 'h '.word
-        elseif (index(['git','gitcommit','man'], &filetype) >= 0 || !coc#rpc#ready())
-            if &filetype=='man' | let word= "'".word."'" | endif
-            execute '!' . &keywordprg . " " . word
-        elseif &filetype=='html'
-            if coc#source#custom_elements#hover(word)==0
-                call CocActionAsync('doHover')
+        if (index(['vim', 'help'], &filetype) >= 0)
+            " inspired by https://github.com/tpope/vim-scriptease/blob/74bd5bf46a63b982b100466f9fd47d2d0597fcdd/autoload/scriptease.vim#L737
+            let syn= get(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')), 0, '')
+            if      syn ==# 'vimFuncName'       | return <sid>show_documentation_vim('h '.word.'()')
+            elseif  syn ==# 'vimOption'         | return <sid>show_documentation_vim("h '".word."'")
+            elseif  syn ==# 'vimUserAttrbKey'   | return <sid>show_documentation_vim('h :command-'.word)
             endif
-        else
-            call CocActionAsync('doHover')
+
+            let col= col('.') - 1
+            while col && getline('.')[col] =~# '\k' | let col-= 1 | endwhile
+            let pre= col == 0 ? '' : getline('.')[0 : col]
+            let col= col('.') - 1
+            while col && getline('.')[col] =~# '\k' | let col+= 1 | endwhile
+            if      pre =~# '^\s*:\=$'  | return <sid>show_documentation_vim('h :'.word)
+            elseif  pre =~# '\<v:$'     | return <sid>show_documentation_vim('h v:'.word)
+            endif
+            
+            let post= getline('.')[col : -0]
+            if word ==# 'v' && post =~# ':\w\+' | return <sid>show_documentation_vim('h v'.matchstr(post, ':\w\+')) | endif
+            return <sid>show_documentation_vim('h '.word)
         endif
+        if (!CocAction('hasProvider', 'hover'))
+            return feedkeys('K', 'in')
+        endif
+        if &filetype=='html' && coc#source#custom_elements#hover(word)!=0
+            return 0
+        endif
+        
+        return CocActionAsync('doHover')
+    endfunction
+    function! s:show_documentation_vim(cmd)
+        call execute(a:cmd) | call histadd("cmd", a:cmd)
     endfunction
 "" #endregion COC
 " vim: set tabstop=4 shiftwidth=4 textwidth=250 expandtab :
