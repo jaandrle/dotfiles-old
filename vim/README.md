@@ -23,6 +23,7 @@ To navigate my secondary editor use [../vscode](../vscode).
 §vim_plugins --add jaandrle/vim-user_tips
 §vim_plugins --add jaandrle/vim-cheat_copilot
 §vim_plugins --add rhysd/git-messenger.vim
+§vim_plugins --add Yilin-Yang/vim-markbar
 
 mkdir -p ~/.vim/pack/coc/start
 cd ~/.vim/pack/coc/start

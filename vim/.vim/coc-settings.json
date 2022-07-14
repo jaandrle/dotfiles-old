@@ -7,5 +7,7 @@
     "diagnostic.hintSign": "·",
     "javascript.showUnused": true,
     "coc.source.emoji.filetypes": [ "markdown", "magit", "gitcommit" ],
-    "html.filetypes": [ "html", "handlebars", "htmldjango", "blade", "liquid" ]
+    "html.filetypes": [ "html", "handlebars", "htmldjango", "blade", "liquid" ],
+    "html.autoClosingTags": false,
+    "html.autoCreateQuotes": false
 }

@@ -79,3 +79,10 @@ alias §dotfiles='cd ~/Vzdálené/GitHub/dotfiles && git status'
     printf "$L" "KERNEL: $(uname -rms)"
     printf "\n"
 }
+pushd(){ builtin pushd "$@" >/dev/null && dirs -v; }
+popd() { builtin popd "$@" >/dev/null  && dirs -v; }
+
+alias npx-wca='npx -y web-component-analyzer'
+alias npx-qnm='npx -y qnm'
+alias npx-hint='npx -y hint'
+alias zfz=fzf-carroarmato0.fzf

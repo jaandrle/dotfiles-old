@@ -3,6 +3,7 @@ eval "$(gh completion -s bash)"
 # used ectension: heaths/gh-label
 eval "$(asana.mjs completion_bash)"
 \. "$BASH_DOTFILES/cordova.completion"
+\. "$BASH_DOTFILES/himalaya.completion"
 eval "$(node --completion-bash)"
 eval "$(npm completion)"
 

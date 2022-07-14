@@ -19,12 +19,17 @@
     log-authors = shortlog -ns
     log-list = log --color --graph --pretty=format:'%Cred%h%Creset %Cgreen[%ad] -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset'
     log-list-nocolors = log --graph --pretty=format:'%h [%ad] -%d %s <%an>'
-    status--= !git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo
+    status--= !git fetch && git status && echo && echo Commits unpushed: && git log @{push}..HEAD && echo
     commit--= !clear && git status -sb | grep -v -e '^ M' & git commit --interactive -v
     stashpush = !git stash && git pull && git push && git stash pop
     unstage = reset HEAD --
     undoall = reset --soft HEAD^
     diff-dirs = diff --dirstat --find-copies --find-renames --histogram --color
+    status-submodule = !git submodule --quiet foreach 'git fetch' && git submodule foreach 'git status && echo'
+    rm-submodule = !git submodule deinit -f $1 && rm -rf .git/modules/$1 && git rm -rf $1
+    update-submodule = submodule update --remote --merge
+    pull-submodule = submodule foreach 'git pull'
+    diff-submodule = submodule foreach 'git diff'
 [core]
     editor = vim
     pager = delta
@@ -43,3 +48,6 @@
     navigate = true
     side-by-side = true
     line-numbers = true
+[gc]
+	reflogExpire = 200
+	reflogExpireUnreachable = 90

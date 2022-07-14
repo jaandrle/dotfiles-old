@@ -6,7 +6,7 @@ const /* helper for coloring console | main program params */
     colors= { e: "\x1b[38;2;252;76;76m", s: "\x1b[38;2;76;252;125m", w: "\x1b[33m", R: "\x1b[0m", y: "\x1b[38;2;200;190;90m", g: "\x1b[38;2;150;150;150m" },
     info= {
         name: __filename.slice(__filename.lastIndexOf("/")+1, __filename.lastIndexOf(".")),
-        version: "1.2.0",
+        version: "1.2.1",
         description: "Helper for working with “packages” stored in GitHub releases.",
         config: `${__filename.slice(0, __filename.lastIndexOf("."))}.json`,
         folder: __filename.slice(0, __filename.lastIndexOf("/")+1),
@@ -132,12 +132,12 @@ async function update_(config){
     let updates= [];
     log(1, "Collecting packages to download:");
     for(const [
-        i, { repository, last_update, group, file_name, exec, downloaded }
+        i, { repository, last_update, group, file_name, exec, downloaded, tag_name_regex }
     ] of Object.entries(config.packages)){
         if(group==="skip") continue;
         if(!is_all&&group&&filter!==group) continue;
 
-        const { tag_name, published_at, html_url, assets_url }= await githubRelease_(repository);
+        const { tag_name, published_at, html_url, assets_url }= await githubRelease_(repository, tag_name_regex);
         const status= packageStatus(last_update, published_at);
         if(status!==3) continue;
 
@@ -204,8 +204,8 @@ function registerDownloads({ repository, last_update, message: downloads, exec, 
 }
 async function check_({ packages }){
     let updates= 0, skipped= 0;
-    for(const { repository, name, version, last_update, group } of packages){
-        const { tag_name, published_at }= await githubRelease_(repository);
+    for(const { repository, name, version, last_update, group, tag_name_regex } of packages){
+        const { tag_name, published_at }= await githubRelease_(repository, tag_name_regex);
         const status= packageStatus(last_update, published_at);
         updates+= status===3;
         const skip= group==="skip";
@@ -263,9 +263,13 @@ function logSection(spaces, name, data){
     for(const [ key, value ] of Object.entries(data))
         console.log(spaces.repeat(2)+colors.g+key+": "+value.replace(/@(\w)_/g, (_, m)=> colors[m])+colors.R);
 }
-function githubRelease_(repository){
+function githubRelease_(repository, tag_name_regex= ""){
     return downloadJSON_(repository, "https://api.github.com/repos/"+repository+"/releases")
-    .then(data=> data.find(({ draft, published_at })=> !draft&&published_at) || {});
+    .then(data=> data.find(function find({ draft, published_at, tag_name }){
+        if(draft||!published_at) return false;
+        if(!tag_name_regex) return true;
+        return (new RegExp(tag_name_regex, 'g')).test(tag_name);
+    })||{});
 }
 function githubRepo_(repository){ return downloadJSON_(repository, "https://api.github.com/repos/"+repository); }
 function promt_(q, def){

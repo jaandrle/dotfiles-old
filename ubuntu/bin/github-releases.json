@@ -7,7 +7,9 @@
             "file_name": "github-desktop",
             "exec": "yes",
             "description": "Fork of GitHub Desktop to support various Linux distributions",
-            "last_update": ""
+            "last_update": "2022-06-11T13:48:56Z",
+            "downloads": "/home/jaandrle/bin/github-desktop",
+            "version": "release-3.0.1-linux1"
         },
         {
             "repository": "jaandrle/jaaCSS-cli",
@@ -16,7 +18,9 @@
             "group": "dev",
             "file_name": "jaaCSS.js",
             "exec": "yes",
-            "last_update": ""
+            "downloads": "/home/jaandrle/bin/jaaCSS.js",
+            "version": "v1.3.1",
+            "last_update": "2021-07-01T10:37:21Z"
         },
         {
             "repository": "th-ch/youtube-music",
@@ -25,7 +29,9 @@
             "group": "nondev",
             "file_name": "youtube-music",
             "exec": "yes",
-            "last_update": ""
+            "last_update": "2022-05-20T14:26:27Z",
+            "downloads": "/home/jaandrle/bin/youtube-music",
+            "version": "v1.17.0"
         },
         {
             "repository": "Kong/insomnia",
@@ -34,7 +40,10 @@
             "group": "dev",
             "file_name": "insomnia",
             "exec": "yes",
-            "last_update": ""
+            "last_update": "2022-06-22T16:55:49Z",
+            "downloads": "/home/jaandrle/bin/insomnia",
+            "tag_name_regex": "core@.*",
+            "version": "core@2022.4.2"
         },
         {
             "repository": "rvpanoz/luna",
@@ -68,6 +77,28 @@
             "file_name": "appimagekit",
             "exec": "yes",
             "description": "Package desktop applications as AppImages that run on common Linux-based operating systems, such as RHEL, CentOS, openSUSE, SLED, Ubuntu, Fedora, debian and derivatives. Join #AppImage on irc.freenode.net"
+        },
+        {
+            "repository": "davidsmorais/kuro",
+            "name": "Kuro",
+            "description": "An elegant Microsoft ToDo desktop client for Linux (a fork of Ao)",
+            "group": "nondev",
+            "file_name": "kuro",
+            "exec": "yes",
+            "downloads": "/home/jaandrle/bin/kuro",
+            "version": "v8.1.0",
+            "last_update": "2022-04-19T20:30:53Z"
+        },
+        {
+            "repository": "dynobo/normcap",
+            "name": "NormCap",
+            "description": "OCR powered screen-capture tool to capture information instead of images",
+            "group": "nondev",
+            "file_name": "normcap",
+            "exec": "yes",
+            "last_update": "2022-03-25T06:55:09Z",
+            "downloads": "/home/jaandrle/bin/normcap",
+            "version": "v0.3.3"
         }
     ]
 }
