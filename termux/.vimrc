@@ -3,6 +3,7 @@ let $BASH_ENV = "~/.bashrc"
 packadd! matchit
 set hidden
 set confirm
+set belloff=esc
 set showcmd cmdheight=2 showmode
 set wildmenu wildmode=list:longest,list:full
 set history=500
@@ -43,10 +44,13 @@ set autowrite autoread | autocmd FocusGained,BufEnter *.* checktime
 set modeline
 set hlsearch incsearch
 set smarttab
+command! -nargs=1 SETtab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
+SETtab 4
 set showmatch
 set backspace=indent,eol,start
 set shiftround autoindent
 filetype plugin indent on
+colorscheme codedark
 if ($TERM =~ '256' && has("termguicolors"))
 	set termguicolors | endif
 if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
