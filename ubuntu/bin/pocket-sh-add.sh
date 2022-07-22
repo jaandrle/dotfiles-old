@@ -1,5 +1,5 @@
-[ ! -r ~/.config/.pocketshaddrc ] && echo "\`~/.config/.pocketshaddrc\` not found" && exit 1
-. ~/.config/.pocketshaddrc
+[ ! -r ~/.config/pocketshaddrc ] && echo "\`~/.config/pocketshaddrc\` not found" && exit 1
+. ~/.config/pocketshaddrc
 
 curl -sS -X POST \
 	-F "url=$1" \
