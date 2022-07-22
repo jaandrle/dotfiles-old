@@ -20,8 +20,11 @@ color listnormal_unread		color187	default
 color listfocus_unread		color179		default
 search-highlight-colors		color179	default
 highlight article "^(Feed|Author|Title|Date|Link): .*$" color117 default
+highlight articlelist "/date .\{4\}-.\{2\}-.\{2\} .\{2\}:.\{2\}" color43 default
+highlight articlelist "/size \[^ \]*" color64 default
 highlight-article "age > 1 and unread == \"no\"" color245 default
 feedlist-format ":%-4i %-5U %?T?↪  &?%t"
+articlelist-format ":%-4i %f %?T?%-10T | ?%t /date %D /size %-4L"
 
 text-width 90
 datetime-format "%Y-%m-%d %H:%M"
