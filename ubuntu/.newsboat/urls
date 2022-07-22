@@ -3,7 +3,10 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCMiyV_Ib77XLpzHPQH_q0qQ vid
 https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA !
 "query:Sakitech – Note/Update:title =~ \"(Note|Phones|phones)\" and rssurl == \"https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA\"" video
-http://createfeed.fivefilters.org/extract.php?url=https%3A%2F%2Fwww.stream.cz%2Fkokoti-na-nedeli&in_id_or_class=episodes-box__item&max=5&order=document&guid=0 ! video
+"exec:./newsboat-html.sh 'Kokoti na neděli' 'https://www.stream.cz/kokoti-na-nedeli' './newsboat-html-streamCZ.config'" ! video
+"exec:./newsboat-html.sh 'Šťastné pondělí' 'https://www.stream.cz/stastne-pondeli' './newsboat-html-streamCZ.config'" !
+"query:Šťastné pondělí:title =~ \"Šťastné pondělí\" and feedtitle == \"Šťastné pondělí\"" video
+https://www.mall.tv/rssfeed/mikyrova-uzasna-pout-internetem ! video
 
 "query:📰👋:tags # \"news\""
 https://www.irozhlas.cz/rss/irozhlas ! news

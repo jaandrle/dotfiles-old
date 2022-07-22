@@ -10,6 +10,8 @@ curl $url_root/bash/.inputrc --output ~/.inputrc
 mkdir ~/.newsboat
 curl $url_root/ubuntu/.newsboat/config --output ~/.newsboat/config
 curl $url_root/ubuntu/.newsboat/urls --output ~/.newsboat/urls
+curl $url_root/ubuntu/.newsboat/newsboat-html.sh --output ~/.newsboat/newsboat-html.sh
+curl $url_root/ubuntu/.newsboat/newsboat-html-streamCZ.config --output ~/.newsboat/newsboat-html-streamCZ.config
 mkdir ~/bin
 ln -s $PREFIX/bin/vim ~/bin/termux-file-editor
 mkdir -p ~/.vim/colors
