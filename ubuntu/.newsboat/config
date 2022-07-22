@@ -6,7 +6,7 @@ always-display-description true
 error-log "~/.newsboat/error.log"
 keep-articles-days 30
 prepopulate-query-feeds yes
-confirm-mark-all-feeds-read no
+# confirm-mark-all-feeds-read no
 
 player vlc
 browser "xdg-open"

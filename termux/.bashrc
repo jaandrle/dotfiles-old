@@ -41,3 +41,4 @@ alias myless='less -R -S'
 mylsl(){ mls -l $* --color=always | mless; }
 
 myup(){ cd $(eval printf '../'%.0s {1..$1}); }
+mkcd(){ mkdir -p "${1:?}" && cd "${1}"; }

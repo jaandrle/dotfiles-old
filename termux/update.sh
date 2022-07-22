@@ -2,6 +2,7 @@
 cd ~
 url_root=https://raw.githubusercontent.com/jaandrle/dotfiles/master
 curl $url_root/termux/update.sh --output ~/update_new.sh
+chmod +x ~/update_new.sh
 curl $url_root/termux/.bashrc --output ~/.bashrc
 
 curl $url_root/termux/.vimrc --output ~/.vimrc
