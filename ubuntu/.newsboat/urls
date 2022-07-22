@@ -1,0 +1,68 @@
+"query:📹:tags # \"video\""
+https://www.youtube.com/feeds/videos.xml?channel_id=UCMiyV_Ib77XLpzHPQH_q0qQ video
+https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg video
+https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA !
+"query:Sakitech – Note/Update:title =~ \"(Note|Phones|phones)\" and rssurl == \"https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA\"" video
+http://createfeed.fivefilters.org/extract.php?url=https%3A%2F%2Fwww.stream.cz%2Fkokoti-na-nedeli&in_id_or_class=episodes-box__item&max=5&order=document&guid=0 ! video
+
+"query:📰👋:tags # \"news\""
+https://www.irozhlas.cz/rss/irozhlas ! news
+https://denikn.cz/feed?ref=inc ! news
+https://www.investigace.cz/feed/ ! news
+
+"query:📰🔬:tags # \"news/science\""
+https://denikn.cz/veda/feed?ref=inc ! news/science
+"query:Petr Koubský:author = \"Petr Koubský\"" news/science
+https://vedator.org/feed/ ! news/science
+https://www.osel.cz/rss/rss.php ! news/science
+https://news.mit.edu/rss/feed ! news/science
+https://news.mit.edu/rss/research ! news/science
+
+"query:📰💻💡:tags # \"news/tech\""
+https://www.lupa.cz/rss/clanky/ ! news/tech
+https://www.root.cz/rss/zpravicky/ ! news/tech
+https://www.root.cz/rss/clanky/ ! news/tech
+"query: Root – Softwarová sklizeň:title =~ \"^Softwarová sklizeň\" and rssurl == \"https://www.root.cz/rss/clanky/\"" news/tech
+https://zdrojak.cz/feed/ ! news/tech
+https://www.omgubuntu.co.uk/feed ! news/tech
+https://servis.idnes.cz/rss.aspx?c=technet ! news/tech
+
+"query:⌨🖱:tags # \"dev\""
+https://developer.apple.com/news/rss/news.rss "~Apple Dev News" dev
+https://github.com/LeaVerou.atom ! dev
+https://github.com/staltz.atom ! dev
+https://github.com/jensimmons.atom ! dev
+https://github.com/mirisuzanne.atom ! dev
+# https://www.smashingmagazine.com/feed/
+
+"query:🤔:tags # \"desinfo\""
+https://demagog.cz/rss/index.atom ! desinfo
+https://www.fakticke.info/feed/ ! desinfo
+https://manipulatori.cz/feed/ ! desinfo
+
+"query:🤓:tags # \"blogs\""
+https://boundedlyrational.substack.com/feed ! blogs
+https://blog.eischmann.cz/feed/ ! blogs
+https://www.zoonpolitikon.cz/feed/ ! blogs
+https://blog.zvestov.cz/feed.xml ! blogs
+https://www.pirati.cz/feed.xml ! blogs
+https://www.kdu.cz/system/rss ! blogs
+
+"query:🗞 💰📱:tags # \"news/info\""
+https://mobilmania.zive.cz/rss/sc-47/default.aspx ! news/info
+https://feeds.feedburner.com/penize?format=xml ! news/info
+https://www.mesec.cz/rss/clanky/ ! news/info
+https://www.mesec.cz/rss/aktuality/ ! news/info
+
+"query:🗞 🌐⏩:tags # \"news/rest\""
+http://feeds.bbci.co.uk/news/world/rss.xml ! news/rest
+https://feeds.a.dj.com/rss/RSSWorldNews.xml ! news/rest
+https://feeds.a.dj.com/rss/RSSWSJD.xml ! news/rest
+https://domaci.hn.cz/?m=rss ! news/rest
+https://ekonom.cz/?m=rss ! news/rest
+https://vikend.hn.cz/?m=rss ! news/rest
+https://procne.hn.cz/?m=rss ! news/rest
+http://casopisargument.cz/?feed=rss2 ! news/rest
+
+"query:🗞 💤:tags # \"rest\""
+https://www.seznamzpravy.cz/rss ! rest

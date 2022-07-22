@@ -1,6 +1,8 @@
 this_dir=$(dirname $(readlink -f $0))
 
 ln -s $this_dir/.XCompose ~/.XCompose
+ln -s $this_dir/.newsboat/config ~/.newsboat/config
+ln -s $this_dir/.newsboat/urls ~/.newsboat/urls
 ln -s $this_dir/.gitconfig ~/.gitconfig
 ln -s $this_dir/gh_config.yml ~/.config/gh/config.yml
 mkdir ~/bin

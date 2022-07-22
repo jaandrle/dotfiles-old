@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2022-07-14 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2022-07-18 (VIM >=8.1)
 "" #region B – Base
 	scriptencoding utf-8 | set encoding=utf-8
 	let $BASH_ENV = "~/.bashrc"
@@ -183,6 +183,8 @@
 	let g:vifm_replace_netrw= 1 | let g:loaded_netrw= 1 | let g:loaded_netrwPlugin= 1  " this line needs to be commented to let vim dowmload spelllangs!!! … see http://jdem.cz/fgyw25
 	nmap <leader>e :Vifm<cr>
 	call scommands#map('e', 'Vifm', "n")
+	nnoremap gx :silent exec "!xdg-open '".shellescape(substitute(expand('<cfile>'), '?', '\\?', ''), 1)."'" \| redraw!<cr>
+	vnoremap gx :silent exec "!xdg-open '".shellescape(substitute(mini_enhancement#selectedText(), '?', '\\?', ''), 1)."'" \| redraw!<cr>
 "" #endregion FOS
 "" #region EN – Editor navigation + search
 	call jaandrle_utils#MapSmartKey('Home')
@@ -355,8 +357,8 @@
 	nmap <silent> <leader>gd <Plug>(coc-diagnostic-next)
 	nmap <silent> <leader>gD <Plug>(coc-diagnostic-prev)
 					" navigate diagnostics, use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-	nnoremap <silent> gh :call <sid>show_documentation(0)<cr>
-	vnoremap <silent> gh :<c-u>call <sid>show_documentation(1)<cr>
+	nnoremap <silent> gh :call <sid>show_documentation(expand("<cword>"))<cr>
+	vnoremap <silent> gh :<c-u>call <sid>show_documentation(mini_enhancement#selectedText())<cr>
 	nnoremap <leader>gf :let g:ctrlp_default_input=expand("<cword>") <bar> execute 'CtrlP' <bar> unlet g:ctrlp_default_input <cr>
 	vnoremap <leader>gf :<c-u>let g:ctrlp_default_input=mini_enhancement#selectedText() <bar> execute 'CtrlP' <bar> unlet g:ctrlp_default_input <cr>
 	autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -405,14 +407,13 @@
 	nmap <leader>/ :CocSearch 
 	nmap <leader>? <leader>/
 	
-	function! s:show_documentation(is_visual)
-		let word= a:is_visual ? getline("'<")[getpos("'<")[2]-1:getpos("'>")[2]-1] : expand('<cword>')
+	function! s:show_documentation(word)
 		if (index(['vim', 'help'], &filetype) >= 0)
 			" inspired by https://github.com/tpope/vim-scriptease/blob/74bd5bf46a63b982b100466f9fd47d2d0597fcdd/autoload/scriptease.vim#L737
 			let syn= get(reverse(map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')), 0, '')
-			if		syn ==# 'vimFuncName'		| return <sid>show_documentation_vim('h '.word.'()')
-			elseif	syn ==# 'vimOption'			| return <sid>show_documentation_vim("h '".word."'")
-			elseif	syn ==# 'vimUserAttrbKey'	| return <sid>show_documentation_vim('h :command-'.word)
+			if		syn ==# 'vimFuncName'		| return <sid>show_documentation_vim('h '.a:word.'()')
+			elseif	syn ==# 'vimOption'			| return <sid>show_documentation_vim("h '".a:word."'")
+			elseif	syn ==# 'vimUserAttrbKey'	| return <sid>show_documentation_vim('h :command-'.a:word)
 			endif
 
 			let col= col('.') - 1
@@ -420,18 +421,18 @@
 			let pre= col == 0 ? '' : getline('.')[0 : col]
 			let col= col('.') - 1
 			while col && getline('.')[col] =~# '\k' | let col+= 1 | endwhile
-			if		pre =~# '^\s*:\=$'	| return <sid>show_documentation_vim('h :'.word)
-			elseif	pre =~# '\<v:$'		| return <sid>show_documentation_vim('h v:'.word)
+			if		pre =~# '^\s*:\=$'	| return <sid>show_documentation_vim('h :'.a:word)
+			elseif	pre =~# '\<v:$'		| return <sid>show_documentation_vim('h v:'.a:word)
 			endif
 			
 			let post= getline('.')[col : -0]
-			if word ==# 'v' && post =~# ':\w\+' | return <sid>show_documentation_vim('h v'.matchstr(post, ':\w\+')) | endif
-			return <sid>show_documentation_vim('h '.word)
+			if a:word ==# 'v' && post =~# ':\w\+' | return <sid>show_documentation_vim('h v'.matchstr(post, ':\w\+')) | endif
+			return <sid>show_documentation_vim('h '.a:word)
 		endif
 		if (!CocAction('hasProvider', 'hover'))
 			return feedkeys('K', 'in')
 		endif
-		if &filetype=='html' && coc#source#custom_elements#hover(word)!=0
+		if &filetype=='html' && coc#source#custom_elements#hover(a:word)!=0
 			return 0
 		endif
 		

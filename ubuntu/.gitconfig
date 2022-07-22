@@ -51,3 +51,5 @@
 [gc]
 	reflogExpire = 200
 	reflogExpireUnreachable = 90
+[push]
+	autoSetupRemote = true
