@@ -50,6 +50,6 @@ myping(){ # Pings ip address of noip.com and www.google.com.
 pushd(){ builtin pushd "$@" >/dev/null && dirs -v; }
 popd() { builtin popd "$@" >/dev/null  && dirs -v; }
 
-LAST_PWD_PATH="$HOME/.bash_last_pwd"
+LAST_PWD_PATH="$(dirname "${BASH_SOURCE[0]}")/.bash_last_pwd"
 [ -f "$LAST_PWD_PATH" ] && OLDPWD=`cat $LAST_PWD_PATH`
 cd(){ builtin cd "$@" && echo `pwd` > "$LAST_PWD_PATH"; }
