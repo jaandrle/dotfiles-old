@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 cd ~
-local url_root=https://raw.githubusercontent.com/jaandrle/dotfiles/master
+url_root=https://raw.githubusercontent.com/jaandrle/dotfiles/master
 curl $url_root/termux/.vimrc --output ~/.vimrc
 curl $url_root/bash/.inputrc --output ~/.inputrc
 mkdir ~/.newsboat
