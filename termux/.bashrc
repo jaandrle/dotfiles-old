@@ -32,12 +32,12 @@ alias q='exit'
     alias egrep='egrep --color=auto'
     alias diff='diff --color=auto'
 fi
-alias mls='ls -pQFhA --group-directories-first'
-alias mrm='rm -vi'
-alias mcp='cp -vi'
-alias mmv='mv -vi'
-alias mdf='df -Th'
-alias mless='less -R -S'
-mlsl(){ mls. -l $* --color=always | mless; }
+alias myls='ls -pQFhA --group-directories-first'
+alias myrm='rm -vi'
+alias mycp='cp -vi'
+alias mymv='mv -vi'
+alias mydf='df -Th'
+alias myless='less -R -S'
+mylsl(){ mls -l $* --color=always | mless; }
 
-mup(){ cd $(eval printf '../'%.0s {1..$1}); }
+myup(){ cd $(eval printf '../'%.0s {1..$1}); }
