@@ -42,3 +42,14 @@ mylsl(){ mls -l $* --color=always | mless; }
 
 myup(){ cd $(eval printf '../'%.0s {1..$1}); }
 mkcd(){ mkdir -p "${1:?}" && cd "${1}"; }
+update(){ ~/update.sh && mv ~/update_new.sh ~/update.sh; }
+myping(){ # Pings ip address of noip.com and www.google.com.
+  ping -c 1 -q 8.23.224.107 | grep --color=never -A 1 -i '\---'
+  ping -c 1 -q www.google.com | grep --color=never -A 1 -i '\---'
+}
+pushd(){ builtin pushd "$@" >/dev/null && dirs -v; }
+popd() { builtin popd "$@" >/dev/null  && dirs -v; }
+
+LAST_PWD_PATH="$BASH_DOTFILES/.bash_last_pwd"
+[ -f "$LAST_PWD_PATH" ] && OLDPWD=`cat $LAST_PWD_PATH`
+cd(){ builtin cd "$@" && echo `pwd` > "$LAST_PWD_PATH"; }
