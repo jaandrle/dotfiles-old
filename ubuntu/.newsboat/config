@@ -6,6 +6,7 @@ always-display-description true
 error-log "~/.newsboat/error.log"
 keep-articles-days 30
 prepopulate-query-feeds yes
+confirm-mark-all-feeds-read no
 
 player vlc
 browser "xdg-open"
@@ -51,7 +52,7 @@ bind-key U show-urls
 unbind-key ^B
 bind-key m bookmark
 
-bookmark-cmd "~/Applications/pocket-sh-add.sh"
+bookmark-cmd "~/bin/pocket-sh-add.sh"
 bookmark-autopilot yes
 
 # vim: ft=apachestyle cms=#\ %s :

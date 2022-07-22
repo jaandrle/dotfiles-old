@@ -1,5 +1,4 @@
 #!/usr/bin/bash
-
 cd ~
 url_root=https://raw.githubusercontent.com/jaandrle/dotfiles/master
 curl $url_root/termux/update.sh --output ~/update_new.sh
@@ -14,6 +13,7 @@ curl $url_root/ubuntu/.newsboat/newsboat-html.sh --output ~/.newsboat/newsboat-h
 curl $url_root/ubuntu/.newsboat/newsboat-html-streamCZ.config --output ~/.newsboat/newsboat-html-streamCZ.config
 mkdir ~/bin
 ln -s $PREFIX/bin/vim ~/bin/termux-file-editor
+curl $url_root/ubuntu/bin/pocket-sh-add.sh --output ~/bin/pocket-sh-add.sh
 mkdir -p ~/.vim/colors
 curl $url_root/vim/.vim/colors/codedark.vim --output ~/.vim/colors/codedark.vim
 # termux-setup-storage
