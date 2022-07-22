@@ -16,4 +16,7 @@ ln -s $PREFIX/bin/vim ~/bin/termux-file-editor
 curl $url_root/ubuntu/bin/pocket-sh-add.sh --output ~/bin/pocket-sh-add.sh
 mkdir -p ~/.vim/colors
 curl $url_root/vim/.vim/colors/codedark.vim --output ~/.vim/colors/codedark.vim
+
+mkdir ~/.termux
+echo "extra-keys = [['ESC','~','-','HOME','UP','END','PGUP'],['TAB','CTRL','ALT','LEFT','DOWN','RIGHT','PGDN']]" > ~/.termux/termux.properties
 # termux-setup-storage
