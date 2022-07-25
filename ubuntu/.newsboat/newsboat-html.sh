@@ -2,7 +2,7 @@
 
 # $1–n = title, url, entry
 
-. "$3"
+source "$3"
 titles=`curl -s $2 | xmllint --html --xpath $xpath$xpath_title - 2>/dev/null | sed 's/^\(.*\)/<title>\1<\/title>/'`
 links=`curl -s $2 | xmllint --html --xpath $xpath$xpath_link - 2>/dev/null | sed 's/href="\(.*\)"/<link>\1<\/link>/'`
 pubDates=`curl -s $2 | xmllint --html --xpath $xpath$xpath_updated - 2>/dev/null | sed 's/^\(.\.\)/0\1/' | sed 's/ \(.\.\)/ 0\1/' | sed 's/\(.*\)\. \(.*\)\. \(.*\)/<updated>\3-\2-\1T00:00:00+00:00<\/updated>/'`
