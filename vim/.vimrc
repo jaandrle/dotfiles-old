@@ -326,7 +326,7 @@
 	let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tabnine', 'coc-tsserver' ]
 	autocmd FileType scss setl iskeyword+=@-@
 	command -nargs=? ALTmake if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
-						  \| if <q-args>!='' | silent make <args> | else | silent make "%" | endif | checktime | silent redraw!		   " …prev line, hotfix (filetype detection does’t works)
+						  \| if <q-args>!='' | silent make <args> | else | silent make '%' | endif | checktime | silent redraw!		   " …prev line, hotfix (filetype detection does’t works)
 	autocmd BufWritePost *.{php,js,mjs} execute 'ALTmake' | call <sid>QuickFixCmdPost()
 	function! CustomKeyWord(word)
 		if(a:word=="gulp_place")

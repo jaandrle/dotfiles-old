@@ -1,6 +1,7 @@
 "query:📹:tags # \"video\""
 https://www.youtube.com/feeds/videos.xml?channel_id=UCMiyV_Ib77XLpzHPQH_q0qQ video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg video
+https://www.youtube.com/feeds/videos.xml?channel_id=UCACJQqtYw6sASWAHXWkBWpw ! video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCD9L1HvpYpmZ8rrXABARCRQ ! video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA !
 "query:Sakitech – Note/Update:title =~ \"(Note|Phones|phones)\" and rssurl == \"https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA\"" video
