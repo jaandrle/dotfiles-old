@@ -4,6 +4,7 @@ export SUDO_EDITOR="vim"
 export VISUAL="vim"
 
 [[ -f /etc/bashrc ]] && . /etc/bashrc		# Source global definitions
+[ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 [[ $- != *i* ]] && return					# If not running interactively, don't do anything
 
 export HISTCONTROL=ignoreboth:erasedups
