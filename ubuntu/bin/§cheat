@@ -1,7 +1,0 @@
-#!/bin/bash
-out=`curl -fGsS --compressed cht.sh/${1:-:help}`
-if [ ! -t 0 ]; then
-    echo "$out"
-    exit
-fi
-echo "$out" | less -R -S

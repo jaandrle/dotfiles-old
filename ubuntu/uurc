@@ -1,0 +1,9 @@
+#! /usr/bin/
+uu_w_alias="wttr.in/${1:-prague}?M"
+uu_w_is_raw=0
+uu_h_alias="cheat.sh/$1"
+uu_h_is_raw=0
+uu_surl_alias="tinyurl.com/api-create.php?url=$1"
+uu_surl_is_raw=1
+uu_ip_alias="ifconfig.co/json"
+uu_ip_is_raw=1

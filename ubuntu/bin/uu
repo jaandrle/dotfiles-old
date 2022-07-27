@@ -1,0 +1,119 @@
+#!/bin/bash
+this="${0##*/}"
+version="2022-07-27"
+config_file="$HOME/.config/${this}rc"
+[ ! -t 0 ] && exo-open --launch TerminalEmulator -- -e "$this $*" && exit 0
+
+arg=${1:---help}
+if [[ "$arg" = "--completion-bash" ]]; then
+	exit 0;
+	echo "_${this}_completion(){
+	local cur=\"\${COMP_WORDS[COMP_CWORD]}\"
+	local com_basic=\"--alias --help --version --tips\"
+	local com_urls=\"cht.sh wttr.in rate.sx qrenco.de ifconfig.co\"
+	if [[ \$COMP_CWORD != 1 ]]; then
+		local com_web=\"\"
+		case \"\${COMP_WORDS[1]}\" in
+			--raw)
+			COMPREPLY=( \$(compgen -W \"\$com_urls \$com_basic\" -- \"\$cur\" ) )
+			return 0;
+			;;
+			--alias)
+			COMPREPLY=( \$(compgen -W \"? + -\" -- \"\$cur\" ) )
+			return 0;
+			;;
+			wttr.in)
+			local com_web+=\"moon m u M 0 1 2 A F n q Q T\"
+			;;
+			ifconfig.co)
+			local com_web+=\"json\"
+			;;
+			cht.sh)
+			local com_web+=\"\$(compgen -c)\"
+			;;
+		esac
+		COMPREPLY=( \$(compgen -W \":help \$com_web\" -- \"\$cur\" ) )
+		return 0;
+	fi
+	
+	COMPREPLY=( \$(compgen -W \"--raw \$com_urls \$com_basic\" -- \"\$cur\" ) )
+}
+complete -F _${this}_completion ${this}
+"
+	exit 0;
+fi
+
+_echo(){ [[ $is_raw == 1 ]] && echo -e "$1" || echo "$1" | less -R -S; }
+[[ "$arg" = "--raw" ]] && is_raw=1 && command shift && arg=${1:---help} || is_raw=0
+
+if [[ "$arg" = "--help" ]]; then
+	_echo "\
+	$this@v$version – URL UTILS
+	This is helper around \`curl\` to run web-based commands such as 'wttr.in', 'cht.sh', …
+	Usage:
+		$this [--raw] BASE_URL [PARAMS]
+		$this [--raw] --[help|version|tips]
+		$this [--raw] --alias NAME +|-|? FULL_URL
+
+	Options:
+		--raw – no output using \`less\`
+		--alias – you can also use vars '\\\$1', …
+		PARAMS – parameters to be concatenated with BASE_URL with '/' or '?'/'&' when parameter starts with '?' … se below
+	Examples:
+		$this cht.sh/less			$this cht.sh less
+		$this wttr.in/prague?M&n		$this wttr.in prague ?M ?n
+		$this --raw ident.me/json | jq
+	Config file:
+		$config_file
+"
+	exit 0
+fi
+[[ "$arg" = "--version" ]] && echo "$version" && exit 0
+if [[ "$arg" = "--tips" ]]; then
+	_echo "\
+	cht.sh – The only cheat sheet you need Unified access to the best community driven documentation repositories of the world.
+	wttr.in – Weather report
+	rate.sx – show exchange rates for cryptocurrencies
+	qrenco.de
+	ifconfig.co
+	https://github.com/chubin/awesome-console-services/tree/65e8e897c9c5a2ec013747dd9f1acc03c8573fe7
+"
+	exit 0
+fi
+command shift
+
+if [[ "$arg" == "--alias" ]]; then
+	alias_name="${1:-[^_]*}"
+	[[ $alias_name == *.* ]] && echo "Alias should not contains '.'" && exit 1
+	case "$2" in
+		"+")
+			out=$(grep -v -e "uu_${alias_name}_alias=" -e "uu_${alias_name}_is_raw=" $config_file)
+			out="$out\nuu_${alias_name}_alias=\"$3\""
+			out="$out\nuu_${alias_name}_is_raw=$is_raw"
+			echo -e "$out" > $config_file
+			exit 0
+			;;
+		"-") echo -e "$(grep -v -e "uu_${alias_name}_alias=" -e "uu_${alias_name}_is_raw=" $config_file)" > $config_file || echo "No aliases yet"; exit 0;;
+		*) grep -e "uu_${alias_name}_alias=" -e "uu_${alias_name}_is_raw=" $config_file || echo "No aliases yet"; exit 0;;
+	esac
+	exit 1
+fi
+
+args=""
+if [[ $arg != *.* ]]; then
+	. $config_file
+	is_raw_name=uu_${arg}_is_raw
+	is_raw=${!is_raw_name}
+	
+	[[ -z $is_raw ]] && echo "No alias '$arg' found." && exit 1
+	arg_name=uu_${arg}_alias
+	arg=${!arg_name}
+else
+	for p in "$@"; do
+		[[  $p == "?"* ]] \
+			&& args+=" --data-urlencode ${p:1} " \
+			|| arg+="/$p"
+	done
+fi
+out=$(curl -fGsS -H 'Accept-Language: cs' $args --compressed $arg || echo 'Curl error, see terminal error output.')
+_echo "$out"

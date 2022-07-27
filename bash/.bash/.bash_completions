@@ -6,6 +6,7 @@ eval "$(asana.mjs completion_bash)"
 \. "$BASH_DOTFILES/himalaya.completion"
 eval "$(node --completion-bash)"
 eval "$(npm completion)"
+eval "$(uu --completion-bash)"
 
 _npx() {
   local cur="${COMP_WORDS[COMP_CWORD]}"
