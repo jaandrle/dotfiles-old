@@ -22,3 +22,4 @@ cp -i $this_dir/bin/github-releases.js ~/bin/github-releases.js
 cp -i $this_dir/bin/github-releases.json ~/bin/github-releases.json
 mkdir ~/.ssh
 ln -s $this_dir/.ssh/README.md ~/.ssh/README.md
+ln -s $this_dir./himalaya ~/.config/himalaya

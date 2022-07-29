@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -eo pipefail
 this="${0##*/}"
 version="2022-07-27"
 config_file="$HOME/.config/${this}rc"
@@ -6,7 +7,6 @@ config_file="$HOME/.config/${this}rc"
 
 arg=${1:---help}
 if [[ "$arg" = "--completion-bash" ]]; then
-	exit 0;
 	echo "_${this}_completion(){
 	local cur=\"\${COMP_WORDS[COMP_CWORD]}\"
 	local com_basic=\"--alias --help --version --tips\"
@@ -38,7 +38,7 @@ if [[ "$arg" = "--completion-bash" ]]; then
 	
 	COMPREPLY=( \$(compgen -W \"--raw \$com_urls \$com_basic\" -- \"\$cur\" ) )
 }
-complete -F _${this}_completion ${this}
+complete  -o bashdefault -o default -F _${this}_completion ${this}
 "
 	exit 0;
 fi
