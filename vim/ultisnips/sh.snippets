@@ -1,0 +1,9 @@
+snippet sceleton "bash" b
+#!/usr/bin/env ${1:bash}
+set -eou pipefail
+${0}
+endsnippet
+snippet info "script name and version" b
+this="${0##*/}"
+version="`date +%Y-%m-%d`"
+endsnippet

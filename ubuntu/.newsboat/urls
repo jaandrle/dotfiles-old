@@ -4,7 +4,7 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg vid
 https://www.youtube.com/feeds/videos.xml?channel_id=UCACJQqtYw6sASWAHXWkBWpw ! video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCD9L1HvpYpmZ8rrXABARCRQ ! video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA !
-"query:Sakitech – Note/Update:title =~ \"(Note|Phones|phones)\" and rssurl == \"https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA\"" video
+"query:Sakitech – Note/Update:title =~ \"(Note|Phones|phones)\" and title !~ \"(Wallpaper|wallpaper)\" and rssurl == \"https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA\"" video
 "exec:~/.newsboat/newsboat-html.sh 'Kokoti na neděli' 'https://www.stream.cz/kokoti-na-nedeli' ~/.newsboat/newsboat-html-streamCZ.config" ! video
 "exec:~/.newsboat/newsboat-html.sh 'Šťastné pondělí' 'https://www.stream.cz/stastne-pondeli' ~/.newsboat/newsboat-html-streamCZ.config" !
 "query:Šťastné pondělí:title =~ \"Šťastné pondělí\" and feedtitle == \"Šťastné pondělí\"" video

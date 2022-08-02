@@ -1,0 +1,39 @@
+name = "Jan Andrle"
+downloads-dir = "~/Stažené"
+
+[centrum]
+default = true
+email = "andrle.jan@centrum.cz"
+
+imap-host = "imap.centrum.cz"
+imap-port = 993
+imap-login = "andrle.jan@centrum.cz"
+imap-passwd-cmd  =  "kwalletcli -f imap -e centrumCZ"
+
+smtp-host = "smtp.centrum.cz"
+smtp-port = 465
+smtp-login = "andrle.jan@centrum.cz"
+smtp-passwd-cmd = "kwalletcli -f imap -e centrumCZ"
+
+[centrum.mailboxes]
+sent = "Odeslan&AOE- po&AWE-ta"
+draft = "Koncepty"
+
+[indigo]
+email = "jan.andrle@indigo.cz"
+
+imap-host = "imap.gmail.com"
+imap-port = 993
+imap-login = "jan.andrle@indigo.cz"
+imap-passwd-cmd  =  "kwalletcli -f imap -e indigoCZ"
+
+smtp-host = "smtp.gmail.com"
+smtp-port = 465
+smtp-login = "jan.andrle@indigo.cz"
+smtp-passwd-cmd  =  "kwalletcli -f imap -e indigoCZ"
+
+[indigo.mailboxes]
+sent = "Odeslan&AOE- po&AWE-ta"
+draft = "Koncepty"
+
+# vim: ft=apachestyle cms=#\ %s :

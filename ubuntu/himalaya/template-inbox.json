@@ -1,0 +1,8 @@
+[
+	{ "type": "text", "value": "Složka 'Příchozí'" },
+	{ "type": "himalaya", "value": [ "-m", "inbox", "list" ], "label": "inbox" },
+	{ "type": "text", "value": "Složka 'Hromadná'" },
+	{ "type": "himalaya", "value": [ "-m", "Hromadn&AOE-", "list" ], "label": "Hromadná" },
+	{ "type": "text", "value": "Složka 'Práce'" },
+	{ "type": "himalaya", "value": [ "-m", "_Prace", "list" ], "label": "_Prace" }
+]

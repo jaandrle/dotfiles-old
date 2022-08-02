@@ -1,4 +1,5 @@
 """ VIM config file | Jan Andrle | 2022-07-18 (VIM >=8.1)
+let g:coc_disable_startup_warning = 1
 "" #region B – Base
 	scriptencoding utf-8 | set encoding=utf-8
 	let $BASH_ENV = "~/.bashrc"
@@ -341,9 +342,9 @@
 	endfunction
 
 	set completeopt=menuone,preview,noinsert,noselect
-	inoremap <silent><expr> <F1> pumvisible() ? coc#_select_confirm() : coc#refresh()
-	inoremap <silent><expr> <tab> pumvisible() ? "\<c-n>" : <sid>check_back_space() ? "\<tab>" : coc#refresh()
-	inoremap <silent><expr> <s-tab> pumvisible() ? "\<c-p>" : "\<c-h>"
+	inoremap <silent><expr> <F1> coc#pum#visible() ? coc#pum#confirm() : coc#refresh()
+	inoremap <silent><expr> <tab> coc#pum#visible() ? coc#pum#next(1) : <sid>check_back_space() ? "\<tab>" : coc#refresh()
+	inoremap <silent><expr> <s-tab> coc#pum#visible() ? coc#pum#prev(1) : "\<c-h>"
 	function! s:check_back_space() abort
 		let col = col('.') - 1
 		return !col || getline('.')[col - 1]  =~# '\s'

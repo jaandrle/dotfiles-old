@@ -51,8 +51,16 @@ alias §ls.='§ls -A'
 alias §less='less -R -S'
 §lsl(){ §ls. -l $* --color=always | §less; }
 
+pushd(){ builtin pushd "$@" >/dev/null && dirs -v | sed 1d; }
+popd() { builtin popd "$@" >/dev/null  && dirs -v | sed 1d; }
 alias §cd.='clear;§ls'
 §cd..(){ cd $(eval printf '../'%.0s {1..$1}); }
+cdd(){
+    [[ "$1" == '--help' ]] && echo -e "Usage: cddirs NUMBER|PATH\nSee: dirs -v" && return 0
+    [[ -z "$1" ]] && dirs -v | sed 1d && return 0
+	[[ $1 =~ ^[0-9]+$ ]] && cd "$(dirs -l +$1)" && dirs -v | sed 1d && return 0
+	builtin pushd "$1" >/dev/null && pushd .
+}
 
 alias §find.='find . -maxdepth 1'
 
@@ -79,8 +87,6 @@ alias §dotfiles='cd ~/Vzdálené/GitHub/dotfiles && git status'
     printf "$L" "KERNEL: $(uname -rms)"
     printf "\n"
 }
-pushd(){ builtin pushd "$@" >/dev/null && dirs -v; }
-popd() { builtin popd "$@" >/dev/null  && dirs -v; }
 
 alias npx-wca='npx -y web-component-analyzer'
 alias npx-qnm='npx -y qnm'

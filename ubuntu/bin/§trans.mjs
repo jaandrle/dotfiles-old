@@ -53,14 +53,29 @@ if(!fs.existsSync(template_path)){
 	echo(await $`${app.cmd}`);
 	process.exit(0);
 }
-await Promise.all(JSON.parse(fs.readFileSync(template_path)).map(function(line){
-	if(line.indexOf("himalaya")!==0)
-		return Promise.resolve(chalk.reset("===\n")+chalk.magenta(line));
-	return $`${app.cmd} ${line.slice(1)}`;
-})).then(function(lines){
+await Promise.all((argv_arr.indexOf('--rofi')===-1 ? templateRead : templateRofi)(JSON.parse(fs.readFileSync(template_path))))
+.then(function(lines){
 	lines.forEach(echo);
 });
 process.exit(0);
+
+function templateRofi(lines){
+	return lines.filter(line=> line.type!=="text")
+	.map(line=>
+		$`${app.cmd} ${line.value} -w 120`
+		.then(data=> data.toString().split("\n")
+			.filter(l=> l)
+			.map(line=> line.replaceAll("✷ ", "* "))
+			.map(line_result=> line_result+" │ "+line.label)
+			.join("\n"))
+	);
+}
+function templateRead(lines){
+	return lines.map(line=> line.type==="text" ?
+		Promise.resolve(chalk.reset("===\n")+chalk.magenta(line.value)) :
+		$`${app.cmd} ${line.value}`
+	);
+}
 
 /** @param {string} str */
 function echo(str){

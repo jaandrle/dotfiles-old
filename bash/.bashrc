@@ -14,6 +14,7 @@ shopt -s expand_aliases
 # Install Ruby Gems to ~/.local/share/gems
 export GEM_HOME="$HOME/.local/share/gems"
 export PATH="$HOME/.local/share/gems/bin:$PATH"
+[ -f $BASH_DOTFILES/.bash_completions ] && . $BASH_DOTFILES/.bash_completions # for Vim
 
 [[ $- != *i* ]] && return                   # If not running interactively, don't do anything
 
@@ -55,4 +56,3 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-[ -f $BASH_DOTFILES/.bash_completions ] && . $BASH_DOTFILES/.bash_completions
