@@ -192,7 +192,8 @@ let g:coc_disable_startup_warning = 1
 	call jaandrle_utils#MapSmartKey('End')
 
 	set hlsearch incsearch														  " highlight search, start when typing
-	nmap <silent>ú :nohlsearch<bar>diffupdate<cr>
+	if maparg('<C-L>', 'n') ==# ''
+		nnoremap <silent> <c-l> :nohlsearch<c-r>=has('diff')?'<bar>diffupdate':''<cr><cr><c-l> | endif
 
 	call scommands#map('n', 'NAV', "n")
 	command! NAVjumps call jaandrle_utils#gotoJumpChange('jump')

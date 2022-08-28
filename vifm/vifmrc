@@ -26,9 +26,7 @@
 "" #region G – General
 														" set vicmd=elvis\ -G\ termcap | " set vicmd=vile
 	set vicmd=vim
-	" TODO: temp fix (on ubuntu not worsk)
-	if !has('win') | set novimhelp
-		else | set vimhelp | endif
+	set vimhelp
 	if !has('win')
 		set fusehome=/tmp/vifm_FUSE
 		set slowfs=curlftpfs

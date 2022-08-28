@@ -3,6 +3,7 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCMiyV_Ib77XLpzHPQH_q0qQ vid
 https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCACJQqtYw6sASWAHXWkBWpw ! video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCD9L1HvpYpmZ8rrXABARCRQ ! video
+https://www.youtube.com/feeds/videos.xml?channel_id=UCONH73CdRXUjlh3-DdLGCPw ! video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA !
 "query:Sakitech – Note/Update:title =~ \"(Note|Phones|phones)\" and title !~ \"(Wallpaper|wallpaper)\" and rssurl == \"https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA\"" video
 "exec:~/.newsboat/newsboat-html.sh 'Kokoti na neděli' 'https://www.stream.cz/kokoti-na-nedeli' ~/.newsboat/newsboat-html-streamCZ.config" ! video
@@ -19,6 +20,7 @@ https://www.investigace.cz/feed/ ! news
 https://denikn.cz/veda/feed?ref=inc ! news/science
 "query:Petr Koubský:author = \"Petr Koubský\"" news/science
 https://vedator.org/feed/ ! news/science
+http://feeds.feedburner.com/Backreaction ! news/science
 https://www.osel.cz/rss/rss.php ! news/science
 https://news.mit.edu/rss/feed ! news/science
 https://news.mit.edu/rss/research ! news/science
@@ -41,6 +43,7 @@ https://github.com/mirisuzanne.atom ! dev
 # https://www.smashingmagazine.com/feed/
 
 "query:🤔:tags # \"desinfo\""
+https://www.informacnigramotnost.cz/feed/ ! desinfo
 https://demagog.cz/rss/index.atom ! desinfo
 https://www.fakticke.info/feed/ ! desinfo
 https://manipulatori.cz/feed/ ! desinfo

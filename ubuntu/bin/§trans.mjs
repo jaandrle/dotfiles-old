@@ -38,7 +38,14 @@ if(argv_arr.indexOf(app.modificator)===-1){
 	.pipe(process.stdout);
 	process.exit(0);
 }
+
 argv_arr= argv_arr.filter(str=> str!==app.modificator);
+if(argv_arr.indexOf("list")!==-1){
+	argv_arr.push("-w", process.stdout.columns);
+	await $`${app.cmd} ${argv_arr}`
+	.pipe(process.stdout);
+	process.exit(0);
+}
 if(argv_arr.indexOf("read")!==-1){
 	const email= os.tmpdir()+"/himalaya-read.eml";
 	await $`${app.cmd} ${argv_arr} -h From -h Subject`
@@ -71,9 +78,10 @@ function templateRofi(lines){
 	);
 }
 function templateRead(lines){
+	argv_arr.push("-w", process.stdout.columns);
 	return lines.map(line=> line.type==="text" ?
 		Promise.resolve(chalk.reset("===\n")+chalk.magenta(line.value)) :
-		$`${app.cmd} ${line.value}`
+		$`${app.cmd} ${line.value} ${argv_arr}`
 	);
 }
 
