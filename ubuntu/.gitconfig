@@ -53,3 +53,5 @@
 	reflogExpireUnreachable = 90
 [push]
 	autoSetupRemote = true
+[init]
+	defaultBranch = main

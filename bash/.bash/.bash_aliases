@@ -61,8 +61,12 @@ cdd(){
 	[[ $1 =~ ^[0-9]+$ ]] && cd "$(dirs -l +$1)" && dirs -v | sed 1d && return 0
 	builtin pushd "$1" >/dev/null && pushd .
 }
+mkcd(){ mkdir -p -- "$1" && cd -P -- "$1"; }
+
 
 alias §find.='find . -maxdepth 1'
+
+alias pdftk='java -jar $HOME/bin/pdftk-all.jar'
 
 alias §psmem_all='ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem'
 alias §psmem='§psmem_all | head -n 10'
