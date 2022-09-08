@@ -8,12 +8,12 @@ email = "andrle.jan@centrum.cz"
 imap-host = "imap.centrum.cz"
 imap-port = 993
 imap-login = "andrle.jan@centrum.cz"
-imap-passwd-cmd  =  "kwalletcli -f imap -e centrumCZ"
+imap-passwd-cmd  =  "bw get password mail-centrum"
 
 smtp-host = "smtp.centrum.cz"
 smtp-port = 465
 smtp-login = "andrle.jan@centrum.cz"
-smtp-passwd-cmd = "kwalletcli -f imap -e centrumCZ"
+smtp-passwd-cmd = "bw get password mail-centrum"
 
 [centrum.mailboxes]
 sent = "Odeslan&AOE- po&AWE-ta"
@@ -25,12 +25,12 @@ email = "jan.andrle@indigo.cz"
 imap-host = "imap.gmail.com"
 imap-port = 993
 imap-login = "jan.andrle@indigo.cz"
-imap-passwd-cmd  =  "kwalletcli -f imap -e indigoCZ"
+imap-passwd-cmd  =  "bw get password mail-gmail-indigo"
 
 smtp-host = "smtp.gmail.com"
 smtp-port = 465
 smtp-login = "jan.andrle@indigo.cz"
-smtp-passwd-cmd  =  "kwalletcli -f imap -e indigoCZ"
+smtp-passwd-cmd  =  "bw get password mail-gmail-indigo"
 
 [indigo.mailboxes]
 sent = "Odeslan&AOE- po&AWE-ta"

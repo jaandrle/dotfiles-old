@@ -63,10 +63,19 @@ cdd(){
 }
 mkcd(){ mkdir -p -- "$1" && cd -P -- "$1"; }
 
-
 alias §find.='find . -maxdepth 1'
 
 alias pdftk='java -jar $HOME/bin/pdftk-all.jar'
+bw-session(){
+	bw logout
+	login=`kwallet-query kdewallet -f accounts -r Bitwarden 2> /dev/null`
+	export BW_CLIENTSECRET=`echo "$login" | jq -r .secret`
+	export BW_CLIENTID=`echo "$login" | jq -r .id`
+	bw login --apikey --raw
+	export BW_SESSION=`bw unlock --raw $(echo "$login" | jq -r .pass)` && echo "Bitwarden session ON" ||  echo "Bitwarden session FAILED"
+	unset BW_CLIENTSECRET
+	unset BW_CLIENTID
+}
 
 alias §psmem_all='ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem'
 alias §psmem='§psmem_all | head -n 10'
