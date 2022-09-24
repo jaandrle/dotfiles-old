@@ -1,6 +1,12 @@
-snippet sceleton_cli "nodejs" b
+snippet sceleton_node "nodejs" b
 #!/usr/bin/env node
 /* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true */
+${0}
+endsnippet
+snippet sceleton_cli "nodejsscript" b
+#!/usr/bin/env nodejsscript
+/* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true */
+import { s, echo, exit } from "nodejsscript";
 ${0}
 endsnippet
 snippet sceleton_zx "zx" b

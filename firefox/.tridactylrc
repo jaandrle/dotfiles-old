@@ -89,6 +89,9 @@ quickmark c moz-extension://616498c0-3916-4f0b-b0a9-ce01ecf2298d/popup.html
 
 command data_delall composite hint_focus * ; js document.activeElement.querySelectorAll("input").forEach(el=> el.checked=false)
 
+command scrollblur js tri.scrolling.setCurrentFocus(document.documentElement || document.body)
+autocmd DocLoad https://user.centrum.cz/?url=http%3A%2F%2Fmail.centrum.cz open https://mail.centrum.cz/?fld=-666
+
 " For syntax highlighting see https://github.com/tridactyl/vim-tridactyl
 " vim: set filetype=tridactyl
 " vim: set ft=vim :

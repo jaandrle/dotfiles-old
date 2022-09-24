@@ -282,8 +282,15 @@
 			fileviewer <video/*>,<audio/*> mediainfo %c
 		endif
 	" #endregion FmediaBin
-	fileviewer .*/,*/ tree %c -L 3
-	fileviewer ../ tree %c -L 1
+	fileviewer .*/,*/ tree %c -L 3 &
+	fileviewer ../ tree %c -L 1 &
+	fileviewer	 *.js,*.mjs,*.ts,*.sh,
+				\*.css,*.scss,
+				\*.php,
+				\*.md,*.html,
+				\*.json,*.xml
+				\ env -uCOLORTERM bat --color always --theme 'Visual Studio Dark+' --wrap never --pager never --tabs 2 %c -p &
+	fileviewer <text/x-*>,<application/*> env -uCOLORTERM bat --color always --theme 'Visual Studio Dark+' --wrap never --pager never --tabs 2 %c -p &
 " #endregion F
 " #region S – sS keys
 	nnoremap sf :file &
@@ -317,6 +324,7 @@
 " #endregion Y
 
 command! README :!vim ~/Dokumenty/GitHub/dotfiles/vifm/README.md
+map <f1> :!vim ~/.config/vifm/vifm-help.txt<cr>
 
 "" #region N – Notes
 	"Filter-out build and temporary files

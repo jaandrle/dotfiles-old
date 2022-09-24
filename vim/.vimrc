@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2022-07-18 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2022-09-24 (VIM >=8.1)
 let g:coc_disable_startup_warning = 1
 "" #region B – Base
 	scriptencoding utf-8 | set encoding=utf-8
@@ -49,7 +49,11 @@ let g:coc_disable_startup_warning = 1
 		autocmd BufEnter *.txt if &buftype == 'help' | wincmd L | vertical resize 90 | endif
 	augroup END
 	
-	let g:loaded_vimballPlugin = 1 " :h pi_vimball
+	""" #region BB – Build-in plugins
+	" https://github.com/rbtnn/vim-gloaded/blob/master/plugin/gloaded.vim
+	let g:loaded_vimballPlugin = 1 " :h pi_vimball … for plugin creators
+	let g:vifm_replace_netrw= 1 | let g:loaded_netrw= 1 | let g:loaded_netrwPlugin= 1  " this line needs to be commented to let vim dowmload spelllangs!!! … see http://jdem.cz/fgyw25
+	""" #endregion BB
 "" #endregion B
 "" #region H – Helpers + remap 'sS' (primary ss, see `vim-scommands`)
 	nmap sh :execute 'ALTredir :map s \<bar> map '.mapleader.' \<bar> map § \<bar> map ů \<bar> map ; \<bar> map U \<bar> map ž'<cr>:g/^$/d<cr>:g/^v  s/m$<cr>úgg
@@ -65,7 +69,7 @@ let g:coc_disable_startup_warning = 1
 	cabbrev ALTR ALTredrawSyntax
 	set grepprg=LC_ALL=C\ grep\ -nrsH
 	command! -nargs=0
-		\ ALTredrawSyntax edit | normal `"
+		\ ALTredrawSyntax edit | exec 'normal `"' | exec 'set ft='.&ft
 	command! -complete=command -bar -range -nargs=+
 		\ ALTredir call jaandrle_utils#redir(0, <q-args>, <range>, <line1>, <line2>)
 	command! -complete=command -bar -range -nargs=+
@@ -153,7 +157,6 @@ let g:coc_disable_startup_warning = 1
 	nmap s3 :buffers<cr>:b<space>
 	nmap sš :CtrlPBuffer<cr>
 	nmap č sš
-	command!			CLcloseOtherBuffers execute '%bdelete|edit #|normal `"'
 	command!			ALToldfiles ALTredir oldfiles | call feedkeys(':%s/^\d\+: //<cr>gg:echo ''Alternative to `:browse oldfiles`''', 'tn')
 	let g:ctrlp_map = 'ě'
 	command! -nargs=?	SETctrlp execute 'nnoremap '.g:ctrlp_map.' :CtrlP <args><cr>'
@@ -181,7 +184,6 @@ let g:coc_disable_startup_warning = 1
 	set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.png,*.ico
 	set wildignore+=*.pdf,*.psd
 
-	let g:vifm_replace_netrw= 1 | let g:loaded_netrw= 1 | let g:loaded_netrwPlugin= 1  " this line needs to be commented to let vim dowmload spelllangs!!! … see http://jdem.cz/fgyw25
 	nmap <leader>e :Vifm<cr>
 	call scommands#map('e', 'Vifm', "n")
 	nnoremap gx :silent exec "!xdg-open '".shellescape(substitute(expand('<cfile>'), '?', '\\?', ''), 1)."'" \| redraw!<cr>
@@ -226,11 +228,10 @@ let g:coc_disable_startup_warning = 1
 	let g:highlightedyank_highlight_duration= 250
 	let g:cwordhi#autoload= 1
 	set showmatch												" Quick highlight oppening bracket/… for currently writted
-	set timeoutlen=1000 ttimeoutlen=0												   " Remove timeout when hitting escape
-	" TAB
+	set timeoutlen=1000 ttimeoutlen=0												   " Remove timeout when hitting escape TAB
 	if v:version > 703 || v:version == 703 && has("patch541")
 		set formatoptions+=j | endif							" Delete comment character when joining commented lines
-	set smarttab												   " Use spaces instead of tabs and be smart
+	set smarttab
 	call <sid>SetToggle('expandtab')
 	command! -nargs=1 SETtab let &shiftwidth=<q-args> | let &tabstop=<q-args> | let &softtabstop=<q-args>
 	SETtab 4
@@ -324,7 +325,7 @@ let g:coc_disable_startup_warning = 1
 	command! -nargs=0
 		\ GITblameThis GitMessenger
 "" #endregion GIT
-"" #region COC – COC and so on, compilers
+"" #region COC – COC and so on, compilers, code/commands completions
 	let g:coc_global_extensions= [ 'coc-css', 'coc-docthis', 'coc-emmet', 'coc-emoji', 'coc-html', 'coc-json', 'coc-marketplace', 'coc-phpls', 'coc-scssmodules', 'coc-snippets', 'coc-tabnine', 'coc-tsserver' ]
 	autocmd FileType scss setl iskeyword+=@-@
 	command -nargs=? ALTmake if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
@@ -344,6 +345,7 @@ let g:coc_disable_startup_warning = 1
 
 	set completeopt=menuone,preview,noinsert,noselect
 	inoremap <silent><expr> <F1> coc#pum#visible() ? coc#pum#confirm() : coc#refresh()
+	set wildcharm=<f1>
 	inoremap <silent><expr> <tab> coc#pum#visible() ? coc#pum#next(1) : <sid>check_back_space() ? "\<tab>" : coc#refresh()
 	inoremap <silent><expr> <s-tab> coc#pum#visible() ? coc#pum#prev(1) : "\<c-h>"
 	function! s:check_back_space() abort
@@ -351,20 +353,21 @@ let g:coc_disable_startup_warning = 1
 		return !col || getline('.')[col - 1]  =~# '\s'
 	endfunction
 
-	xmap <leader>if <Plug>(coc-funcobj-i)
-	omap <leader>if <Plug>(coc-funcobj-i)
-	xmap <leader>af <Plug>(coc-funcobj-a)
-	omap <leader>af <Plug>(coc-funcobj-a)
 	nmap <silent> gd <Plug>(coc-definition)
-	nmap <silent> <leader>gd <Plug>(coc-diagnostic-next)
-	nmap <silent> <leader>gD <Plug>(coc-diagnostic-prev)
+	nmap <leader>/ :CocSearch 
+	nmap <leader>? <leader>/
+	command! -bang NAVdiagnostic call CocActionAsync('diagnostic'.( "<bang>" == '!' ? 'Previous' : 'Next' ))<CR>
+	command! NAVdefinition		   call CocActionAsync('jumpDefinition')
+	command! NAVtype			   call CocActionAsync('jumpTypeDefinition')
+	command! NAVimplementation	   call CocActionAsync('jumpImplementation')
+	command! NAVreferences		   call CocActionAsync('jumpReferences')
 					" navigate diagnostics, use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
 	nnoremap <silent> gh :call <sid>show_documentation(expand("<cword>"))<cr>
 	vnoremap <silent> gh :<c-u>call <sid>show_documentation(mini_enhancement#selectedText())<cr>
 	nnoremap <leader>gf :let g:ctrlp_default_input=expand("<cword>") <bar> execute 'CtrlP' <bar> unlet g:ctrlp_default_input <cr>
 	vnoremap <leader>gf :<c-u>let g:ctrlp_default_input=mini_enhancement#selectedText() <bar> execute 'CtrlP' <bar> unlet g:ctrlp_default_input <cr>
 	autocmd CursorHold * silent call CocActionAsync('highlight')
-	""" #region Coc popups scroll (not working for me now, newer version if Vim)
+	""" #region COCP – Coc popups scroll (not working for me now, newer version if Vim)
 														" Highlight the symbol and its references when holding the cursor.
 	if has('nvim-0.4.0') || has('patch-8.2.0750')					" Remap <C-f> and <C-b> for scroll float windows/popups.
 		nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
@@ -374,7 +377,7 @@ let g:coc_disable_startup_warning = 1
 		vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 		vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 	endif
-	""" #endregion Coc popups scroll (not working for me now, newer version if Vim)
+	""" #endregion COCP
 	command! -nargs=? SETFOLDcoc :call CocAction('fold', <f-args>)
 
 	call scommands#map('C', 'Coc', "n,v")
@@ -401,13 +404,6 @@ let g:coc_disable_startup_warning = 1
 	nnoremap <f1> :CLcheat<cr>
 	command! -nargs=?
 		   \ CLcheat call cheat_copilot#open(<q-args>==''?&filetype:<q-args>)
-	command! NAVdefinition		   call CocActionAsync('jumpDefinition')
-	command! NAVtype			   call CocActionAsync('jumpTypeDefinition')
-	command! NAVimplementation	   call CocActionAsync('jumpImplementation')
-	command! NAVreferences		   call CocActionAsync('jumpReferences')
-	
-	nmap <leader>/ :CocSearch 
-	nmap <leader>? <leader>/
 	
 	function! s:show_documentation(word)
 		if (index(['vim', 'help'], &filetype) >= 0)
@@ -444,5 +440,15 @@ let g:coc_disable_startup_warning = 1
 		call execute(a:cmd) | call histadd("cmd", a:cmd)
 	endfunction
 "" #endregion COC
+
+
+augroup nodejsscript
+	autocmd!
+	autocmd BufEnter *.{js,mjs}
+		\ command! -buffer -nargs=1 CLnodejsscript
+			\ call setline(<q-args>, getline(<q-args>) =~ 'jaandrle' ?
+				\ substitute(getline(<q-args>), '/home/jaandrle/.nvm/versions/node/current/lib/node_modules/nodejsscript/index.js', 'nodejsscript', 'g') :
+				\ substitute(getline(<q-args>), 'nodejsscript', '/home/jaandrle/.nvm/versions/node/current/lib/node_modules/nodejsscript/index.js', 'g'))
+augroup END
 " vim: set tabstop=4 shiftwidth=4 textwidth=250 :
 " vim>60: set foldmethod=marker foldmarker=#region,#endregion :

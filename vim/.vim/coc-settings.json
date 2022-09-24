@@ -1,13 +1,14 @@
 {
-    "coc.preferences.rootPatterns": [ ".git", ".vscode" ],
-    "diagnostic.separateRelatedInformationAsDiagnostics": true,
-    "diagnostic.errorSign": "┅",
-    "diagnostic.warningSign": "┉",
-    "diagnostic.infoSign": "┄",
-    "diagnostic.hintSign": "·",
-    "javascript.showUnused": true,
-    "coc.source.emoji.filetypes": [ "markdown", "magit", "gitcommit" ],
-    "html.filetypes": [ "html", "handlebars", "htmldjango", "blade", "liquid" ],
-    "html.autoClosingTags": false,
-    "html.autoCreateQuotes": false
+	"coc.preferences.rootPatterns": [ ".git", ".vscode" ],
+	"diagnostic.separateRelatedInformationAsDiagnostics": true,
+	"diagnostic.errorSign": "┅",
+	"diagnostic.warningSign": "┉",
+	"diagnostic.infoSign": "┄",
+	"diagnostic.hintSign": "·",
+	"javascript.showUnused": true,
+	"coc.source.emoji.filetypes": [ "markdown", "magit", "gitcommit" ],
+	"html.filetypes": [ "html", "handlebars", "htmldjango", "blade", "liquid" ],
+	"html.autoClosingTags": false,
+	"html.autoCreateQuotes": false,
+	"coc.preferences.formatOnType": false
 }

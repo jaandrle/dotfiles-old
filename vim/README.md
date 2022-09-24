@@ -46,4 +46,5 @@ Also call `:helptags ~/.vim/bundle/`.
 - [mbbill/undotree: The undo history visualizer for VIM](https://github.com/mbbill/undotree)
 
 ## To consider
+- [yaegassy/coc-html-css-support: HTML id and class attribute "completion" for coc.nvim.](https://github.com/yaegassy/coc-html-css-support): `alpine.js`, `petite-vue`
 - [vimwiki/vimwiki: Personal Wiki for Vim](https://github.com/vimwiki/vimwiki)
