@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2022-09-24 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2022-09-30 (VIM >=8.1)
 let g:coc_disable_startup_warning = 1
 "" #region B – Base
 	scriptencoding utf-8 | set encoding=utf-8
@@ -399,6 +399,7 @@ let g:coc_disable_startup_warning = 1
 		   \ CLreplace			   call feedkeys(':<c-u>'.(<q-args>==''?'.':<q-args>).'s/'.("<bang>"=='!'?mini_enhancement#selectedText():expand('<cword>')).'//cgODODOD', 'tn')
 	command! CLrepeatLastChange    call feedkeys('/\V<C-r>"<CR>cgn<C-a><Esc>', 'tn')
 	command! CLjsdoc			   exec 'CocCommand docthis.documentThis'
+	command! CLjshintGlobal		   normal yiwmm?\/\* global<cr><c-l>f*hi, p`m
 	command! CLcodeactionCursor    call CocActionAsync('codeAction', 'cursor')
 	command! CLfixCodeQuick		   call CocActionAsync('doQuickfix')
 	nnoremap <f1> :CLcheat<cr>
@@ -440,15 +441,5 @@ let g:coc_disable_startup_warning = 1
 		call execute(a:cmd) | call histadd("cmd", a:cmd)
 	endfunction
 "" #endregion COC
-
-
-augroup nodejsscript
-	autocmd!
-	autocmd BufEnter *.{js,mjs}
-		\ command! -buffer -nargs=1 CLnodejsscript
-			\ call setline(<q-args>, getline(<q-args>) =~ 'jaandrle' ?
-				\ substitute(getline(<q-args>), '/home/jaandrle/.nvm/versions/node/current/lib/node_modules/nodejsscript/index.js', 'nodejsscript', 'g') :
-				\ substitute(getline(<q-args>), 'nodejsscript', '/home/jaandrle/.nvm/versions/node/current/lib/node_modules/nodejsscript/index.js', 'g'))
-augroup END
 " vim: set tabstop=4 shiftwidth=4 textwidth=250 :
 " vim>60: set foldmethod=marker foldmarker=#region,#endregion :

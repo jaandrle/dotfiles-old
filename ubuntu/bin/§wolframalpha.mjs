@@ -1,6 +1,5 @@
 #!/usr/bin/env nodejsscript
-/* jshint esversion: 6,-W097, -W040, node: true, expr: true, undef: true */
-import { s, echo, cli } from "/home/jaandrle/.nvm/versions/node/current/lib/node_modules/nodejsscript/index.js";
+/* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true *//* global echo, exit, cli, pipe, s, style, fetch, cyclicLoop */
 cli.api("<...query_array>")
 .version("v2022-09-23")
 .describe([

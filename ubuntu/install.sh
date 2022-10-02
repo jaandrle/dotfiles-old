@@ -17,6 +17,7 @@ ln -s $this_dir/bin/§trans.mjs ~/bin/§trans
 ln -s $this_dir/bin/§vim_plugins ~/bin/§vim_plugins
 ln -s $this_dir/bin/§vim_cache_clean ~/bin/§vim_cache_clean
 ln -s $this_dir/bin/§wallpaper_BIOTD.mjs ~/bin/§wallpaper_BIOTD.mjs
+ln -s $this_dir/bin/§wolframalpha.mjs ~/bin/§wolframalpha
 ln -s $this_dir/bin/uu ~/bin/uu
 cp -i $this_dir/bin/github-releases.js ~/bin/github-releases.js
 cp -i $this_dir/bin/github-releases.json ~/bin/github-releases.json

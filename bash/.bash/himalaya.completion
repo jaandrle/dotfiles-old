@@ -2535,6 +2535,6 @@ complete -F _himalaya -o bashdefault -o default himalaya
 
 complete -F _himalaya -o bashdefault -o default §mail
 §mail-inbox(){
-	ch=$(§mail § --rofi | sed 's/\x1B[@A-Z\\\]^_]\|\x1B\[[0-9:;<=>?]*[-!"#$%&'"'"'()*+,.\/]*[][\\@A-Z^_`a-z{|}~]//g' | rofi -dmenu -theme Pop-Dark | awk -F│ '/│/{gsub(/ /, "", $0); print"-m "$6" read "$1}')
-	§mail $ch §
+	ch=$(§mail --rofi | sed 's/\x1B[@A-Z\\\]^_]\|\x1B\[[0-9:;<=>?]*[-!"#$%&'"'"'()*+,.\/]*[][\\@A-Z^_`a-z{|}~]//g' | rofi -dmenu -theme Pop-Dark | awk -F│ '/│/{gsub(/ /, "", $0); print"-m "$6" read "$1}')
+	§mail $ch
 }

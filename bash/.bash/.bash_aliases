@@ -42,7 +42,7 @@ history_most_used(){ LC_ALL=C cat ~/.bash_history | cut -d ';' -f 2- | §awk 1 |
 }
 
 if [[ `lsb_release -a 2>/dev/null | grep 'Distributor ID' | cut --delimiter='	' -f 2-` == "Neon" ]]; then
-    alias §apt-uu='echo ":: pkcon refresh ::" && sudo pkcon refresh && echo ":: pkcon update ::" && sudo pkcon update'
+    alias §apt-uu='echo ":: pkcon refresh ::" && pkcon refresh && echo ":: pkcon update ::" && pkcon update -p'
 else
     alias §apt-uu='echo ":: apt update ::" && sudo apt update && echo ":: apt upgrade ::" && sudo apt upgrade'
 fi
@@ -105,3 +105,8 @@ alias npx-wca='npx -y web-component-analyzer'
 alias npx-qnm='npx -y qnm'
 alias npx-hint='npx -y hint'
 alias zfz=fzf-carroarmato0.fzf
+
+alias bathelp='bat --plain --language=help'
+help() {
+    "$@" --help 2>&1 | bathelp
+}

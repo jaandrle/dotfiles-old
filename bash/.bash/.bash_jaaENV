@@ -64,6 +64,7 @@ function jaaENV {
     fi
     . ./.jaaENV
     if [ ! -z ${android_home+x} ]; then export ANDROID_HOME=$ANDROID_HOME_BAK; echo "\$ANDROID_HOME=$ANDROID_HOME"; else unset ANDROID_HOME; echo "\$ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"; fi
+    if [ ! -z ${android_home_is_sdk+x} ]; then export ANDROID_HOME=$ANDROID_SDK_ROOT; echo "\$ANDROID_HOME=$ANDROID_HOME"; fi
     if [ ! -z ${nodejs+x} ]; then nvm use $nodejs; fi
     if [ ! -z ${gradle+x} ]; then sdk use gradle $gradle | tr -d '\n'; echo ; fi
     if [ ! -z ${php+x} ];    then

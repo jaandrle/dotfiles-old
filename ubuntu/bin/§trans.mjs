@@ -1,6 +1,5 @@
 #!/usr/bin/env nodejsscript
-/* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true */
-import { s, echo, cli } from "./.nodejsscript.mjs";
+/* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true *//* global echo, exit, cli, pipe, s, style, fetch, cyclicLoop */
 cli.api("<lang>")
 .version("2022-09-23")
 .describe("This is just wrapper around 'trans' cli utility.")
