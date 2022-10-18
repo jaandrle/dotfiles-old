@@ -3,6 +3,7 @@
 		"/home/jaandrle/.nvm/versions/node/v17.9.1/lib/node_modules/nodejsscript/index.d.ts",
 		"./§trans.mjs",
 		"./§wolframalpha.mjs",
-		"./§mail.mjs"
+		"./§mail.mjs",
+		"./§cordova-release.mjs"
 	]
 }

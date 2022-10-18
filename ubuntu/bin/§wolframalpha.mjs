@@ -12,6 +12,7 @@ cli.api("<...query_array>")
 .action(function main(_, { _: query_array }){
 	echo("Opening:");
 	echo("https://www.wolframalpha.com/input/?i="+encodeURI(query_array.join(" ")).replace(/\+/g, '%2B'))
-	.xargs(s.exec, "exo-open --launch WebBrowser {}", { async: true });
+	.xargs(s.runA, "exo-open --launch WebBrowser {}")
+	.then(exit.bind(null, 0)).catch(exit.bind(null, 1));
 })
 .parse((()=> ( process.argv.splice(2, 0, 'skip'), process.argv ))());

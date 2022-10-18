@@ -13,8 +13,9 @@ cli.api("<lang>")
 	query.unshift(lang[0]==="2" ? lang.replace("2", "cs:") : ( lang.indexOf(":")!==-1 ? lang : lang+":cs" ));
 	query.push('-no-ansi');
 	
-	const result= s.$().exec("trans "+query.join(" "));
+	const result= s.$().run("trans "+query.join(" "));
 	if(!to_clipboard) return echo(result.toString()); 
-	result.exec("xclip -selection clipboard 2> /dev/null 1> /dev/null", { async: true });
+	result.runA("xclip -selection clipboard 2> /dev/null 1> /dev/null")
+	.then(exit.bind(null, 0)).catch(exit.bind(null, 1));
 })
 .parse(process.argv);

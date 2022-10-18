@@ -30,6 +30,7 @@
 	update-submodule = submodule update --remote --merge
 	pull-submodule = submodule foreach 'git pull'
 	diff-submodule = submodule foreach 'git diff'
+	set-upstream = !git branch --set-upstream-to=origin/`git symbolic-ref --short HEAD`
 [core]
 	editor = vim
 	pager = delta

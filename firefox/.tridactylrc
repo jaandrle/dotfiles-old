@@ -49,9 +49,8 @@ bind dd tabclose
 unbind --mode=normal s
 bind st fillcmdline_notrail tab
 
-set keymap ě ;
-set keymap ; :
-bindurl ^https://mail.centrum.cz/* ěě composite hint_focus ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
+set keytranslatemap {"ě":";",";":":"}
+bindurl ^https://mail.centrum.cz/* ;; composite hint_focus ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
 bind --mode=normal ;gt hint -c [tabindex]
 
 bind š tab #

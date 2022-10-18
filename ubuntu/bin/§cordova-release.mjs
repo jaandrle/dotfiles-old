@@ -1,65 +1,59 @@
-#!/usr/bin/env node
-import { readFileSync, existsSync, readdirSync, unlinkSync, copyFileSync } from "fs";
-import { spawn } from "child_process";
-import { join } from "path";
-import { env, platform, exit, argv } from "process";
+#!/usr/bin/env nodejsscript
+/* jshint esversion: 11,-W097, -W040, module: true, node: true, expr: true, undef: true *//* global echo, exit, cli, pipe, s, style, fetch, cyclicLoop */
+import { join as pathJoin } from "path";
+import { platform } from "process";
+const config_path= cli.xdg.data`package_global.json`;
 
-const shared_file_path=
-    /*
-        OS X        - '/Users/user/Library/Preferences/package_global.json'
-        Windows 8   - 'C:\Users\user\AppData\Roaming\package_global.json'
-        Windows XP  - 'C:\Documents and Settings\user\Application Data\package_global.json'
-        Linux       - '/home/user/.local/share/package_global.json'
-     */
-    (env.APPDATA || (platform == 'darwin' ? env.HOME + '/Library/Preferences' : env.HOME + "/.local/share"))+'/package_global.json';
-if(!existsSync(shared_file_path)){
-    console.error(`No '${shared_file_path}' file.`);
-    exit(1);
+cli.api("[name]", true)
+.version("2022-10-06")
+.describe([
+	"Release cordova app with saved data in: "+config_path+".",
+	"This should be JSON file with `cordova_keys_store` key/object:",
+	`{"cordova_keys_store": { "NAME": { "path": "", "password": "", "alias": "" } }}`,
+	"You can lists all saved options (NAME), when you run without arguments." ])
+.option("--noclear", "Skipping cleaning existing apk files.")
+.action(function main(name, { noclear }){
+	if(!name){
+		echo("Available options:");
+		pipe(getConfig, Object.keys, a=> "- "+a.join("\n- "), echo)();
+		exit(0);
+	}
+	const /* runtime arguments and cwd */
+		{ path, password, alias }= getConfigFor(name),
+		cwd= process.cwd(),
+		platform_android= toDirPath( cwd, "platforms", "android" ),
+		platform_build= !s.test("-e", toDirPath(platform_android, "app")) ? toDirPath(platform_android, "build") : toDirPath(platform_android, "app", "build"),
+		apk_dir= toDirPath(platform_build, "outputs", "apk"),
+		key_path= pathJoin(cwd, "keystore.jks"),
+		process_clear= !noclear && !s.test("-e", toDirPath(platform_android, "app"));
+	
+	cli.configAssign({ verbose: true, fatal: true });
+	if(process_clear) s.rm("-Rf", apk_dir+"*");
+	s.cp(path, key_path);
+	s.run("cordova" + ( platform==="win32" ? ".cmd" : "" ) + " ::args::",
+		{ args: [ "build", "--release", "android", "--",'--keystore=keystore.jks', "--storePassword="+password, "--password="+password, "--alias="+alias ] });
+	s.rm(key_path);// cordova si to uklada a uz potom bez nej nelze buildit vubec
+	s.rm(platform_android+"release-signing.properties");
+	exit(0);
+})
+.parse(process.argv);
+
+function toDirPath(...path){ return pathJoin(...path)+"/"; }
+function getConfigFor(name){
+	const config= getConfig();
+	if(Object.hasOwn(config, name))
+		return config[name];
+
+	cli.error(`Name '${name}' not found, use one of: `+Object.keys(config));
 }
-
-const { cordova_keys_store }= JSON.parse(readFileSync(shared_file_path)) || {};
-if(!existsSync(shared_file_path)){
-    console.error(`No 'cordova_keys_store' key in the shared file '${shared_file_path}'.`);
-    exit(1);
-}
-
-const [ name, ...params ]= argv.slice(2);
-if(!name||name==="--help"){
-    console.error(`Use one of the options in '\`${shared_file_path}\`.cordova_keys_store'.`);
-    console.log("Curently available: "+Object.keys(cordova_keys_store).join(", "));
-    exit(!name);
-}
-
-const /* runtime arguments and cwd */
-    { path, password, alias }= cordova_keys_store[name],
-    cwd= process.cwd().replace(/\\/g, "/")+"/",
-    platform_android= cwd+"platforms/android/",
-    platform_build= !existsSync(platform_android+"app/") ? platform_android+"build/" : platform_android+"app/build/",
-    apk_dir= platform_build+"outputs/apk/",
-    process_clear= params.indexOf("noclear")===-1 && !existsSync(platform+"app/");
-
-console.log("Clearing previous builds: start");
-if(process_clear) emptyFolder(apk_dir);
-console.log("Clearing previous builds: end");
-console.log(`Temp '${path}': start`);
-copyFileSync(path, cwd+"keystore.jks");
-console.log(`Temp '${path}': end`);
-console.log("Cordova release: start");
-const cordova_cmd= spawn("cordova"+( platform==="win32" ? ".cmd" : "" ),
-    [ "build", "--release", "android", "--",'--keystore=keystore.jks', "--storePassword="+password, "--password="+password, "--alias="+alias ], { cwd });
-cordova_cmd.stderr.pipe(process.stderr);
-cordova_cmd.stdout.pipe(process.stdout);
-cordova_cmd.stdin.pipe(process.stdin);
-cordova_cmd.on("close", function(){
-    console.log("Cordova release: end");
-    console.log("Cleaning: start");
-    unlinkSync(cwd+"keystore.jks");// cordova si to uklada a uz potom bez nej nelze buildit vubec
-    if(existsSync(platform_android+"release-signing.properties"))
-        unlinkSync(platform_android+"release-signing.properties");
-    console.log("Cleaning: end");
-});
-
-function emptyFolder(path){
-    if(!existsSync(path)) throw new Error(`Path '${path}' doesn’t exist!`);
-    readdirSync(path).forEach(file=> unlinkSync(join(path, file)));
+function getConfig(){
+	if(!s.test("-f", config_path))
+		cli.error("No config file found! Tested file path: "+config_path);
+	try{
+		const config= s.cat(config_path).xargs(JSON.parse).cordova_keys_store;
+		if(!Object.keys(config).length) throw new Error();
+		return config;
+	} catch(e){
+		cli.error("Unsupported config file: "+config_path+"! Use `--help` for more information.");
+	}
 }
