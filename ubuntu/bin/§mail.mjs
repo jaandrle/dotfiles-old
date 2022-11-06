@@ -1,11 +1,11 @@
 #!/usr/bin/env nodejsscript
-/* jshint esversion: 11,-W097, -W040, module: true, node: true, expr: true, undef: true *//* global echo, exit, cli, pipe, s, style, fetch, cyclicLoop, xdg, $ */
+/* jshint esversion: 11,-W097, -W040, module: true, node: true, expr: true, undef: true *//* global echo, $, pipe, s, style, fetch, cyclicLoop, xdg, $ */
 import { basename } from "path";
 const app= {
 	name: basename(process.argv[1]),
 	version: "2022-09-28",
-	cmd: cli.xdg.home`.local/bin/himalaya`,
-	configs: cli.xdg.config`himalaya/`,
+	cmd: $.xdg.home`.local/bin/himalaya`,
+	configs: $.xdg.config`himalaya/`,
 	modificator: "§"
 };
 const chars= { "&AOE-": "á", "&AWE-": "š", "&ARs-": "ě" };
@@ -16,19 +16,19 @@ if("help"===argv_arr.toString().replaceAll("-", "")){ //#region
 			`This is small wrapper around 'himalaya' fixing coding errors and provide better 'read'. (Use § for calling himalaya directly)`,
 			"" ].join("\n"));
 	s.run(app.cmd+" --help");
-	exit(0); //#endregion
+	$.exit(0); //#endregion
 }
 if("version"===argv_arr.toString().replaceAll("-", "")){//#region
 	echo(`${app.name} ${app.version}`);
 	s.run(app.cmd+" --version");
-	process.exit(0);//#endregion
+	$.exit(0);//#endregion
 }
 if("completion,bash"===argv_arr.toString()){//#region
 	const completion= s.run(app.cmd+" ::argv_arr::", { argv_arr });
 	echo(completion.toString().replace("himalaya)", `himalaya|${app.name})`));
 	echo(`alias ${app.name}-inbox="§mail § | less -R -S"`);
 	echo(`complete -F _himalaya -o bashdefault -o default ${app.name}`);
-	exit(0);//#endregion
+	$.exit(0);//#endregion
 }
 (async function main(){
 	if(argv_arr.indexOf(app.modificator)!==-1) await runH(argv_arr.filter(l=> l!==app.modificator));
@@ -39,11 +39,11 @@ if("completion,bash"===argv_arr.toString()){//#region
 		await runH(argv_arr);
 	}
 	if(argv_arr.indexOf("read")!==-1){
-		const email= cli.xdg.temp`/himalaya-read.eml`;
+		const email= $.xdg.temp`/himalaya-read.eml`;
 		argv_arr.push("-h", "From", "-h", "Subject");
 		await s.$().runA(app.cmd+" ::argv_arr::", { argv_arr }).pipe(s=> s.to(email));
 		await s.runA`vim ${email}`.pipe(process.stdout);
-		exit(0);
+		$.exit(0);
 	}
 	
 	if(argv_arr[0] && argv_arr[0]!=="--rofi") await runH(argv_arr);
@@ -51,13 +51,16 @@ if("completion,bash"===argv_arr.toString()){//#region
 	const template_path= app.configs+"template-inbox.json";
 	if(!s.test("-f", template_path)) await runH([]);
 
-	await pipe(
+	const out= await pipe(
 		f=> s.cat(f).xargs(JSON.parse),
 		argv_arr.indexOf('--rofi')===-1 ? templateRead : templateRofi,
-		a=> Promise.all(a),
-		p=> p.then(l=> echo(l.join("\n")))
+		a=> Promise.all(a)
 	)(template_path);
-	exit(0);
+	for(const l of out){
+		if(typeof l=="string"&&!l.indexOf("%c===\n")) echo(l, "unset:all", "color:magenta");
+		else echo(l);
+	}
+	$.exit(0);
 })();
 
 function templateRofi(lines){
@@ -74,7 +77,7 @@ function templateRofi(lines){
 function templateRead(lines){
 	argv_arr.push("-w", process.stdout.columns);
 	return lines.map(line=> line.type==="text" ?
-		Promise.resolve(style.reset("===\n")+style.magenta(line.value)) :
+		Promise.resolve("%c===\n%c"+line.value) :
 		s.$().runA(app.cmd+" ::value:: ::argv_arr::", { value: line.value, argv_arr })
 	);
 }
@@ -84,8 +87,8 @@ function argvArr(){
 	return process.argv.slice(2).map(str=> str.replace(new RegExp(`(${Object.keys(_chars).join("|")})`, "g"), l=> _chars[l]));
 }
 async function runH(args){
-	const result= await s.runA(app.cmd+" ::args::", { args });
-	exit(result.exitCode);
+	const result= await s.runA(app.cmd+" ::args::", { args }).pipe(process.stdout);
+	$.exit(result.exitCode);
 }
 // vim: set tabstop=4 shiftwidth=4 textwidth=250 noexpandtab ft=javascript :
 // vim>60: set foldmethod=marker foldmarker=#region,#endregion :

@@ -1,5 +1,4 @@
 """ VIM config file | Jan Andrle | 2022-09-30 (VIM >=8.1)
-let g:coc_disable_startup_warning = 1
 "" #region B – Base
 	scriptencoding utf-8 | set encoding=utf-8
 	let $BASH_ENV = "~/.bashrc"
@@ -34,7 +33,7 @@ let g:coc_disable_startup_warning = 1
 	imap  <c-w>
 	cmap  <c-w>
 	
-	if executable('konsole')
+	if executable('konsole') " https://superuser.com/a/1709353
 		command! -nargs=? ALTterminal if <q-args>=='' | execute 'silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &' | else | execute 'silent !(konsole -e /bin/bash --rcfile <(echo "source ~/.profile;<args>") > /dev/null 2>&1) &' | endif
 	else
 		command! -nargs=? ALTterminal silent !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &
@@ -208,6 +207,8 @@ let g:coc_disable_startup_warning = 1
 "" #region EA – Editing adjustment + White chars + Folds
 	" use <c-v>§ for §
 	inoremap § <esc>
+	set nrformats-=octal
+	command! -nargs=1 SETTOGGLEnrformats if &nf=~<q-args> | set nf-=<args> | else | set nf+=<args> | endif
 
 	let g:markdown_fenced_languages= [ 'javascript', 'js=javascript', 'json', 'html', 'php', 'bash', 'vim', 'vimscript=javascript', 'sass' ]
 	augroup conceal

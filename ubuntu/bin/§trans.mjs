@@ -1,6 +1,6 @@
 #!/usr/bin/env nodejsscript
-/* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true *//* global echo, exit, cli, pipe, s, style, fetch, cyclicLoop */
-cli.api("<lang>")
+/* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true *//* global echo, $, pipe, s, style, fetch, cyclicLoop */
+$.api("<lang>")
 .version("2022-09-23")
 .describe("This is just wrapper around 'trans' cli utility.")
 .option("-b", "Turn off '-b' parametrer for 'trans' which is give by this script.")
@@ -16,6 +16,6 @@ cli.api("<lang>")
 	const result= s.$().run("trans "+query.join(" "));
 	if(!to_clipboard) return echo(result.toString()); 
 	result.runA("xclip -selection clipboard 2> /dev/null 1> /dev/null")
-	.then(exit.bind(null, 0)).catch(exit.bind(null, 1));
+	.then($.exit.bind(null, 0)).catch($.exit.bind(null, 1));
 })
 .parse(process.argv);

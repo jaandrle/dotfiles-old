@@ -152,9 +152,11 @@
 		command! onedrive xfce4-terminal -x bash -c 'echo Microsoft Onedrive Log:; onedrive --synchronize &
 		command! meld meld %"f %"F 2> /dev/null &
 		command! zipAll zip -r "%c:r.zip" ./*
+		command! terminal !(exo-open --launch TerminalEmulator > /dev/null 2>&1) &
+		nmap \t :terminal<cr>
 	endif
 	if !has('win')
-		command! volumes :cd /media/jaandrle/ | :!gigolo 2> /dev/null &
+		command! volumes :cd /media/jaandrle/
 	endif
 
 	command! df df -h %m 2> /dev/null
@@ -289,8 +291,8 @@
 				\*.php,
 				\*.md,*.html,
 				\*.json,*.xml
-				\ env -uCOLORTERM bat --color always --theme 'Visual Studio Dark+' --wrap never --pager never --tabs 2 %c -p &
-	fileviewer <text/x-*>,<application/*> env -uCOLORTERM bat --color always --theme 'Visual Studio Dark+' --wrap never --pager never --tabs 2 %c -p &
+				\ env -uCOLORTERM bat --color always --theme 'Visual Studio Dark+' --wrap never --pager never --tabs 2 %c -p
+	fileviewer <text/x-*>,<application/*> env -uCOLORTERM bat --color always --theme 'Visual Studio Dark+' --wrap never --pager never --tabs 2 %c -p
 " #endregion F
 " #region S – sS keys
 	nnoremap sf :file &

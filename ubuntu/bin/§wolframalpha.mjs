@@ -1,6 +1,6 @@
 #!/usr/bin/env nodejsscript
-/* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true *//* global echo, exit, cli, pipe, s, style, fetch, cyclicLoop */
-cli.api("<...query_array>")
+/* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true *//* global echo, $, pipe, s, style, fetch, cyclicLoop */
+$.api("<...query_array>")
 .version("v2022-09-23")
 .describe([
 	"This is just redirection to [WolframAlpha](https://www.wolframalpha.com/) site.",
@@ -13,6 +13,6 @@ cli.api("<...query_array>")
 	echo("Opening:");
 	echo("https://www.wolframalpha.com/input/?i="+encodeURI(query_array.join(" ")).replace(/\+/g, '%2B'))
 	.xargs(s.runA, "exo-open --launch WebBrowser {}")
-	.then(exit.bind(null, 0)).catch(exit.bind(null, 1));
+	.then($.exit.bind(null, 0)).catch($.exit.bind(null, 1));
 })
 .parse((()=> ( process.argv.splice(2, 0, 'skip'), process.argv ))());

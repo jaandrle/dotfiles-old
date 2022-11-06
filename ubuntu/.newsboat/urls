@@ -34,7 +34,13 @@ https://zdrojak.cz/feed/ ! news/tech
 https://www.omgubuntu.co.uk/feed ! news/tech
 https://servis.idnes.cz/rss.aspx?c=technet ! news/tech
 
+"query:📰👋💻💡:tags # \"news/twitter\""
+https://rss.app/feeds/uJiuwTPQeQWdvYZX.xml news/twitter news/tech dev
+https://rss.app/feeds/Uq6DNnvvIK73xikb.xml news/twitter
+
 "query:⌨🖱:tags # \"dev\""
+" https://www.githubstatus.com/history.rss dev
+https://github.com/mdn.atom ! dev
 https://developer.apple.com/news/rss/news.rss "~Apple Dev News" dev
 https://github.com/LeaVerou.atom ! dev
 https://github.com/staltz.atom ! dev
