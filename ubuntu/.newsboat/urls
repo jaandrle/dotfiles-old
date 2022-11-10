@@ -34,9 +34,9 @@ https://zdrojak.cz/feed/ ! news/tech
 https://www.omgubuntu.co.uk/feed ! news/tech
 https://servis.idnes.cz/rss.aspx?c=technet ! news/tech
 
-"query:📰👋💻💡:tags # \"news/twitter\""
-https://rss.app/feeds/uJiuwTPQeQWdvYZX.xml news/twitter news/tech dev
-https://rss.app/feeds/Uq6DNnvvIK73xikb.xml news/twitter
+https://news.ycombinator.com/rss "~📰👋💻💡 – Hackernews"
+https://rss.app/feeds/uJiuwTPQeQWdvYZX.xml "~📰👋💻💡 – Twitter/α"
+https://rss.app/feeds/Uq6DNnvvIK73xikb.xml  "~📰👋💻💡 – Twitter/mixed"
 
 "query:⌨🖱:tags # \"dev\""
 " https://www.githubstatus.com/history.rss dev

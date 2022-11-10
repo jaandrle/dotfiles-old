@@ -261,6 +261,10 @@
 	nnoremap <s-k> a<cr><esc>
 	for l in [ 'y', 'p', 'P', 'd' ] | for m in [ 'n', 'v' ]
 		execute m.'noremap <leader>'.l.' "+'.l | endfor | endfor
+	" ik ak (last change pseudo-text objects) – src: https://www.reddit.com/r/vim/comments/ypt6uf/comment/ivl68xu/?utm_source=share&utm_medium=web2x&context=3
+	xnoremap ik `]o`[
+	onoremap ik :<C-u>normal vik<cr>
+	onoremap ak :<C-u>normal vikV<cr>
 	" FOLDS
 	command! -nargs=0 SETFOLDregions set foldmethod=marker
 	command! -nargs=1 SETFOLDindent set foldmethod=indent | let &foldlevel=<q-args> | let &foldnestmax=<q-args>+1
