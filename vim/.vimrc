@@ -255,7 +255,6 @@
 		hi clear SpellBad | hi SpellBad cterm=underline,italic | endif
 	command! -nargs=? SETspell if <q-args>==&spelllang || <q-args>=='' | set spell! | else | set spell | set spelllang=<args> | endif | if &spell | set spelllang | endif
 	" EDIT HEPERS
-	let g:wordmotion_prefix= '<space>'
 	nnoremap <leader>o o<space><bs><esc>
 	nnoremap <leader>O O<space><bs><esc>
 	nnoremap <s-k> a<cr><esc>

@@ -27,6 +27,7 @@ let g:user_tips_list= [
 	\ '<c-]> (`ž`) <c-t>',
 	\ 'Macro defs. → ]D [D ]<c-D> [<c-D> … :dlist string … :djump string',
 	\ ':update | edit ++ff=dos | setlocal ff=unix',
+	\ 'Shift-V and then type gq → put "overflowed" text on new lines',
 	\ ':set scrollbind (`scb`) … :diffthis :diffoff :diff*<tab>',
 	\ ":let i=10 | 'a,'bg/Abc/s/yy/\=i/ |let i=i+1 # convert yy to 10,11,12 etc",
 	\ 'use \zs \ze \c inside `?`|`/`',
