@@ -110,6 +110,8 @@ alias npx-qnm='npx -y qnm'
 alias npx-hint='npx -y hint'
 alias zfz=fzf-carroarmato0.fzf
 
+§url-curl(){ curl --silent -I "$1" | grep -i location; }
+
 alias bathelp='bat --plain --language=help'
 help() {
 	"$@" --help 2>&1 | bathelp

@@ -86,7 +86,9 @@ bindurl ^https://mail.centrum.cz/* sN composite js tri.controller.acceptExCmd(`c
 alias hint_focus hint -;
 quickmark c moz-extension://616498c0-3916-4f0b-b0a9-ce01ecf2298d/popup.html
 
-bindurl ^https://fosstodon.org/* \fc composite hint_focus .scrollable ; js (onclick=document.createEvent("Events"), onclick.initEvent("click", true, false), Array.from(document.activeElement.getElementsByClassName("status__content__spoiler-link")).forEach(el=> el.dispatchEvent(onclick)))
+command mastodonUncoverAll composite hint_focus .scrollable ; js (onclick=document.createEvent("Events"), onclick.initEvent("click", true, false), Array.from(document.activeElement.getElementsByClassName("status__content__spoiler-link")).forEach(el=> el.dispatchEvent(onclick)))
+command mastodonRedirectHome js const parts = location.pathname.split('/'); if(parts.length===2) location.href= `https://fosstodon.org/${parts[1]}@${location.host}`; else location.href= `https://fosstodon.org/authorize_interaction?uri=${location.href}`;
+bind sm fillcmdline_notrail mastodon
 
 command data_delall composite hint_focus * ; js document.activeElement.querySelectorAll("input").forEach(el=> el.checked=false)
 
