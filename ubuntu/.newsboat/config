@@ -25,7 +25,7 @@ highlight articlelist "/date .\{4\}-.\{2\}-.\{2\} .\{2\}:.\{2\}" color43 default
 highlight articlelist "/size \[^ \]*" color64 default
 highlight articlelist "/feed .*$" color151 default
 highlight-article "age > 1 and unread == \"no\"" color245 default
-feedlist-format ":%-4i %-5U %?T?↪  &?%t"
+feedlist-format ":%-4i %-5U %?T?↓  &?%t"
 articlelist-format ":%-4i %f %?T?%-3T|?%t /date %D /size %-4L %?T?/feed %T?%"
 
 text-width 90

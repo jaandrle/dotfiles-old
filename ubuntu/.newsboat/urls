@@ -1,4 +1,3 @@
-"query:📹:tags # \"video\""
 https://www.youtube.com/feeds/videos.xml?channel_id=UCMiyV_Ib77XLpzHPQH_q0qQ video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCACJQqtYw6sASWAHXWkBWpw ! video
@@ -10,13 +9,13 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA !
 "exec:~/.newsboat/newsboat-html.sh 'Šťastné pondělí' 'https://www.stream.cz/stastne-pondeli' ~/.newsboat/newsboat-html-streamCZ.config" !
 "query:Šťastné pondělí:title =~ \"Šťastné pondělí\" and feedtitle == \"Šťastné pondělí\"" video
 https://www.mall.tv/rssfeed/mikyrova-uzasna-pout-internetem ! video
+"query:📹:tags # \"video\""
 
-"query:📰👋:tags # \"news\""
 https://www.irozhlas.cz/rss/irozhlas ! news
 https://denikn.cz/feed?ref=inc ! news
 https://www.investigace.cz/feed/ ! news
+"query:📰👋:tags # \"news\""
 
-"query:📰🔬:tags # \"news/science\""
 https://denikn.cz/veda/feed?ref=inc ! news/science
 "query:Petr Koubský:author = \"Petr Koubský\"" news/science
 https://vedator.org/feed/ ! news/science
@@ -24,8 +23,8 @@ http://feeds.feedburner.com/Backreaction ! news/science
 https://www.osel.cz/rss/rss.php ! news/science
 https://news.mit.edu/rss/feed ! news/science
 https://news.mit.edu/rss/research ! news/science
+"query:📰🔬:tags # \"news/science\""
 
-"query:📰💻💡:tags # \"news/tech\""
 https://www.lupa.cz/rss/clanky/ ! news/tech
 https://www.root.cz/rss/zpravicky/ ! news/tech
 https://www.root.cz/rss/clanky/ ! news/tech
@@ -34,10 +33,10 @@ https://zdrojak.cz/feed/ ! news/tech
 https://www.vzhurudolu.cz/rss ! news/tech
 https://www.omgubuntu.co.uk/feed ! news/tech
 https://servis.idnes.cz/rss.aspx?c=technet ! news/tech
+"query:📰💻💡:tags # \"news/tech\""
 
 https://news.ycombinator.com/rss "~📰👋💻💡 – Hackernews"
 
-"query:📰👋💻💡 – Twitter/α:tags # \"twitter/α\""
 https://nitter.cz/DefensiveCSS/rss ! twitter/α
 https://nitter.cz/nologcz/rss ! twitter/α
 https://nitter.cz/FrontendGarden/rss ! twitter/α
@@ -48,33 +47,39 @@ https://nitter.cz/samantha_ming/rss ! twitter/α
 https://nitter.cz/javascripting/rss ! twitter/α
 https://nitter.cz/jordwalke/rss ! twitter/α
 https://nitter.cz/ell2cz/rss ! twitter/α
-https://nitter.cz/apachecordova/rss ! twitter/α
+https://nitter.cz/fieldsofmoab/rss ! twitter/α
 https://nitter.cz/cztomsik/rss ! twitter/α
 https://nitter.cz/heydonworks/rss ! twitter/α
 https://nitter.cz/sw_samuraj/rss ! twitter/α
 https://nitter.cz/shadeed9/rss ! twitter/α
 https://nitter.cz/AndroidDev/rss ! twitter/α
 https://nitter.cz/EduardStula/rss ! twitter/α
-https://nitter.cz/MozillaCZ/rss ! twitter/α
+https://nitter.cz/ubuntu_unity/rss ! twitter/α
+https://nitter.cz/KdeNeon/rss ! twitter/α
 https://nitter.cz/rauschma/rss ! twitter/α
 https://nitter.cz/erikengheim/rss ! twitter/α
 https://nitter.cz/LeaVerou/rss ! twitter/α
+https://nitter.cz/jpschroeder/rss ! twitter/α
 https://nitter.cz/vzhurudolu/rss ! twitter/α
 https://nitter.cz/devgirlFL/rss ! twitter/α
 https://nitter.cz/maxiorel/rss ! twitter/α
 https://nitter.cz/firt/rss ! twitter/α
-# https://nitter.cz/zdrojak/rss ! twitter/α
+https://nitter.cz/princi_ya/rss ! twitter/α
 https://nitter.cz/davidwalshblog/rss ! twitter/α
 https://nitter.cz/jakubvrana/rss ! twitter/α
 https://nitter.cz/Jahoda/rss ! twitter/α
 https://nitter.cz/TerribleMia/rss ! twitter/α
 https://nitter.cz/jensimmons/rss ! twitter/α
 https://nitter.cz/LauraViglioni/rss ! twitter/α
+# JanKoWeb geekovo zdrojak
+"query:📰👋💻💡 – Twitter/α:tags # \"twitter/α\""
 
-"query:📰👋💻💡 – Twitter/α:tags # \"twitter/mixed\""
 https://nitter.cz/Zeptej_se_vedce/rss ! twitter/mixed
 https://nitter.cz/Olinium42/rss ! twitter/mixed
 https://nitter.cz/narodnitymzen/rss ! twitter/mixed
+https://nitter.cz/Julianne_SF/rss ! twitter/α
+https://nitter.cz/_Case/rss ! twitter/α
+https://nitter.cz/olgarichterova/rss ! twitter/mixed
 https://nitter.cz/eicul/rss ! twitter/mixed
 https://nitter.cz/CO2IN/rss ! twitter/mixed
 https://nitter.cz/Iluminator_cz/rss ! twitter/mixed
@@ -101,6 +106,7 @@ https://nitter.cz/MarieHermanova/rss ! twitter/mixed
 https://nitter.cz/NKC_CZ/rss ! twitter/mixed
 https://nitter.cz/EP_ThinkTank/rss ! twitter/mixed
 https://nitter.cz/lkristoufek/rss ! twitter/mixed
+https://nitter.cz/OSAliance/rss ! twitter/mixed
 https://nitter.cz/Madla_G/rss ! twitter/mixed
 https://nitter.cz/Chmee2/rss ! twitter/mixed
 https://nitter.cz/matfyz/rss ! twitter/mixed
@@ -117,9 +123,9 @@ https://nitter.cz/Vedator5/rss ! twitter/mixed
 https://nitter.cz/marenamat/rss ! twitter/mixed
 https://nitter.cz/traintravels42/rss ! twitter/mixed
 https://nitter.cz/JulieMontek/rss ! twitter/mixed
+# PulseofEuropeCZ NEOVLIVNICZ KohoVolitEU
+"query:📰👋💻💡 – Twitter/α:tags # \"twitter/mixed\""
 
-"query:⌨🖱:tags # \"dev/servises\""
-# https://www.githubstatus.com/history.rss ! dev/servises
 https://nitter.cz/githubstatus/rss ! dev/servises
 https://nitter.cz/GitHubSecurity/rss ! dev/servises
 https://developer.apple.com/news/rss/news.rss "~Apple Dev News" dev/servises
@@ -127,22 +133,27 @@ https://nitter.cz/JetBrains_Fleet/rss ! dev/servises
 https://nitter.cz/NativeScript/rss ! dev/servises
 https://nitter.cz/sveltejs/rss ! dev/servises
 https://nitter.cz/github/rss ! dev/servises
+https://nitter.cz/firefox/rss ! dev/servises
+https://nitter.cz/apachecordova/rss ! twitter/α
+https://nitter.cz/MozillaCZ/rss ! twitter/α
+https://nitter.cz/janovsky/rss ! twitter/α
+# https://www.githubstatus.com/history.rss ! dev/servises
+"query:⌨🖱:tags # \"dev/servises\""
 
-"query:⌨🖱:tags # \"dev/github\""
 https://github.com/mdn.atom ! dev
 https://github.com/LeaVerou.atom ! dev/github
 https://github.com/staltz.atom ! dev/github
 https://github.com/jensimmons.atom ! dev/github
 https://github.com/mirisuzanne.atom ! dev/github
 # https://www.smashingmagazine.com/feed/
+"query:⌨🖱:tags # \"dev/github\""
 
-"query:🤔:tags # \"desinfo\""
 https://www.informacnigramotnost.cz/feed/ ! desinfo
 https://demagog.cz/rss/index.atom ! desinfo
 https://www.fakticke.info/feed/ ! desinfo
 https://manipulatori.cz/feed/ ! desinfo
+"query:🤔:tags # \"desinfo\""
 
-"query:🤓:tags # \"blogs\""
 https://n3wjack.net/feed/ ! blogs
 https://boundedlyrational.substack.com/feed ! blogs
 https://blog.eischmann.cz/feed/ ! blogs
@@ -151,14 +162,15 @@ https://blog.zvestov.cz/feed.xml ! blogs
 https://www.pirati.cz/feed.xml ! blogs
 https://www.kdu.cz/system/rss ! blogs
 https://80000hours.org/feed/ ! glogs
+http://tapolitika.cz/feed/ ! glogs
+"query:🤓:tags # \"blogs\""
 
-"query:🗞 💰📱:tags # \"news/info\""
 https://mobilmania.zive.cz/rss/sc-47/default.aspx ! news/info
 https://feeds.feedburner.com/penize?format=xml ! news/info
 https://www.mesec.cz/rss/clanky/ ! news/info
 https://www.mesec.cz/rss/aktuality/ ! news/info
+"query:🗞 💰📱:tags # \"news/info\""
 
-"query:🗞 🌐⏩:tags # \"news/rest\""
 http://feeds.bbci.co.uk/news/world/rss.xml ! news/rest
 https://feeds.a.dj.com/rss/RSSWorldNews.xml ! news/rest
 https://feeds.a.dj.com/rss/RSSWSJD.xml ! news/rest
@@ -167,6 +179,7 @@ https://ekonom.cz/?m=rss ! news/rest
 https://vikend.hn.cz/?m=rss ! news/rest
 https://procne.hn.cz/?m=rss ! news/rest
 http://casopisargument.cz/?feed=rss2 ! news/rest
+"query:🗞 🌐⏩:tags # \"news/rest\""
 
-"query:🗞 💤:tags # \"rest\""
 https://www.seznamzpravy.cz/rss ! rest
+"query:🗞 💤:tags # \"rest\""

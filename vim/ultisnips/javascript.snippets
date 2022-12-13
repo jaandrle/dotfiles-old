@@ -34,6 +34,9 @@ snippet stor "localStorage"
 ${1}localStorage.${2:g}etItem("${0}");
 endsnippet
 
+snippet import "import with backward order"
+import ${2:values} from '${1:specifier}';$0
+endsnippet
 snippet promise "return? new Promise"
 ${1:return }new Promise(function(resolve, reject){
     ${0:/* async code */}
@@ -45,7 +48,7 @@ for(${1:let} ${2:i}= 0, ${2}_length= ${3:ITERABLE}.length; ${2}<${2}_length; ${2
 }
 endsnippet
 snippet foreach "PHP-like name" b
-for(${1:const} ${2:element} of ${3:iterable}){
+for(${2:const} ${3:element} of ${1:iterable}){
     ${0:/* statement */}
 }
 endsnippet
