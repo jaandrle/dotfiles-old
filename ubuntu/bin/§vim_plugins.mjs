@@ -1,16 +1,18 @@
 #!/usr/bin/env nodejsscript
 /* jshint esversion: 11,-W097, -W040, module: true, node: true, expr: true, undef: true *//* global echo, $, pipe, s, fetch, cyclicLoop */
+//TODO: save options!?
 const dirs= { vim_root: $.xdg.home`.vim` };
 Object.assign(dirs, {
 	pack: dirs.vim_root+"/pack/",
 	bundle: dirs.vim_root+"/bundle/",
 	one_files: dirs.vim_root+"/bundle/__one_files/plugin/" });
-const file_one_file= dirs.bundle+".one_file";
+const file_one_file= dirs.bundle+"one_file.json";
 const runResToArr= pipe( s.$().run, ({ stderr, stdout })=> stdout+stderr, o=> o.split("\n"));
 const css= echo.css`
 	.code{ color: yellow; }
 	.code::before, .code::after{ content: "\`"; }
 	.url{ color: lightblue; }
+	.bold{ color: magenta; }
 `;
 
 $.api()
@@ -28,12 +30,13 @@ $.api()
 	.alias("a")
 	.alias("install")
 	.option("--target, -t [target]", `In case of ${f("pack", css.code)} type, specify the target sub-directory (typically/defaults ${f("start", css.code)}).`)
-	.action(function(type, url, { target }){
+	.option("--branch, -b [branch]", `In case of ${f("git", css.bold)} repository, specify the branch if it is different from default one.`)
+	.action(function(type, url, options){
 		switch(type){
 			case "bundle": return addBundle(url);
-			case "pack": return addPack(url, target);
+			case "pack": return addPack(url, options);
 		}
-		echo("Nothing todo, check given arguments (compare to `--help`):", { type, url });
+		echo("Nothing todo, check given arguments (compare to `--help`):", { type, options });
 		$.exit(1);
 	})
 .command("list", "List all plugins paths/url/… (based on option).")
@@ -51,13 +54,37 @@ $.api()
 	.action(actionUpdate)
 .parse();
 
-function addBundle(url){
+async function addBundle(url){
 	const is_onefile= url.endsWith(".vim");
 	if(!is_onefile)
 		url= gitUrl(url);
+	const name= url.slice(url.lastIndexOf("/")+1, url.lastIndexOf("."));
+	s.cd(dirs.bundle);
+	if(is_onefile){
+		const file= await fetch(url).then(r=> r.text());
+		s.echo(file).to(dirs.one_files+name+".vim");
+		const log= new Set(s.cat(file_one_file).xargs(JSON.parse));
+		log.add(url);
+		s.echo(JSON.stringify([ ...log ])).to(file_one_file);
+	} else {
+		s.run`git submodule init`;
+		s.run`git submodule add ${url}`;
+	}
+	s.run`git add .`;
+	const type= is_onefile ? "file" : "repo";
+	s.run`git commit -m "Added ${type}: ${name}"`;
+	$.exit(0);
 }
-function addPack(url, target= "start"){
+/** @param {string} url @param {{ target: "start", branch?: string }} options */
+function addPack(url, { target= "start", branch }){
 	url= gitUrl(url);
+	const author= url.split(/[:\/]/).at(-2);
+	const path= dirs.pack+author+"/"+target;
+	s.mkdir("-p", path);
+	s.cd(path);
+	branch= !branch ? "" : `-b ${branch}`;
+	s.run`git clone ${branch} --single-branch ${url} --depth 1`;
+	$.exit(0);
 }
 function gitUrl(url_candidate){
 	if(url_candidate.endsWith(".git"))
@@ -130,7 +157,7 @@ function actionList({ type= "paths" }){
 		echo(dirs.pack);
 		urls_pack.forEach(echoUrl);
 	}
-	if("json"===type){
+	if("json"===type){ //TODO: save options!?
 		const o= {};
 		o.bundle= urls_bundle;
 		o.one_files= urls_onefiles;
@@ -195,7 +222,7 @@ function echoProgress(length, message_start= "Working"){
 function getPack(){ return s.ls(dirs.pack).flatMap(f=> s.find(dirs.pack+f+"/start/*/")[0]); }
 function getBundle(){ return s.cd(dirs.bundle).grep("path", ".gitmodules").split("\n").filter(Boolean).map(l=> dirs.bundle+l.split(" = ")[1]); }
 function getOneFiles(){ return s.find(dirs.one_files+"*"); }
-function getOneFilesUrls(){ return s.cat(file_one_file).split("\n").filter(Boolean); }
+function getOneFilesUrls(){ return s.cat(file_one_file).xargs(JSON.parse); }
 
 function fileName(url){ return url.split("/").pop(); }
 /** Quick formating of one piece of text. */
