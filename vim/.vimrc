@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2022-09-30 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2022-12-20 (VIM >=8.1)
 "" #region B – Base
 	scriptencoding utf-8 | set encoding=utf-8
 	let $BASH_ENV = "~/.bashrc"
@@ -112,6 +112,8 @@
 "" #region SLH – Status Line + Command Line + History (general) + Sessions + File Update, …
 	set showcmd cmdheight=2 showmode
 	set wildmenu wildmode=list:longest,list:full									" Tab autocomplete in command mode
+
+	cabbrev wbw w<bar>bw
 	
 	set sessionoptions-=options
 	command! -nargs=1
@@ -210,6 +212,7 @@
 	set nrformats-=octal
 	command! -nargs=1 SETTOGGLEnrformats if &nf=~<q-args> | set nf-=<args> | else | set nf+=<args> | endif
 
+	let g:htl_css_templates=1
 	let g:markdown_fenced_languages= [ 'javascript', 'js=javascript', 'json', 'html', 'php', 'bash', 'vim', 'vimscript=javascript', 'sass' ]
 	augroup conceal
 		autocmd!
@@ -334,7 +337,10 @@
 	autocmd FileType scss setl iskeyword+=@-@
 	command -nargs=? ALTmake if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
 						  \| if <q-args>!='' | silent make <args> | else | silent make '%' | endif | checktime | silent redraw!		   " …prev line, hotfix (filetype detection does’t works)
-	autocmd BufWritePost *.{php,js,mjs} execute 'ALTmake' | call <sid>QuickFixCmdPost()
+	augroup ALTmake_auto
+		autocmd!
+		autocmd BufWritePost *.{php,js,mjs} execute 'ALTmake' | call <sid>QuickFixCmdPost()
+	augroup END
 	function! CustomKeyWord(word)
 		if(a:word=="gulp_place")
 			highlight link gulp_place ErrorMsg
@@ -370,10 +376,8 @@
 	vnoremap <silent> gh :<c-u>call <sid>show_documentation(mini_enhancement#selectedText())<cr>
 	nnoremap <leader>gf :let g:ctrlp_default_input=expand("<cword>") <bar> execute 'CtrlP' <bar> unlet g:ctrlp_default_input <cr>
 	vnoremap <leader>gf :<c-u>let g:ctrlp_default_input=mini_enhancement#selectedText() <bar> execute 'CtrlP' <bar> unlet g:ctrlp_default_input <cr>
-	autocmd CursorHold * silent call CocActionAsync('highlight')
-	""" #region COCP – Coc popups scroll (not working for me now, newer version if Vim)
-														" Highlight the symbol and its references when holding the cursor.
-	if has('nvim-0.4.0') || has('patch-8.2.0750')					" Remap <C-f> and <C-b> for scroll float windows/popups.
+	""" #region COCP – Coc popups scroll (Remap <C-f> and <C-b> for scroll float windows/popups.)
+	if has('nvim-0.4.0') || has('patch-8.2.0750')
 		nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 		nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 		inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"

@@ -6,6 +6,7 @@
 [user]
 	name = Jan Andrle
 	email = andrle.jan@centrum.cz
+	signingkey = B3A25AED155AFFAB
 [credential]
 	# see https://stackoverflow.com/questions/5343068/is-there-a-way-to-cache-https-credentials-for-pushing-commits/18362082#18362082
 	helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
@@ -57,3 +58,5 @@
 	autoSetupRemote = true
 [init]
 	defaultBranch = main
+[commit]
+	gpgsign = true

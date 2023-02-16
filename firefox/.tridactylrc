@@ -37,6 +37,13 @@ bind gi hint -Jc input,textarea,[contenteditable="true"]
 unbindurl ^https://www.youtube.com/* >>
 unbindurl ^https://www.youtube.com/* <<
 
+bindurl ^https://www.o2tv.cz/* p js const v= document.querySelector("video"); v.paused ? v.play() : v.pause();
+bindurl ^https://www.o2tv.cz/* -- js document.querySelector("video").currentTime-= 15
+bindurl ^https://www.o2tv.cz/* ++ js document.querySelector("video").currentTime+= 15
+bindurl ^https://www.o2tv.cz/* \++ fillcmdline_notrail js document.querySelector("video").currentTime+= 15*30
+bindurl ^https://www.o2tv.cz/* == js document.querySelector("video").playbackRate= 1
+bindurl ^https://www.o2tv.cz/* ** js document.querySelector("video").playbackRate+= 0.25
+bindurl ^https://www.o2tv.cz/* // js document.querySelector("video").playbackRate-= 0.25
 bindurl ^https://play.hbomax.com/* -- js document.querySelector("video").currentTime-= 15
 bindurl ^https://play.hbomax.com/* ++ js document.querySelector("video").currentTime+= 15
 bindurl ^https://play.hbomax.com/* // js document.querySelector("video").playbackRate-= 0.25

@@ -1,6 +1,7 @@
 https://www.youtube.com/feeds/videos.xml?channel_id=UCMiyV_Ib77XLpzHPQH_q0qQ video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCACJQqtYw6sASWAHXWkBWpw ! video
+https://www.youtube.com/feeds/videos.xml?channel_id=UCPeHT7xKjaw_-8hHW0GEXLg ! video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCD9L1HvpYpmZ8rrXABARCRQ ! video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCONH73CdRXUjlh3-DdLGCPw ! video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA !
@@ -23,6 +24,7 @@ http://feeds.feedburner.com/Backreaction ! news/science
 https://www.osel.cz/rss/rss.php ! news/science
 https://news.mit.edu/rss/feed ! news/science
 https://news.mit.edu/rss/research ! news/science
+https://nitter.cz/PatrikKorenar/rss ! news/science
 "query:📰🔬:tags # \"news/science\""
 
 https://www.lupa.cz/rss/clanky/ ! news/tech
@@ -61,6 +63,7 @@ https://nitter.cz/erikengheim/rss ! twitter/α
 https://nitter.cz/LeaVerou/rss ! twitter/α
 https://nitter.cz/jpschroeder/rss ! twitter/α
 https://nitter.cz/vzhurudolu/rss ! twitter/α
+https://nitter.cz/machal/rss ! twitter/α
 https://nitter.cz/devgirlFL/rss ! twitter/α
 https://nitter.cz/maxiorel/rss ! twitter/α
 https://nitter.cz/firt/rss ! twitter/α
@@ -124,7 +127,7 @@ https://nitter.cz/marenamat/rss ! twitter/mixed
 https://nitter.cz/traintravels42/rss ! twitter/mixed
 https://nitter.cz/JulieMontek/rss ! twitter/mixed
 # PulseofEuropeCZ NEOVLIVNICZ KohoVolitEU
-"query:📰👋💻💡 – Twitter/α:tags # \"twitter/mixed\""
+"query:📰👋💻💡 – Twitter/mixed:tags # \"twitter/mixed\""
 
 https://nitter.cz/githubstatus/rss ! dev/servises
 https://nitter.cz/GitHubSecurity/rss ! dev/servises
@@ -169,16 +172,18 @@ https://mobilmania.zive.cz/rss/sc-47/default.aspx ! news/info
 https://feeds.feedburner.com/penize?format=xml ! news/info
 https://www.mesec.cz/rss/clanky/ ! news/info
 https://www.mesec.cz/rss/aktuality/ ! news/info
+https://www.edna.cz/doctor-who/rss/ ! news/info
 "query:🗞 💰📱:tags # \"news/info\""
 
 http://feeds.bbci.co.uk/news/world/rss.xml ! news/rest
-https://feeds.a.dj.com/rss/RSSWorldNews.xml ! news/rest
-https://feeds.a.dj.com/rss/RSSWSJD.xml ! news/rest
+https://feeds.a.dj.com/rss/RSSWorldNews.xml ! news/rest news/rest-wsj
+https://feeds.a.dj.com/rss/RSSWSJD.xml ! news/rest news/rest-wsj
 https://domaci.hn.cz/?m=rss ! news/rest
 https://ekonom.cz/?m=rss ! news/rest
 https://vikend.hn.cz/?m=rss ! news/rest
 https://procne.hn.cz/?m=rss ! news/rest
 http://casopisargument.cz/?feed=rss2 ! news/rest
+"query:↓ The Wall Street Journal:tags # \"news/rest-wsj\""
 "query:🗞 🌐⏩:tags # \"news/rest\""
 
 https://www.seznamzpravy.cz/rss ! rest

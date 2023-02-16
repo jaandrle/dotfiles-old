@@ -1,5 +1,6 @@
 {
-	"coc.preferences.rootPatterns": [ ".git", ".vscode" ],
+	"workspace.rootPatterns": [ ".git", ".vscode" ],
+	"coc.preferences.formatOnType": false,
 	"diagnostic.separateRelatedInformationAsDiagnostics": true,
 	"diagnostic.errorSign": "┅",
 	"diagnostic.warningSign": "┉",
@@ -10,5 +11,4 @@
 	"html.filetypes": [ "html", "handlebars", "htmldjango", "blade", "liquid" ],
 	"html.autoClosingTags": false,
 	"html.autoCreateQuotes": false,
-	"coc.preferences.formatOnType": false
 }

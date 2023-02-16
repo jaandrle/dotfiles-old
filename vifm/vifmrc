@@ -46,6 +46,7 @@
 	cmap  <c-b>
 	cmap  <c-f>
 	nmap ; :
+	nmap š <tab>
 	nnoremap <c-h> :history<cr>
 	nnoremap \= :filter !{}<left><left>
 	" Open console in current directory

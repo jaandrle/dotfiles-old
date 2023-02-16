@@ -80,4 +80,5 @@ set keymap vi-command
 "di:": "lF:lmtf:d`t"
 "ci:": "di:i"
 "ca:": "da:i"
+# esc+* = https://superuser.com/a/216169
 $endif
