@@ -18,17 +18,22 @@ const css= echo.css`
 $.api()
 .version("2023-02-14")
 .describe([
-	"Utility for managing vim plugins native way. It uses two types:",
+	"Utility for managing vim plugins “native” way. It uses two types:",
 	`- “old” way (${f("bundle", css.code)}): inspiration from ${f("https://shapeshed.com/vim-packages/", css.url)}`,
 	`- vim8 native package managing (${f("pack", css.code)}): see for example ${f("https://shapeshed.com/vim-packages/", css.url)}`
 ])
-.command("add <type> <url>", [
-	"Add new package.",
+.command("path <type>", [ "Prints paths for given package type",
+	"Use (‘S’ is alias for this script name):",
+	"- "+f("cd `S path bundle`", css.code),
+	"- "+f("cd `S path one_files`", css.code),
+	"- "+f("cd `S path pack`", css.code)
+])
+	.action(function(type){ echo(dirs[type]); $.exit(0); })
+.command("clone <type> <url>").describe([ "Add/install new package.",
 	`Use ${f("bundle", css.code )}/${f("pack", css.code)} to specify the package ${f("type", css.code)}.`,
 	`The ${f("url", css.url)} should be a URL to the script itself or url of the git repository or github repository in the form of ${f("username/reponame", css.url)}.`
 ])
-	.alias("a")
-	.alias("install")
+	.alias("C")
 	.option("--target, -t [target]", `In case of ${f("pack", css.code)} type, specify the target sub-directory (typically/defaults ${f("start", css.code)}).`)
 	.option("--branch, -b [branch]", `In case of ${f("git", css.bold)} repository, specify the branch if it is different from default one.`)
 	.action(function(type, url, options){
@@ -36,29 +41,66 @@ $.api()
 			case "bundle": return addBundle(url);
 			case "pack": return addPack(url, options);
 		}
-		echo("Nothing todo, check given arguments (compare to `--help`):", { type, options });
+		echo("Nothing todo, check given arguments (compare to `--help`):", { type, url, options });
+		$.exit(1);
+	})
+.command("remove <type> <path>", [ "Remove/uninstall package.",
+	`As ${f("type", css.bold)}/${f("path", css.bold)} use output printed by ${f("list", css.code)} command.`
+])
+	.alias("R").alias("rm")
+	.action(function(type, path){
+		switch(type){
+			case "bundle": return removeBundle(path);
+			case "pack": return removePack(path);
+		}
+		echo("Nothing todo, check given arguments (compare to `--help`):", { type, path });
 		$.exit(1);
 	})
 .command("list", "List all plugins paths/url/… (based on option).")
-	.alias("ls")
+	.alias("L").alias("ls")
 	.option("--type, -t [type]", `Defaults to list of paths (${f("paths", css.code)}). Use ${f("repos", css.code)} to show plugins origin.`)
 	.example("list")
 	.example("list --type paths")
 	.example("list --type repos")
 	.action(actionList)
 .command("export", "List all plugins in the form that can be imported by this Utility.")
-	.action(actionList.bind(null, { format: "json" }))
+	.action(actionList.bind(null, { type: "json" }))
 .command("status", "Loops through all installed plugins and shows overall status.")
+	.alias("S")
 	.action(actionStatus)
-.command("update", "Loops through all installed plugins and updates them.")
+.command("pull", "Loops through all installed plugins and updates them.")
+	.alias("P").alias("update")
 	.action(actionUpdate)
 .parse();
 
+import { join as pathJoin } from 'node:path';
+function removePack(path){
+	s.cd(dirs.pack);
+	s.rm("-rf", path);
+	$.exit(0);
+}
+function removeBundle(path){
+	const is_onefile= dirs.one_files.endsWith(path.split("/").slice(0, 2).join("/")+"/");
+	const name= path.slice(path.lastIndexOf("/")+1);
+	s.cd(dirs.bundle);
+	if(is_onefile){
+		s.rm("-f", path);
+		pipe( s.cat, JSON.parse, f=> f.filter(u=> !u.endsWith(name)), JSON.stringify, s.echo )
+			(file_one_file).to(file_one_file);
+	} else {
+        s.run`git submodule deinit -f ${path}`;
+        s.run`git rm ${path}`;
+		s.rm("-rf", ".git/modules/"+path);
+	}
+	const type= is_onefile ? "file" : "repo";
+	s.run`git commit --all -m "Remove ${type}: ${name}"`;
+	$.exit(0);
+}
 async function addBundle(url){
 	const is_onefile= url.endsWith(".vim");
 	if(!is_onefile)
 		url= gitUrl(url);
-	const name= url.slice(url.lastIndexOf("/")+1, url.lastIndexOf("."));
+	const name= url.split(/[\/\.]/g).at(is_onefile ? -2 : -1);
 	s.cd(dirs.bundle);
 	if(is_onefile){
 		const file= await fetch(url).then(r=> r.text());
@@ -132,11 +174,11 @@ async function actionUpdate(){
 }
 function actionList({ type= "paths" }){
 	if("paths"===type){
-		echo(dirs.bundle);
+		echo("%cbundle", css.bold, dirs.bundle);
 		getOneFiles().forEach(echoPath);
 		getBundle().forEach(echoPath);
 		
-		echo(dirs.pack);
+		echo("%cpack", css.bold, dirs.pack);
 		getPack().forEach(echoPath);
 		$.exit(0);
 	}
@@ -150,11 +192,11 @@ function actionList({ type= "paths" }){
 	
 	if("repos"===type){
 		const echoUrl= u=> echo(f(u, css.url));
-		echo(dirs.bundle);
+		echo("%cbundle", css.bold, dirs.bundle);
 		urls_bundle.forEach(echoUrl);
-		echo(dirs.bundle+".one_file");
+		echo("%cbundle", css.bold, dirs.one_files);
 		urls_onefiles.forEach(echoUrl);
-		echo(dirs.pack);
+		echo("%cpack", css.bold, dirs.pack);
 		urls_pack.forEach(echoUrl);
 	}
 	if("json"===type){ //TODO: save options!?
@@ -219,7 +261,7 @@ function echoProgress(length, message_start= "Working"){
 	};
 }
 
-function getPack(){ return s.ls(dirs.pack).flatMap(f=> s.find(dirs.pack+f+"/start/*/")[0]); }
+function getPack(){ return s.ls(dirs.pack).flatMap(f=> s.find(dirs.pack+f+"/start/*/")[0]).filter(Boolean); }
 function getBundle(){ return s.cd(dirs.bundle).grep("path", ".gitmodules").split("\n").filter(Boolean).map(l=> dirs.bundle+l.split(" = ")[1]); }
 function getOneFiles(){ return s.find(dirs.one_files+"*"); }
 function getOneFilesUrls(){ return s.cat(file_one_file).xargs(JSON.parse); }
