@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2022-12-20 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2023-02-20 (VIM >=8.1)
 "" #region B – Base
 	scriptencoding utf-8 | set encoding=utf-8
 	let $BASH_ENV = "~/.bashrc"
@@ -206,7 +206,7 @@
 	let g:markbar_persist_mark_names = v:false
 	nmap <Leader>m <Plug>ToggleMarkbar
 "" #endregion EN
-"" #region EA – Editing adjustment + White chars + Folds
+"" #region EA – Editing adjustment + Syntax + White chars + Folds
 	" use <c-v>§ for §
 	inoremap § <esc>
 	set nrformats-=octal
@@ -253,6 +253,7 @@
 		autocmd!
 		autocmd Syntax * syn sync minlines=2000
 	augroup END
+	let g:vim_vue_plugin_config = { 'foldexpr': 1, 'attribute': 1, 'keyword': 1 }
 	" SPELL
 	if !has("gui_running")
 		hi clear SpellBad | hi SpellBad cterm=underline,italic | endif

@@ -73,10 +73,14 @@ $.api()
 	.action(actionUpdate)
 .parse();
 
-import { join as pathJoin } from 'node:path';
 function removePack(path){
 	s.cd(dirs.pack);
-	s.rm("-rf", path);
+	s.$("-V").rm("-rf", path);
+	const root= dirs.pack+path.split("/")[0];
+	const { code, stdout }= s.$().find(root+"/*/*");
+	if(!code) echo(stdout);
+	else if(s.test("-d", root))
+		s.$("-V").rm("-rf", root);
 	$.exit(0);
 }
 function removeBundle(path){
@@ -246,8 +250,9 @@ function formatPath(path){
 	const type= path.startsWith(dirs.bundle) ? "bundle" : "pack";
 	return echo.format("%c"+relative(dirs[type], path), "color:lightblue");
 }
+import { stdout } from 'node:process';
 function echoProgress(length, message_start= "Working"){
-	if($.isFIFO(1)) return { update(){} };
+	if(typeof stdout.isTTY === "undefined") return { update(){} };
 	
 	const css= echo.css`
 		.progress { color: lightblue; }
