@@ -29,7 +29,7 @@ $.api()
 	"- "+f("cd `S path pack`", css.code)
 ])
 	.action(function(type){ echo(dirs[type]); $.exit(0); })
-.command("clone <type> <url>").describe([ "Add/install new package.",
+.command("clone <type> <url>", [ "Add/install new package.",
 	`Use ${f("bundle", css.code )}/${f("pack", css.code)} to specify the package ${f("type", css.code)}.`,
 	`The ${f("url", css.url)} should be a URL to the script itself or url of the git repository or github repository in the form of ${f("username/reponame", css.url)}.`
 ])

@@ -11,4 +11,17 @@
 	"html.filetypes": [ "html", "handlebars", "htmldjango", "blade", "liquid" ],
 	"html.autoClosingTags": false,
 	"html.autoCreateQuotes": false,
+	"___eslint.options": {
+		"overrideConfig":{
+			"extends": [
+				"eslint:recommended"
+			],
+			"rules": {
+				"no-use-before-define": ["error", "nofunc"],
+				"max-params": ["error", 4],
+				"max-depth": ["error", 4],
+				"complexity": ["error", 15]
+			}
+		}
+	}
 }
