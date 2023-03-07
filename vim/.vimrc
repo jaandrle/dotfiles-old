@@ -422,6 +422,8 @@
 	command! CLjshintGlobal		   normal yiwmm?\/\* global<cr><c-l>f*hi, p`m
 	command! CLcodeactionCursor    call CocActionAsync('codeAction', 'cursor')
 	command! CLfixCodeQuick		   call CocActionAsync('doQuickfix')
+	
+	command! -range -nargs=? AICode <line1>,<line2>call AIRun("Hi can you help me with" . &filetype . ", I would like to: " . <f-args>)
 	vnoremap <f1> :AI<f1>
 	nnoremap <f1> :AI<f1>
 	command! -nargs=?
