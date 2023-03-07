@@ -41,11 +41,6 @@ history_most_used(){ LC_ALL=C cat ~/.bash_history | cut -d ';' -f 2- | §awk 1 |
 	ls ~/bin | grep -P "^§" | sed 's/^§/~\/bin\/ §/'
 }
 
-if [[ `lsb_release -a 2>/dev/null | grep 'Distributor ID' | cut --delimiter='	' -f 2-` == "Neon" ]]; then
-	alias §apt-uu='echo ":: pkcon refresh ::" && pkcon refresh && echo ":: pkcon update ::" && pkcon update -p'
-else
-	alias §apt-uu='echo ":: apt update ::" && sudo apt update && echo ":: apt upgrade ::" && sudo apt upgrade'
-fi
 alias §ls='ls -pQFh --group-directories-first'
 alias §ls.='§ls -A'
 alias §less='less -R -S'
@@ -85,8 +80,7 @@ alias §psmem_all='ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem'
 alias §psmem='§psmem_all | head -n 10'
 alias §pscpu_all='ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu'
 alias §pscpu='§pscpu_all | head -n 10'
-
-alias §dotfiles='cd ~/Vzdálené/GitHub/dotfiles && git status'
+alias §psnet_all='lsof -P -i -n'
 
 §ping-test(){ # Pings ip address of noip.com and www.google.com.
   ping -c 1 -q 8.23.224.107 | grep --color=never -A 1 -i '\---'
@@ -104,6 +98,7 @@ alias §dotfiles='cd ~/Vzdálené/GitHub/dotfiles && git status'
 	printf "$L" "KERNEL: $(uname -rms)"
 	printf "\n"
 }
+§cmdfu(){ curl "https://www.commandlinefu.com/commands/matching/$@/$(echo -n $@ | openssl base64)/plaintext"; }
 
 alias npx-wca='npx -y web-component-analyzer'
 alias npx-qnm='npx -y qnm'

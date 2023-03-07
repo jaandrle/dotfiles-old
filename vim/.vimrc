@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2023-02-20 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2023-03-23 (VIM >=8.1)
 "" #region B – Base
 	scriptencoding utf-8 | set encoding=utf-8
 	let $BASH_ENV = "~/.bashrc"
@@ -12,6 +12,7 @@
 	set noerrorbells novisualbell
 	set belloff=esc
 	set confirm
+	set guioptions-=T
 	
 	cabbrev <expr> %PWD%  execute('pwd')
 	cabbrev <expr> %CD%   fnameescape(expand('%:p:h'))
@@ -125,7 +126,8 @@
 	command! -nargs=0
 		\ Scd :call mini_sessions#recoverPwd()
 	
-	execute 'hi! User2 ctermbg='.synIDattr(synIDtrans(hlID('StatusLine')), 'bg').' ctermfg=grey'
+	if !has("gui_running")
+		execute 'hi! User2 ctermbg='.synIDattr(synIDtrans(hlID('StatusLine')), 'bg').' ctermfg=grey' | endif
 	set laststatus=2																	 " Show status line on startup
 	set statusline+=··%1*≡·%{QuickFixStatus()}%*··%2*»·%{user_tips#current()}%*··%=
 	set statusline+=%<%f%R\%M··▶·%{&fileformat}·%{&fileencoding?&fileencoding:&encoding}·%{&filetype}··∷·%{mini_sessions#name('–')}·· 
@@ -338,10 +340,19 @@
 	autocmd FileType scss setl iskeyword+=@-@
 	command -nargs=? ALTmake if &filetype=='javascript' | compiler jshint | elseif &filetype=='php' | compiler php | endif
 						  \| if <q-args>!='' | silent make <args> | else | silent make '%' | endif | checktime | silent redraw!		   " …prev line, hotfix (filetype detection does’t works)
-	augroup ALTmake_auto
-		autocmd!
-		autocmd BufWritePost *.{php,js,mjs} execute 'ALTmake' | call <sid>QuickFixCmdPost()
-	augroup END
+	function <sid>ToggleALTmakeOnWrite()
+		if exists('#ALTmake_auto#BufWritePost')
+			augroup ALTmake_auto
+				autocmd!
+			augroup END
+		else
+			augroup ALTmake_auto
+				autocmd!
+				autocmd BufWritePost *.{php,js,mjs} execute 'ALTmake' | call <sid>QuickFixCmdPost()
+			augroup END
+		endif
+	endfunction
+	command! ALTmakeOnWrite call <sid>ToggleALTmakeOnWrite()
 	function! CustomKeyWord(word)
 		if(a:word=="gulp_place")
 			highlight link gulp_place ErrorMsg

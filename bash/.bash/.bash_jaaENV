@@ -63,7 +63,13 @@ function jaaENV {
 		sdk ls gradle | cat
 		return 0
 	fi
-	. ./.jaaENV
+	
+	if [ -f "compose.yaml" ]; then
+		jdk=$(grep -Po 'VERSION_JAVA=\K.*' compose.yaml)
+		nodejs=$(grep -Po 'VERSION_NODEJS=\K.*' compose.yaml)
+	else
+		. ./.jaaENV
+	fi
 	if [ ! -z ${android_home+x} ]; then export ANDROID_HOME=$ANDROID_HOME_BAK; echo "\$ANDROID_HOME=$ANDROID_HOME"; else unset ANDROID_HOME; echo "\$ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"; fi
 	if [ ! -z ${android_home_is_sdk+x} ]; then export ANDROID_HOME=$ANDROID_SDK_ROOT; echo "\$ANDROID_HOME=$ANDROID_HOME"; fi
 	if [ ! -z ${jdk+x} ]; then

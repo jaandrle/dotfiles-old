@@ -44,11 +44,13 @@ bindurl ^https://www.o2tv.cz/* \++ fillcmdline_notrail js document.querySelector
 bindurl ^https://www.o2tv.cz/* == js document.querySelector("video").playbackRate= 1
 bindurl ^https://www.o2tv.cz/* ** js document.querySelector("video").playbackRate+= 0.25
 bindurl ^https://www.o2tv.cz/* // js document.querySelector("video").playbackRate-= 0.25
+bindurl ^https://play.hbomax.com/* p js const v= document.querySelector("video"); v.paused ? v.play() : v.pause();
+bindurl ^https://play.hbomax.com/* \++ fillcmdline_notrail js document.querySelector("video").currentTime+= 15*30
 bindurl ^https://play.hbomax.com/* -- js document.querySelector("video").currentTime-= 15
 bindurl ^https://play.hbomax.com/* ++ js document.querySelector("video").currentTime+= 15
 bindurl ^https://play.hbomax.com/* // js document.querySelector("video").playbackRate-= 0.25
 bindurl ^https://play.hbomax.com/* ** js document.querySelector("video").playbackRate+= 0.25
-bindurl ^https://play.hbomax.com/* 00 js document.querySelector("video").playbackRate= 1
+bindurl ^https://play.hbomax.com/* == js document.querySelector("video").playbackRate= 1
 
 unbind --mode=normal d
 bind dd tabclose

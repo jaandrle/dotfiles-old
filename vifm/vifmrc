@@ -223,7 +223,8 @@
 		fileviewer *.7z 7z l %c
 	" #endregion Farch
 	filetype *.ftp {Mount with curlftpfs}
-		\ FUSE_MOUNT2|curlftpfs -o ftp_port=-,,disable_eprt %PARAM %DESTINATION_DIR %FOREGROUND,
+		\ FUSE_MOUNT2|curlftpfs -o disable_eprt %PARAM %DESTINATION_DIR %FOREGROUND %CLEAR,
+		"\ FUSE_MOUNT2|curlftpfs -o ftp_port=-,,disable_eprt %PARAM %DESTINATION_DIR %FOREGROUND %CLEAR,
 	filetype *.ssh {Mount with sshfs}
 		\ FUSE_MOUNT2|sshfs %PARAM %DESTINATION_DIR %FOREGROUND,
 	
