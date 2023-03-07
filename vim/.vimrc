@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2023-03-23 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2023-03-07 (VIM >=8.1)
 "" #region B – Base
 	scriptencoding utf-8 | set encoding=utf-8
 	let $BASH_ENV = "~/.bashrc"
@@ -422,7 +422,8 @@
 	command! CLjshintGlobal		   normal yiwmm?\/\* global<cr><c-l>f*hi, p`m
 	command! CLcodeactionCursor    call CocActionAsync('codeAction', 'cursor')
 	command! CLfixCodeQuick		   call CocActionAsync('doQuickfix')
-	nnoremap <f1> :CLcheat<cr>
+	vnoremap <f1> :AI<f1>
+	nnoremap <f1> :AI<f1>
 	command! -nargs=?
 		   \ CLcheat call cheat_copilot#open(<q-args>==''?&filetype:<q-args>)
 	
