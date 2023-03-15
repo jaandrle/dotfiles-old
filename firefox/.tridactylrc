@@ -36,6 +36,8 @@ bind gi hint -Jc input,textarea,[contenteditable="true"]
 
 unbindurl ^https://www.youtube.com/* >>
 unbindurl ^https://www.youtube.com/* <<
+" see https://gist.github.com/jaandrle/031198ab5130deb903065138532cc066
+bindurl ^https://www.youtube.com/* sy fillcmdline open B: YT
 
 bindurl ^https://www.o2tv.cz/* p js const v= document.querySelector("video"); v.paused ? v.play() : v.pause();
 bindurl ^https://www.o2tv.cz/* -- js document.querySelector("video").currentTime-= 15
