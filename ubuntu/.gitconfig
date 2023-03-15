@@ -32,6 +32,7 @@
 	pull-submodule = submodule foreach 'git pull'
 	diff-submodule = submodule foreach 'git diff'
 	set-upstream = !git branch --set-upstream-to=origin/`git symbolic-ref --short HEAD`
+	push-new=!git push -u origin `git rev-parse --abbrev-ref HEAD`
 [core]
 	editor = vim
 	pager = delta
