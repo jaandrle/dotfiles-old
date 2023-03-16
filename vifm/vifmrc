@@ -1,4 +1,4 @@
-"" VIFM Config file / 2022-02-01 / Jan Andrle
+"" VIFM Config file / 2023-03-16 / Jan Andrle
 "" #region B – Bookmarks
 	if !has('win')
 		:bmark! "~/" home
@@ -9,6 +9,7 @@
 		:bmark! "~/Vzdálené/ftp/" ftp
 		:bmark! "~/Vzdálené/OneDrive" onedrive
 		:bmark! "~/.config/vifm/" vifm
+		:bmark! "~/.chatgpt/notes" chatgpt-notes
 		:bmark! "/media/jaandrle/" volumes
 	else
 		:bmark! "~/" home
