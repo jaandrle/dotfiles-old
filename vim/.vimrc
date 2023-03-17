@@ -427,7 +427,7 @@
 	command! -range -nargs=? AIcode <line1>,<line2>call AIRun("Hi can you help me with" . &filetype . ", I would like to: " . <f-args>)
 	command! -range -nargs=? AIcommit <line1>,<line2>call AIRun('I want you to act like a git commit message writer. I will enter a git diff, and your job is to convert it into a useful commit message and make 3 options that are separated by a line end. Do not preface the commit with anything, use a concise, precise, present-tense, complete sentence. The length should be fewer than 50 characters if possible.'.<f-args>)
 	command! -range -nargs=? AIcommitConventional <line1>,<line2>AIcommit 'It should follow the conventional commits. The format is <type in lowercase>: <description>. A type can be one of the following: build, chore, ci, docs, feat, fix, perf, refactor, revert, style, or test. Use it to precisely describe the change.' <q-args>
-	command! -range -nargs=? AIcommitGonventional <line1>,<line2>AIcommit 'It should follow the conventional commits. The format is <type>: <description>. A type can be one of the gitmoji as a shortcode like :tada:. Use it to precisely describe the change.' <q-args>
+	command! -range -nargs=? AIcommitGonventional <line1>,<line2>AIcommit 'It should follow the conventional commits. The format is <type>: <description>. A type can be one of the gitmoji (https://gitmoji.dev/) as a shortcode like :tada:. Use it to precisely describe the change.' <q-args>
 	vnoremap <f1> :AI<f1>
 	nnoremap <f1> :AI<f1>
 	command! -nargs=?
