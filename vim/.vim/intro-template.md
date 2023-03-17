@@ -43,8 +43,8 @@
 nnoremap <buffer><silent> e :bd<cr>
 nnoremap <buffer><silent> p :bd<bar>normal "+p<cr>
 nnoremap <buffer><silent> o :ALToldfiles<cr>
-nnoremap <buffer> w :call feedkeys(':CLSESSIONload <tab>', 'tn')<cr>
-nnoremap <buffer> W :call feedkeys(':CLSESSIONload work_<tab>', 'tn')<cr>
+nnoremap <buffer> w :call feedkeys(':CLSESSIONload ', 'tn')<cr>
+nnoremap <buffer> W :call feedkeys(':CLSESSIONload work_', 'tn')<cr>
 nnoremap <buffer><silent> m :marks<cr>
 nnoremap <buffer> P /region<cr>za
 nnoremap <buffer><silent> c :e ~/.vim/intro-template.md<cr>
