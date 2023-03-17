@@ -112,7 +112,8 @@
 "" #endregion H
 "" #region SLH – Status Line + Command Line + History (general) + Sessions + File Update, …
 	set showcmd cmdheight=2 showmode
-	set wildmenu wildmode=list:longest,list:full									" Tab autocomplete in command mode
+	set wildmenu wildoptions=pum
+	"" wildmode=list:longest,list:full									" Tab autocomplete in command mode
 
 	cabbrev wbw w<bar>bw
 	
