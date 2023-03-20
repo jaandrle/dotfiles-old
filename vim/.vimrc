@@ -465,5 +465,5 @@
 		call execute(a:cmd) | call histadd("cmd", a:cmd)
 	endfunction
 "" #endregion COC
-" vim: set tabstop=4 shiftwidth=4 textwidth=250 :
+" vim: set textwidth=250 :
 " vim>60: set foldmethod=marker foldmarker=#region,#endregion :
