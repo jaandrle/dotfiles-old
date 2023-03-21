@@ -5,6 +5,8 @@
 		"./§trans.mjs",
 		"./§wolframalpha.mjs",
 		"./§mail.mjs",
-		"./§cordova-release.mjs"
+		"./§cordova-release.mjs",
+		"./§ai-commit.mjs",
+		"./bw-ftp.js"
 	]
 }
