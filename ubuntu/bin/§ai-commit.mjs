@@ -1,5 +1,6 @@
 #!/usr/bin/env nodejsscript
 /* jshint esversion: 11,-W097, -W040, module: true, node: true, expr: true, undef: true *//* global echo, $, pipe, s, fetch, cyclicLoop */
+$.is_fatal= true;
 const token_file= "~/.config/openai.token";
 let token;
 

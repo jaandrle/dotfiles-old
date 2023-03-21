@@ -1,6 +1,7 @@
 #!/usr/bin/env nodejsscript
 /* jshint esversion: 11,-W097, -W040, module: true, node: true, expr: true, undef: true *//* global echo, $, pipe, s, fetch, cyclicLoop */
 //TODO: save options!?
+$.is_fatal= true;
 const dirs= { vim_root: $.xdg.home`.vim` };
 Object.assign(dirs, {
 	pack: dirs.vim_root+"/pack/",

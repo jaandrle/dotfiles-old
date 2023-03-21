@@ -4,6 +4,7 @@ import { join as pathJoin } from "path";
 import { platform } from "process";
 const config_path= $.xdg.data`package_global.json`;
 
+$.is_fatal= true;
 $.api("[name]", true)
 .version("2022-10-06")
 .describe([

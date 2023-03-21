@@ -1,5 +1,6 @@
 #!/usr/bin/env nodejsscript
 /* jshint esversion: 8,-W097, -W040, node: true, expr: true, undef: true *//* global echo, $, pipe, s, style, fetch, cyclicLoop */
+$.is_fatal= true;
 $.api("<...query_array>", true)
 .version("v2022-09-23")
 .describe([
