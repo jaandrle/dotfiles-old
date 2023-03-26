@@ -37,22 +37,17 @@ bind gi hint -Jc input,textarea,[contenteditable="true"]
 unbindurl ^https://www.youtube.com/* >>
 unbindurl ^https://www.youtube.com/* <<
 " see https://gist.github.com/jaandrle/031198ab5130deb903065138532cc066
-bindurl ^https://www.youtube.com/* sy fillcmdline open B: YT
+bindurl ^https://www.youtube.com/* ss fillcmdline open B: YT
+bindurl ^https://www.o2tv.cz/* ss fillcmdline open B: O2
 
-bindurl ^https://www.o2tv.cz/* p js const v= document.querySelector("video"); v.paused ? v.play() : v.pause();
-bindurl ^https://www.o2tv.cz/* -- js document.querySelector("video").currentTime-= 15
-bindurl ^https://www.o2tv.cz/* ++ js document.querySelector("video").currentTime+= 15
-bindurl ^https://www.o2tv.cz/* \++ fillcmdline_notrail js document.querySelector("video").currentTime+= 15*30
-bindurl ^https://www.o2tv.cz/* == js document.querySelector("video").playbackRate= 1
-bindurl ^https://www.o2tv.cz/* ** js document.querySelector("video").playbackRate+= 0.25
-bindurl ^https://www.o2tv.cz/* // js document.querySelector("video").playbackRate-= 0.25
-bindurl ^https://play.hbomax.com/* p js const v= document.querySelector("video"); v.paused ? v.play() : v.pause();
-bindurl ^https://play.hbomax.com/* \++ fillcmdline_notrail js document.querySelector("video").currentTime+= 15*30
-bindurl ^https://play.hbomax.com/* -- js document.querySelector("video").currentTime-= 15
-bindurl ^https://play.hbomax.com/* ++ js document.querySelector("video").currentTime+= 15
-bindurl ^https://play.hbomax.com/* // js document.querySelector("video").playbackRate-= 0.25
-bindurl ^https://play.hbomax.com/* ** js document.querySelector("video").playbackRate+= 0.25
-bindurl ^https://play.hbomax.com/* == js document.querySelector("video").playbackRate= 1
+bind ůp js (v=> { if(!v) return; v.paused ? v.play() : v.pause(); })(document.querySelector("video"))
+bind ůl js (v=> { if(!v) return; v.currentTime+= 15 })(document.querySelector("video"))
+bind ůh js (v=> { if(!v) return; v.currentTime-= 15 })(document.querySelector("video"))
+bind ůL fillcmdline_notrail js document.querySelector("video").currentTime+= 15*30
+bind ůk js (v=> { if(!v) return; v.playbackRate+= 0.25 })(document.querySelector("video"))
+bind ůj js (v=> { if(!v) return; v.playbackRate-= 0.25 })(document.querySelector("video"))
+bind ů= js (v=> { if(!v) return; v.playbackRate= 1 })(document.querySelector("video"))
+bind ůG js (v=> { if(!v) return; v.play(); v.currentTime= v.duration-10; setTimeout(()=> v.pause(), 5000); })(document.querySelector("video"))
 
 unbind --mode=normal d
 bind dd tabclose
