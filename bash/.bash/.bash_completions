@@ -9,6 +9,7 @@ eval "$(asana.mjs completion_bash)"
 eval "$(node --completion-bash)"
 eval "$(npm completion)"
 eval "$(uu --completion-bash)"
+eval "$(nodejsscript --completion bash)"
 # eval "$(jc -B)" … newer version needed
 
 _npx() {

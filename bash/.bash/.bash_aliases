@@ -113,4 +113,5 @@ help() {
 	"$@" --help 2>&1 | bathelp
 }
 
-alias adb-device='adb devices | tail -n +2 | head -n 1 | §awk 1'
+# alias adb-device='adb devices | tail -n +2 | head -n 1 | §awk 1'
+# make-completion-wrapper, see https://gdhnotes.blogspot.com/2014/02/alias-bash-completion.html
