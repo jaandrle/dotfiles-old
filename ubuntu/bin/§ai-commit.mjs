@@ -3,14 +3,44 @@
 $.is_fatal= true;
 const token_file= "~/.config/openai.token";
 let token;
+const gitmoji_list= {
+		build: "building_construction",
+		chore: "bricks",
+		ci: "construction_worker",
+		docs: "memo",
+		feat: "sparkles",
+		fix: "bug",
+		perf: "zap",
+		refactor: "recycle",
+		revert: "rewind",
+		style: "art",
+		test: "white_check_mark"
+};
+const conventional_desc= [
+		"Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)",
+		"Other changes that don't modify src or test files",
+		"Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)",
+		"Documentation only changes",
+		"A new feature",
+		"A bug Fix",
+		"A code change that improves performance",
+		"A code change that neither fixes a bug nor adds a feature",
+		"Reverts a previous commit",
+		"Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)",
+		"Adding missing tests or correcting existing tests"
+];
 
 $.api("", true)
 	.version("2023-03-21")
 	.describe([
 		"Utility to use ChatGPT to generate a commit message from COMMIT_EDITMSG file.",
-		`Don't forget to set the token in ${token_file} file.`
+		`Don't forget to set the token in ${token_file} file.`,
+		"",
+		"Conventional/gitmoji commits should follow https://www.conventionalcommits.org/en/v1.0.0/ (https://github.com/pvdlg/conventional-commit-types).",
+		"For the gitmoji the <type> uses emojis as follows:",
+		...Object.entries(gitmoji_list).map(( v, i )=> echo.format("%c"+v[0]+` (${v[1]}): ${conventional_desc[i]}`, "display: list-item"))
 	])
-	.option("--format [format], -f", [ "Use one of the following formats to generate the commit message: [regular (default), conventional, gitmoji]",
+	.option("--format, -f", [ "Use one of the following formats to generate the commit message: [regular (default), conventional, gitmoji]",
 		"For gitmoji see: https://gitmoji.dev/"
 		])
 	.action(async function({ format= "regular" }= {}){
@@ -90,19 +120,7 @@ function gitmoji(candidates){
 	return candidates.map(message=> message.trim().replace(/^[^:]*:/, toGitmoji));
 
 	function toGitmoji(name){
-		const candidate= ({
-			build: "building_construction",
-			chore: "bricks",
-			ci: "construction_worker",
-			docs: "memo",
-			feat: "sparkles",
-			fix: "bug",
-			perf: "zap",
-			refactor: "recycle",
-			revert: "rewind",
-			style: "art",
-			test: "white_check_mark"
-		})[name.slice(0, -1)];
+		const candidate= gitmoji_list[name.slice(0, -1)];
 		return !candidate ? name : `:${candidate}:`;
 	}
 }
