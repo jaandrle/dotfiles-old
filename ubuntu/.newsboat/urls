@@ -12,6 +12,9 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA !
 https://www.mall.tv/rssfeed/mikyrova-uzasna-pout-internetem ! video
 "query:📹:tags # \"video\""
 
+https://www.mfcr.cz/cs/rss/vydali-jsme-k-hospodareni-statu ! stát
+"query:📒:tags # \"stát\""
+
 https://www.irozhlas.cz/rss/irozhlas ! news
 https://denikn.cz/feed?ref=inc ! news
 https://www.investigace.cz/feed/ ! news
@@ -24,6 +27,7 @@ http://feeds.feedburner.com/Backreaction ! news/science
 https://www.osel.cz/rss/rss.php ! news/science
 https://news.mit.edu/rss/feed ! news/science
 https://news.mit.edu/rss/research ! news/science
+https://nautil.us/feed/ ! news/science
 https://nitter.cz/PatrikKorenar/rss ! news/science
 "query:📰🔬:tags # \"news/science\""
 
