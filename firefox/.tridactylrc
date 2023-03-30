@@ -1,5 +1,5 @@
 """ Tridactyl config file | Jan Andrle | 2022-01-25
-" General Settings
+" General Settings 
 set configversion 2.0
 set theme dark
 set modeindicatorshowkeys true
@@ -44,6 +44,7 @@ bind ůp js (v=> { if(!v) return; v.paused ? v.play() : v.pause(); })(document.q
 bind ůl js (v=> { if(!v) return; v.currentTime+= 15 })(document.querySelector("video"))
 bind ůh js (v=> { if(!v) return; v.currentTime-= 15 })(document.querySelector("video"))
 bind ůL fillcmdline_notrail js document.querySelector("video").currentTime+= 15*30
+bind ůůl fillcmdline_notrail js document.querySelector("video").currentTime+= 15*30
 bind ůk js (v=> { if(!v) return; v.playbackRate+= 0.25 })(document.querySelector("video"))
 bind ůj js (v=> { if(!v) return; v.playbackRate-= 0.25 })(document.querySelector("video"))
 bind ů= js (v=> { if(!v) return; v.playbackRate= 1 })(document.querySelector("video"))
@@ -55,6 +56,8 @@ bind dd tabclose
 unbind --mode=normal s
 bind st fillcmdline_notrail tab
 
+" h keyboardlayoutoverrides … https://gistpreview.github.io/?324119c773fac31651f6422087b36804
+" set keyboardlayoutoverrides "Digit2: ;, Backquote: :"
 set keytranslatemap {"ě":";",";":":"}
 bindurl ^https://mail.centrum.cz/* ;; composite hint_focus ; js document.activeElement.dispatchEvent(new CustomEvent("mouseover"))
 bind --mode=normal ;gt hint -c [tabindex]
@@ -73,8 +76,8 @@ bind --mode=normal N current_url tabopen
 bind -c fillcmdline recontain
 bind sc fillcmdline_notrail container
 
-bind \ym composite js ({ textContent= "", href= "", alt= "", src= "" }= document.getSelection().focusNode, `[${textContent?textContent:"!"+alt}](${href?href:src})`) | clipboard yank
 bind --mode=visual \t composite js "https://translate.google.com/?sl=auto&tl=cs&op=translate&text="+encodeURI(document.getSelection().toString()) | tabopen
+bind --mode=normal \t composite js "http://translate.google.com/translate?js=n&tl=cs&u="+encodeURI(location.href) | tabopen
 
 bind gnk tabopen -c osobní https://keep.google.com/u/0/#NOTE/1UXE_BEihe2EexHwZqEYA2oSdILLxF74SPcaLFMStfIpMkWPnStWJDQqH5C1TryJld_dC
 bind gok open -c osobní https://keep.google.com/u/0/#NOTE/1UXE_BEihe2EexHwZqEYA2oSdILLxF74SPcaLFMStfIpMkWPnStWJDQqH5C1TryJld_dC
