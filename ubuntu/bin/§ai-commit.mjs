@@ -31,7 +31,7 @@ const conventional_desc= [
 ];
 
 $.api("", true)
-	.version("2023-03-21")
+	.version("2023-03-31")
 	.describe([
 		"Utility to use ChatGPT to generate a commit message from COMMIT_EDITMSG file.",
 		`Don't forget to set the token in ${token_file} file.`,
@@ -93,7 +93,8 @@ function diffToChunks(max_tokens){ return function(input){
 function convertToJSONArray(text){
 	const arr= text.split("\n")
 		.filter(line=> line.trim().match(/^[1-3]\. /))
-		.map(line=> line.slice(3));
+		.map(line=> line.slice(3))
+		.map(line => line.startsWith('"') ? line : "\"" + ( "'`".slice("").includes(line[0]) ? line.slice(1, -1) : line ) + "\"");
 	return `[${arr.join(", ")}]`;
 }
 function questionChatGPT(format){ return function(diff){
