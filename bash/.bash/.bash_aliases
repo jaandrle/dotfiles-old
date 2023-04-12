@@ -99,7 +99,10 @@ alias §psnet_all='lsof -P -i -n'
 	printf "\n"
 }
 §cmdfu(){ curl "https://www.commandlinefu.com/commands/matching/$@/$(echo -n $@ | openssl base64)/plaintext"; }
-aai(){ echo "ai ask \"$*, thanks for your help\""; ai ask "\"$*, thanks for your help\""; }
+aai(){
+	[[ "$1" == '--help' ]] && ai ask --help && return 0;
+	echo "ai ask \"$*, thanks for your help\""; ai ask "\"$*, thanks for your help\"";
+}
 
 alias npx-wca='npx -y web-component-analyzer'
 alias npx-qnm='npx -y qnm'
