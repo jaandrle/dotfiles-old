@@ -17,7 +17,7 @@ const css= echo.css`
 `;
 
 $.api()
-.version("2023-02-14")
+.version("2023-04-18")
 .describe([
 	"Utility for managing vim plugins “native” way. It uses two types:",
 	`- “old” way (${f("bundle", css.code)}): inspiration from ${f("https://shapeshed.com/vim-packages/", css.url)}`,
@@ -196,7 +196,11 @@ function actionList({ type= "paths" }){
 	const urls_pack= getPack().map(getRepo);
 	
 	if("repos"===type){
-		const echoUrl= u=> echo(f(u, css.url));
+		const echoUrl= pipe(
+			u=> u.replace("git@github.com:", "https://github.com/"),
+			u=> f(u, css.url),
+			echo
+		)
 		echo("%cbundle", css.bold, dirs.bundle);
 		urls_bundle.forEach(echoUrl);
 		echo("%cbundle", css.bold, dirs.one_files);
