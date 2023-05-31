@@ -424,7 +424,18 @@
 	command! CLcodeactionCursor    call CocActionAsync('codeAction', 'cursor')
 	command! CLfixCodeQuick		   call CocActionAsync('doQuickfix')
 	
-	command! -range -nargs=? AIcode <line1>,<line2>call AIRun("Hi can you help me with" . &filetype . ", I would like to: " . <f-args>)
+	function! AIcodeFn(range, ...) range abort
+		let l:instruction = 'Hi, can you help me with ' . &filetype . 'code? Thanks in advance. I would like to: '
+		if a:0
+			let l:instruction = l:instruction .  a:1
+		endif
+		if a:range
+			'<,'>call vim_ai#AIRun(a:range, {}, l:instruction)
+		else
+			call vim_ai#AIRun(a:range, {}, l:instruction)
+		endif
+	endfunction
+	command! -range -nargs=? AIcode <line1>,<line2>call AIcodeFn(<range>, <f-args>)
 	vnoremap <f1> :AI<f1>
 	nnoremap <f1> :AI<f1>
 	command! -nargs=?

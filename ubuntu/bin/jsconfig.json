@@ -1,12 +1,7 @@
 {
 	"include": [
 		"/home/jaandrle/.nvm/versions/node/v18.12.1/lib/node_modules/nodejsscript/index.d.ts",
-		"./§vim_plugins.mjs",
-		"./§trans.mjs",
-		"./§wolframalpha.mjs",
-		"./§mail.mjs",
-		"./§cordova-release.mjs",
-		"./§ai-commit.mjs",
-		"./bw-ftp.js"
+		"./*.mjs",
+		"./*.js"
 	]
 }

@@ -27,7 +27,11 @@
 "" #region G – General
 														" set vicmd=elvis\ -G\ termcap | " set vicmd=vile
 	set vicmd=vim
-	set vimhelp
+	"set vimhelp
+	command! README :!vim ~/Dokumenty/GitHub/dotfiles/vifm/README.md
+	command! Help :!vim ~/.config/vifm/vifm-help.txt
+	map <f1> :Help<cr>
+	cabbrev help Help
 	if !has('win')
 		set fusehome=/tmp/vifm_FUSE
 		set slowfs=curlftpfs
@@ -327,9 +331,6 @@
 		nnoremap ycn :!echo -n %c | xsel --input --primary %i && echo -n %c | xsel --clipboard --input %i<cr>:echo expand('%"c') "is yanked to clipboard"<cr>
 	endif
 " #endregion Y
-
-command! README :!vim ~/Dokumenty/GitHub/dotfiles/vifm/README.md
-map <f1> :!vim ~/.config/vifm/vifm-help.txt<cr>
 
 "" #region N – Notes
 	"Filter-out build and temporary files

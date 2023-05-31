@@ -6,15 +6,16 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCD9L1HvpYpmZ8rrXABARCRQ ! v
 https://www.youtube.com/feeds/videos.xml?channel_id=UCONH73CdRXUjlh3-DdLGCPw ! video
 https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA !
 "query:Sakitech – Note/Update:title =~ \"(Note|Phones|phones)\" and title !~ \"(Wallpaper|wallpaper)\" and rssurl == \"https://www.youtube.com/feeds/videos.xml?channel_id=UCKlOmM_eB0nzTNiDFZibSSA\"" video
-"exec:~/.newsboat/newsboat-html.sh 'Kokoti na neděli' 'https://www.stream.cz/kokoti-na-nedeli' ~/.newsboat/newsboat-html-streamCZ.config" ! video
-"exec:~/.newsboat/newsboat-html.sh 'Šťastné pondělí' 'https://www.stream.cz/stastne-pondeli' ~/.newsboat/newsboat-html-streamCZ.config" !
-"query:Šťastné pondělí:title =~ \"Šťastné pondělí\" and feedtitle == \"Šťastné pondělí\"" video
+"exec:~/.newsboat/html2rss-streamCZ.mjs 'Kokoti na neděli' 'https://www.stream.cz/kokoti-na-nedeli'" ! video
+"exec:~/.newsboat/html2rss-streamCZ.mjs 'Šťastné pondělí' 'https://www.stream.cz/stastne-pondeli'" !
+"query:Šťastné pondělí:feedtitle == \"Šťastné pondělí\"" video
 https://www.mall.tv/rssfeed/mikyrova-uzasna-pout-internetem ! video
 "query:📹:tags # \"video\""
 
 https://nitter.cz/spreadmastodon/rss
 
 https://www.mfcr.cz/cs/rss/vydali-jsme-k-hospodareni-statu ! stát
+https://www.sporicidluhopisycr.cz/cs/rss/aktuality ! stát
 https://nitter.cz/gov_cz/rss ! stát
 https://www.ceskezajmy.eu/feed/ ! stát
 https://poladprahu.cz/category/novinky/feed/ ! stát
@@ -51,7 +52,8 @@ https://news.ycombinator.com/rss "~📰👋💻💡 – Hackernews"
 https://nitter.cz/DefensiveCSS/rss ! twitter/α
 https://nitter.cz/nologcz/rss ! twitter/α
 https://nitter.cz/FrontendGarden/rss ! twitter/α
-https://nitter.cz/randomMDN/rss twitter/α
+# https://nitter.cz/randomMDN/rss twitter/α
+"exec:~/.newsboat/randomMDN2RSS.mjs" twitter/α
 https://nitter.cz/vim_tricks/rss ! twitter/α
 https://nitter.cz/ECODevops/rss ! twitter/α
 https://nitter.cz/samantha_ming/rss ! twitter/α
@@ -135,6 +137,7 @@ https://nitter.cz/Vedator5/rss ! twitter/mixed
 https://nitter.cz/marenamat/rss ! twitter/mixed
 https://nitter.cz/traintravels42/rss ! twitter/mixed
 https://nitter.cz/JulieMontek/rss ! twitter/mixed
+https://nitter.cz/bara_soukup/rss ! twitter/mixed
 # PulseofEuropeCZ NEOVLIVNICZ KohoVolitEU
 "query:📰👋💻💡 – Twitter/mixed:tags # \"twitter/mixed\""
 

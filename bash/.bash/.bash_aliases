@@ -42,12 +42,8 @@ history_most_used(){ LC_ALL=C cat ~/.bash_history | cut -d ';' -f 2- | §awk 1 |
 }
 
 alias §ls='ls -pQFh --group-directories-first'
-alias §ls.='§ls -A'
 alias §less='less -R -S'
-§lsl(){ §ls. -l $* --color=always | §less; }
 
-# pushd(){ builtin pushd "$@" >/dev/null && dirs -v | sed 1d; }
-# popd() { builtin popd "$@" >/dev/null  && dirs -v | sed 1d; }
 alias §cd.='clear;§ls'
 §cd..(){ cd $(eval printf '../'%.0s {1..$1}); }
 §cd(){
@@ -107,14 +103,12 @@ aai(){
 alias npx-wca='npx -y web-component-analyzer'
 alias npx-qnm='npx -y qnm'
 alias npx-hint='npx -y hint'
+alias npx-markdown='nohup npx markserv'
 alias zfz=fzf-carroarmato0.fzf
 
 §url-curl(){ curl --silent -I "$1" | grep -i location; }
 
 alias bathelp='bat --plain --language=help'
-help() {
-	"$@" --help 2>&1 | bathelp
-}
 
 # alias adb-device='adb devices | tail -n +2 | head -n 1 | §awk 1'
 # make-completion-wrapper, see https://gdhnotes.blogspot.com/2014/02/alias-bash-completion.html
