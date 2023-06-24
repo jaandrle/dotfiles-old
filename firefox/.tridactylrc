@@ -43,7 +43,7 @@ bindurl ^https://www.o2tv.cz/* ss fillcmdline open B: O2
 js tri.jaandrle= {}
 
 js tri.jaandrle.pauseVideo= v=> v.pause()
-autocmd DocEnd ^https://www.o2tv.cz/* js tri.jaandrle.pauseVideo= ()=> [ "Pauza", "Přehrát" ].map(l=> document.querySelector(`[aria-label=${l}]`)).find(Boolean).dispatchEvent(new Event("click"))
+autocmd DocLoad ^https://www.o2tv.cz/* js tri.jaandrle= Object.assign(tri.jaandrle || {}, { pauseVideo: ()=> [ "Pauza", "Přehrát" ].map(l=> document.querySelector(`[aria-label=${l}]`)).find(Boolean).dispatchEvent(new Event("click"))})
 bind ůp js (v=> { if(!v) return; v.paused ? v.play() : tri.jaandrle.pauseVideo(v); })(document.querySelector("video"))
 bind ůP js (v=> { if(!v) return; v.playbackRate ? (v.playbackRate= 0) : (v.playbackRate= 1); })(document.querySelector("video"))
 bind ůl js (v=> { if(!v) return; v.currentTime+= 15 })(document.querySelector("video"))
