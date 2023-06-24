@@ -40,7 +40,12 @@ unbindurl ^https://www.youtube.com/* <<
 bindurl ^https://www.youtube.com/* ss fillcmdline open B: YT
 bindurl ^https://www.o2tv.cz/* ss fillcmdline open B: O2
 
-bind ůp js (v=> { if(!v) return; v.paused ? v.play() : v.pause(); })(document.querySelector("video"))
+js tri.jaandrle= {}
+
+js tri.jaandrle.pauseVideo= v=> v.pause()
+autocmd DocEnd ^https://www.o2tv.cz/* js tri.jaandrle.pauseVideo= ()=> [ "Pauza", "Přehrát" ].map(l=> document.querySelector(`[aria-label=${l}]`)).find(Boolean).dispatchEvent(new Event("click"))
+bind ůp js (v=> { if(!v) return; v.paused ? v.play() : tri.jaandrle.pauseVideo(v); })(document.querySelector("video"))
+bind ůP js (v=> { if(!v) return; v.playbackRate ? (v.playbackRate= 0) : (v.playbackRate= 1); })(document.querySelector("video"))
 bind ůl js (v=> { if(!v) return; v.currentTime+= 15 })(document.querySelector("video"))
 bind ůh js (v=> { if(!v) return; v.currentTime-= 15 })(document.querySelector("video"))
 bind ůL fillcmdline_notrail js document.querySelector("video").currentTime+= 15*30
@@ -48,7 +53,7 @@ bind ůůl fillcmdline_notrail js document.querySelector("video").currentTime+= 
 bind ůk js (v=> { if(!v) return; v.playbackRate+= 0.25 })(document.querySelector("video"))
 bind ůj js (v=> { if(!v) return; v.playbackRate-= 0.25 })(document.querySelector("video"))
 bind ů= js (v=> { if(!v) return; v.playbackRate= 1 })(document.querySelector("video"))
-bind ůG js (v=> { if(!v) return; v.play(); v.currentTime= v.duration-10; setTimeout(()=> v.pause(), 5000); })(document.querySelector("video"))
+bind ůG js (v=> { if(!v) return; v.play(); v.currentTime= v.duration-10; setTimeout(()=> tri.jaandrle.pauseVideo(v), 5000); })(document.querySelector("video"))
 
 unbind --mode=normal d
 bind dd tabclose

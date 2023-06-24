@@ -44,6 +44,7 @@ https://www.root.cz/rss/clanky/ ! news/tech
 "query: Root – Softwarová sklizeň:title =~ \"^Softwarová sklizeň\" and rssurl == \"https://www.root.cz/rss/clanky/\"" news/tech
 https://zdrojak.cz/feed/ ! news/tech
 https://www.vzhurudolu.cz/rss ! news/tech
+https://developer.mozilla.org/en-US/blog/rss.xml ! news/tech
 https://www.omgubuntu.co.uk/feed ! news/tech
 https://servis.idnes.cz/rss.aspx?c=technet ! news/tech
 "query:📰💻💡:tags # \"news/tech\""

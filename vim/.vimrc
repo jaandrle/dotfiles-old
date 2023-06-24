@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2023-03-16 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2023-06-20 (VIM >=8.1)
 "" #region B – Base
 	scriptencoding utf-8 | set encoding=utf-8
 	let $BASH_ENV = "~/.bashrc"
@@ -224,6 +224,10 @@
 			\| syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\%(\_[^][]\|\[\_[^][]*\]\)*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart concealends
 		au FileType markdown,json 
 			\ setlocal conceallevel=2
+	augroup END
+	augroup convenient
+		autocmd FileType markdown,text setlocal keywordprg=dict
+		autocmd FileType git,gitcommit setlocal foldmethod=syntax foldlevel=1
 	augroup END
 	" PARENTHESES plugin junegunn/rainbow_parentheses.vim
 	let g:rainbow#pairs= [['(', ')'], ['[', ']'], [ '{', '}' ]]
