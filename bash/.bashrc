@@ -43,7 +43,6 @@ export LS_COLORS=$LS_COLORS:'tw=01;04;34:ow=01;04;34:'
 [ ! -x /usr/bin/tput ] || ! tput setaf 1 >&/dev/null && color_prompt=
 
 [ -f $BASH_DOTFILES/.bash_promt ] && . $BASH_DOTFILES/.bash_promt
-export PROMPT_COMMAND="$PROMPT_COMMAND; history -a"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #	sleep 10; alert

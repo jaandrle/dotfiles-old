@@ -48,6 +48,7 @@ function updatePromt {
     fi
     PS1+="${chB}\w${chW}"
     PS1+="\n:"
+    history -a
 }
 setPromt
 unset color_prompt

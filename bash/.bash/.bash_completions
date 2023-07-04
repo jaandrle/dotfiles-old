@@ -3,14 +3,15 @@ eval "$(gh completion -s bash)"
 # used ectension: heaths/gh-label
 [[ $- != *i* ]] && return                   # dont include rest in Vim
 
-eval "$(asana.mjs completion_bash)"
+alias C--asana='eval "$($HOME/bin/asana.mjs completion_bash)"'
+alias C--himalaya='\. "$BASH_DOTFILES/himalaya.completion"'
+alias C--uu='eval "$($HOME/bin/uu --completion-bash)"'
+alias C--bs='eval "$(bs .completion bash)"'
+alias C--jc='eval "$(jc -B)" … newer version needed'
 \. "$BASH_DOTFILES/cordova.completion"
-\. "$BASH_DOTFILES/himalaya.completion"
 eval "$(node --completion-bash)"
 eval "$(npm completion)"
-eval "$(uu --completion-bash)"
 eval "$(nodejsscript --completion bash)"
-# eval "$(jc -B)" … newer version needed
 
 _npx() {
   local cur="${COMP_WORDS[COMP_CWORD]}"
