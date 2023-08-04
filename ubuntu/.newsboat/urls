@@ -46,6 +46,8 @@ https://www.root.cz/rss/clanky/ ! news/tech
 "query: Root – Softwarová sklizeň:title =~ \"^Softwarová sklizeň\" and rssurl == \"https://www.root.cz/rss/clanky/\"" news/tech
 https://zdrojak.cz/feed/ ! news/tech
 https://www.vzhurudolu.cz/rss ! news/tech
+https://anuradha.hashnode.dev/rss.xml ! news/tech
+https://lea.verou.me/feed.xml ! news/tech
 https://developer.mozilla.org/en-US/blog/rss.xml ! news/tech
 https://www.omgubuntu.co.uk/feed ! news/tech
 https://servis.idnes.cz/rss.aspx?c=technet ! news/tech
@@ -53,117 +55,127 @@ https://servis.idnes.cz/rss.aspx?c=technet ! news/tech
 
 https://news.ycombinator.com/rss "~📰👋💻💡 – Hackernews"
 
-https://nitter.cz/DefensiveCSS/rss ! twitter/α
-https://nitter.cz/nologcz/rss ! twitter/α
-https://nitter.cz/FrontendGarden/rss ! twitter/α
-https://nitter.cz/vim_tricks/rss ! twitter/α
-https://nitter.cz/ECODevops/rss ! twitter/α
-https://nitter.cz/samantha_ming/rss ! twitter/α
-https://nitter.cz/javascripting/rss ! twitter/α
-https://nitter.cz/jordwalke/rss ! twitter/α
-https://nitter.cz/ell2cz/rss ! twitter/α
-https://nitter.cz/fieldsofmoab/rss ! twitter/α
-https://nitter.cz/cztomsik/rss ! twitter/α
-https://nitter.cz/heydonworks/rss ! twitter/α
-https://nitter.cz/sw_samuraj/rss ! twitter/α
-https://nitter.cz/shadeed9/rss ! twitter/α
-https://nitter.cz/AndroidDev/rss ! twitter/α
-https://nitter.cz/EduardStula/rss ! twitter/α
-https://nitter.cz/ubuntu_unity/rss ! twitter/α
-https://nitter.cz/KdeNeon/rss ! twitter/α
-https://nitter.cz/rauschma/rss ! twitter/α
-https://nitter.cz/erikengheim/rss ! twitter/α
-https://nitter.cz/LeaVerou/rss ! twitter/α
-https://nitter.cz/jpschroeder/rss ! twitter/α
-https://nitter.cz/vzhurudolu/rss ! twitter/α
-https://nitter.cz/machal/rss ! twitter/α
-https://nitter.cz/devgirlFL/rss ! twitter/α
-https://nitter.cz/maxiorel/rss ! twitter/α
-https://nitter.cz/firt/rss ! twitter/α
-https://nitter.cz/princi_ya/rss ! twitter/α
-https://nitter.cz/davidwalshblog/rss ! twitter/α
-https://nitter.cz/jakubvrana/rss ! twitter/α
-https://nitter.cz/Jahoda/rss ! twitter/α
-https://nitter.cz/TerribleMia/rss ! twitter/α
-https://nitter.cz/jensimmons/rss ! twitter/α
-https://nitter.cz/LauraViglioni/rss ! twitter/α
+https://lemmy.kde.social/feeds/c/kde.xml?sort=Active ! lemmy
+https://beehaw.org/feeds/c/science.xml?sort=Active ! lemmy
+https://lemmy.ml/feeds/c/firefox.xml?sort=Active ! lemmy
+https://lemmy.ml/feeds/c/vim.xml?sort=Active ! lemmy
+https://lemmy.ml/feeds/c/css.xml?sort=Active ! lemmy
+https://lemmy.ml/feeds/c/javascript.xml?sort=Active ! lemmy
+https://lemmy.ml/feeds/c/kde.xml?sort=Active ! lemmy
+"query:📰👋💻💡 – Lemmy:tags # \"lemmy\""
+
+https://github.com/jordwalke.atom ! twitter/α
+# https://nitter.cz/ell2cz/rss ! twitter/α
+# https://nitter.cz/fieldsofmoab/rss ! twitter/α
+# https://nitter.cz/cztomsik/rss ! twitter/α
+# https://nitter.cz/sw_samuraj/rss ! twitter/α
+# https://nitter.cz/AndroidDev/rss ! twitter/α
+# https://nitter.cz/EduardStula/rss ! twitter/α
+# https://nitter.cz/ubuntu_unity/rss ! twitter/α → ?https://ubuntuunity.org/blog/
+https://blog.neon.kde.org/feed/ ! twitter/α
+# https://nitter.cz/erikengheim/rss ! twitter/α
+# https://nitter.cz/LeaVerou/rss ! twitter/α
+# https://nitter.cz/jpschroeder/rss ! twitter/α
+# https://nitter.cz/machal/rss ! twitter/α
+# https://nitter.cz/devgirlFL/rss ! twitter/α
+# https://nitter.cz/maxiorel/rss ! twitter/α
+# https://nitter.cz/firt/rss ! twitter/α
+https://princiya.com/newblog/feeds/all.atom.xml ! twitter/α
+https://davidwalsh.name/feed ! twitter/α
+# https://nitter.cz/jakubvrana/rss ! twitter/α
+https://jecas.cz/rss ! twitter/α
 # JanKoWeb geekovo zdrojak
 "query:📰👋💻💡 – Twitter/α:tags # \"twitter/α\""
 
-https://nitter.cz/Zeptej_se_vedce/rss ! twitter/mixed
-https://nitter.cz/Olinium42/rss ! twitter/mixed
+# https://nitter.cz/Zeptej_se_vedce/rss ! twitter/mixed
+# https://nitter.cz/Olinium42/rss ! twitter/mixed
+#
 https://nitter.cz/narodnitymzen/rss ! twitter/mixed
-https://nitter.cz/Julianne_SF/rss ! twitter/α
+# https://nitter.cz/Julianne_SF/rss ! twitter/α
+#!
 https://nitter.cz/_Case/rss ! twitter/α
+#!
 https://nitter.cz/olgarichterova/rss ! twitter/mixed
-https://nitter.cz/eicul/rss ! twitter/mixed
-https://nitter.cz/CO2IN/rss ! twitter/mixed
+# https://nitter.cz/eicul/rss ! twitter/mixed
+# https://nitter.cz/CO2IN/rss ! twitter/mixed
+#
 https://nitter.cz/Iluminator_cz/rss ! twitter/mixed
-https://nitter.cz/faktaoklimatu/rss ! twitter/mixed
+https://faktaoklimatu.cz/feed.xml ! twitter/mixed
+#?
 https://nitter.cz/anna_gumplova/rss ! twitter/mixed
-https://nitter.cz/Gopeith/rss ! twitter/mixed
+#?
 https://nitter.cz/DearAbbyHansen/rss ! twitter/mixed
-https://nitter.cz/FZU_AVCR/rss ! twitter/mixed
+# https://nitter.cz/FZU_AVCR/rss ! twitter/mixed
+#!
 https://nitter.cz/_A_d_e_l_k_a_/rss ! twitter/mixed
+#!
 https://nitter.cz/TGuthJarkovsky/rss ! twitter/mixed
-https://nitter.cz/ClaireAccendit/rss ! twitter/mixed
-https://nitter.cz/PavlaHub/rss ! twitter/mixed
-https://nitter.cz/laurencikova_k/rss ! twitter/mixed
-https://nitter.cz/PopDetective/rss twitter/mixed
+# https://nitter.cz/ClaireAccendit/rss ! twitter/mixed
+# https://nitter.cz/PavlaHub/rss ! twitter/mixed
+# https://nitter.cz/laurencikova_k/rss ! twitter/mixed
 # https://popculturedetective.tumblr.com/rss twitter/mixed
+#!
 https://nitter.cz/dan_prokop/rss ! twitter/mixed
+https://www.paqresearch.cz/blog-feed.xml ! twitter/mixed
+#!
 https://nitter.cz/danusenerudova/rss ! twitter/mixed
+#!
 https://nitter.cz/Akademie_ved_CR/rss ! twitter/mixed
+#!
 https://nitter.cz/glacier_ecology/rss ! twitter/mixed
-https://nitter.cz/starojda/rss ! twitter/mixed
-https://nitter.cz/IvoZelinka/rss ! twitter/mixed
-https://nitter.cz/PatrikKorenar/rss ! twitter/mixed
-https://nitter.cz/archetypal_cz/rss ! twitter/mixed
-https://nitter.cz/MarieHermanova/rss ! twitter/mixed
-https://nitter.cz/NKC_CZ/rss ! twitter/mixed
-https://nitter.cz/EP_ThinkTank/rss ! twitter/mixed
+https://archetypal.cz/feed/ ! twitter/mixed
+# https://nitter.cz/MarieHermanova/rss ! twitter/mixed
+# https://nitter.cz/NKC_CZ/rss ! twitter/mixed
+#!
 https://nitter.cz/lkristoufek/rss ! twitter/mixed
-https://nitter.cz/OSAliance/rss ! twitter/mixed
-https://nitter.cz/Madla_G/rss ! twitter/mixed
-https://nitter.cz/Chmee2/rss ! twitter/mixed
-https://nitter.cz/matfyz/rss ! twitter/mixed
+# https://nitter.cz/OSAliance/rss ! twitter/mixed
+# https://nitter.cz/Madla_G/rss ! twitter/mixed
+# https://nitter.cz/matfyz/rss ! twitter/mixed
+#!
 https://nitter.cz/Mitokochan/rss twitter/mixed
-https://nitter.cz/jakubzelenka/rss ! twitter/mixed
-https://nitter.cz/malyvedec/rss ! twitter/mixed
+https://www.mimoagendu.cz/rss/ ! twitter/mixed
+# https://nitter.cz/malyvedec/rss ! twitter/mixed
+#!
 https://nitter.cz/kasikp/rss ! twitter/mixed
-https://nitter.cz/CERN/rss ! twitter/mixed
-https://nitter.cz/josefslerka/rss ! twitter/mixed
-https://nitter.cz/tangero/rss ! twitter/mixed
-https://nitter.cz/annaud/rss ! twitter/mixed
-https://nitter.cz/hassmanm/rss ! twitter/mixed
-https://nitter.cz/Vedator5/rss ! twitter/mixed
+# https://nitter.cz/CERN/rss ! twitter/mixed
+# https://nitter.cz/josefslerka/rss ! twitter/mixed
+# https://nitter.cz/hassmanm/rss ! twitter/mixed
+#!
 https://nitter.cz/marenamat/rss ! twitter/mixed
-https://nitter.cz/traintravels42/rss ! twitter/mixed
+# https://nitter.cz/traintravels42/rss ! twitter/mixed
 https://nitter.cz/JulieMontek/rss ! twitter/mixed
+#
 https://nitter.cz/bara_soukup/rss ! twitter/mixed
-# PulseofEuropeCZ NEOVLIVNICZ KohoVolitEU
+# PulseofEuropeCZ KohoVolitEU
 "query:📰👋💻💡 – Twitter/mixed:tags # \"twitter/mixed\""
+
+https://us8.campaign-archive.com/feed?u=5ec4c91d59d1b26aefb919e61&id=2ebe3120ac ! newsletters
+https://kill-the-newsletter.com/feeds/mx8wi1fifxu6scj8.xml ! newsletters
+https://kill-the-newsletter.com/feeds/9l096daq56dxjw3z.xml ! newsletters
+https://denikn.cz/autor/toman/feed/ ! newsletters
+https://denikn.cz/tag/vylety-n/feed/ ! newsletters
+https://denikn.cz/tag/evropska-unie/feed/ ! newsletters
+"query:🗞️📰💡 – Newsletters:tags # \"newsletters\""
 
 # https://nitter.cz/randomMDN/rss dev/servises
 # "exec:randomMDN rss --limit 3" dev/servises
 https://botsin.space/@randomMDN.rss dev/servises
 https://github.com/evanw/esbuild/releases.atom ! dev/servises
 https://bun.sh/rss.xml ! dev/servises
-https://nitter.cz/githubstatus/rss ! dev/servises
-https://nitter.cz/GitHubSecurity/rss ! dev/servises
+https://www.githubstatus.com/history.rss ! dev/servises
+# https://nitter.cz/GitHubSecurity/rss ! dev/servises
 https://developer.apple.com/news/rss/news.rss "~Apple Dev News" dev/servises
-https://nitter.cz/JetBrains_Fleet/rss ! dev/servises
-https://nitter.cz/NativeScript/rss ! dev/servises
-https://nitter.cz/sveltejs/rss ! dev/servises
-https://nitter.cz/github/rss ! dev/servises
-https://nitter.cz/firefox/rss ! dev/servises
-https://nitter.cz/apachecordova/rss ! twitter/α
-https://nitter.cz/MozillaCZ/rss ! twitter/α
-https://nitter.cz/janovsky/rss ! twitter/α
+# https://nitter.cz/JetBrains_Fleet/rss ! dev/servises → ?https://blog.jetbrains.com/feed/
+# https://nitter.cz/NativeScript/rss ! dev/servises
+# https://nitter.cz/sveltejs/rss ! dev/servises
+# https://nitter.cz/github/rss ! dev/servises
+https://cordova.apache.org/feed.xml ! twitter/α
+https://www.mozilla.cz/feed/ ! twitter/α
+#! https://nitter.cz/janovsky/rss ! twitter/α
 # https://www.githubstatus.com/history.rss ! dev/servises
 "query:⌨🖱:tags # \"dev/servises\""
 
-https://github.com/mdn.atom ! dev
+https://github.com/mdn.atom ! dev/github
 https://github.com/LeaVerou.atom ! dev/github
 https://github.com/staltz.atom ! dev/github
 https://github.com/jensimmons.atom ! dev/github

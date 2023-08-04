@@ -1,7 +1,8 @@
 # jaandrle customizations
 include "/usr/share/X11/locale/cs_CZ.UTF-8/Compose"
 
-<Multi_key> <backslash> <comma> : " " U202F # thin nonbreaking space
+<Multi_key> <backslash> <space> : " " U202F # thin nonbreaking space
+<Multi_key> <bar> <space> : "​" U200B
 <Multi_key> <8> <8> : "∞" U221E
 <Multi_key> <equal> <equal>: "≡"
 <Multi_key> <asciitilde> <asciitilde>: "≈"

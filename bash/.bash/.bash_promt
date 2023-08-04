@@ -29,6 +29,10 @@ function updatePromt {
     else
         PS1+="$chR✗ $chW"
     fi
+    local jobs="$(jobs | wc -l)"
+    if [ $jobs != 0 ]; then
+        PS1+="${chY}≡$jobs$chW"
+    fi
     PS1+="${debian_chroot:+($debian_chroot)}"
     PS1+=" At ${chG}\A${chW}"
     PS1+=" by ${chP}\u${chW}"
