@@ -1,4 +1,4 @@
-""" VIM config file | Jan Andrle | 2023-06-20 (VIM >=8.1)
+""" VIM config file | Jan Andrle | 2023-08-23 (VIM >=8.1)
 "" #region B – Base
 	scriptencoding utf-8 | set encoding=utf-8
 	let $BASH_ENV = "~/.bashrc"

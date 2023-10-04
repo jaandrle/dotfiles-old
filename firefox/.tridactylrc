@@ -80,7 +80,8 @@ bind --mode=normal N current_url tabopen
 bind -c fillcmdline recontain
 bind sc fillcmdline_notrail container
 
-bind --mode=visual \t composite js "https://translate.google.com/?sl=auto&tl=cs&op=translate&text="+encodeURI(document.getSelection().toString()) | tabopen
+bind --mode=visual \t composite js "https://libretranslate.com/?source=auto&target=cs&q="+encodeURI(document.getSelection().toString()) | tabopen
+bind --mode=visual \T composite js "https://translate.google.com/?sl=auto&tl=cs&op=translate&text="+encodeURI(document.getSelection().toString()) | tabopen
 bind --mode=normal \t composite js "http://translate.google.com/translate?js=n&tl=cs&u="+encodeURI(location.href) | tabopen
 
 bind gnk tabopen -c osobní https://keep.google.com/u/0/#NOTE/1UXE_BEihe2EexHwZqEYA2oSdILLxF74SPcaLFMStfIpMkWPnStWJDQqH5C1TryJld_dC

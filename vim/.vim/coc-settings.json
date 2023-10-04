@@ -11,6 +11,9 @@
 	"html.filetypes": [ "html", "handlebars", "htmldjango", "blade", "liquid" ],
 	"html.autoClosingTags": false,
 	"html.autoCreateQuotes": false,
+	"javascript.preferences.quoteStyle": "double",
+	"javascript.preferences.importModuleSpecifierEnding": "js",
+	"javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
 	"___eslint.options": {
 		"overrideConfig":{
 			"extends": [

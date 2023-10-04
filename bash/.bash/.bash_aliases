@@ -110,5 +110,31 @@ alias zfz=fzf-carroarmato0.fzf
 
 alias bathelp='bat --plain --language=help'
 
+rpg(){
+	rpg-cli "$@"
+	if ( [[ "$1" == "cd" ]] || [[ "$1" == "ls" ]] ); then
+		[[ "$2" == "" ]] && $1 . && return 0
+		[[ "$2" == ".." ]] && $1 .. && return 0
+		[[ "-1" != "$(nodejsscript --print "s.ls().findIndex(e=> e==='$2'.replace(/\/$/, ''))")" ]] && $1 "$2" && return 0
+	fi
+	return 0
+
+	# [[ "$(rpg-cli pwd)" == "$(pwd)" ]] && return 0
+	# cd "$(rpg-cli pwd)"
+}
+rpg-dungeon(){
+	current=$(basename $PWD)
+	number_re='^[0-9]+$'
+
+	if [[ $current =~ $number_re ]]; then
+		next=$(($current + 1))
+		command mkdir -p $next && cd $next && rpg ls
+	elif [[ -d 1 ]] ; then
+		cd 1 && rpg ls
+	else
+		command mkdir -p dungeon/1 && cd dungeon/1 && rpg ls
+	fi
+}
+
 # alias adb-device='adb devices | tail -n +2 | head -n 1 | §awk 1'
 # make-completion-wrapper, see https://gdhnotes.blogspot.com/2014/02/alias-bash-completion.html
