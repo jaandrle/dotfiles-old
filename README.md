@@ -1,3 +1,9 @@
+See new version on [https://github.com/jaandrle/dotfiles](https://github.com/jaandrle/dotfiles) respectively [https://gitea.jaandrle.cz/jaandrle/dotfiles](https://gitea.jaandrle.cz/jaandrle/dotfiles).
+
+
+
+
+
 # dotfiles
 My "dotfiles" (Windows/Ubuntu/... config files) WIP
 
